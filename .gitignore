@@ -1,2 +1,3 @@
 naver_api_conf.json
 *.log
+__pycache__

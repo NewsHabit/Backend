@@ -1,24 +1,11 @@
 import json
-import logging
-import logging.config
 import urllib.request
 import MySQLdb
 
+import utils.config
+import utils.logging
+
 from urllib.parse import quote
-
-loggerConfig = json.load(open('./conf/logger.json'))
-logging.config.dictConfig(loggerConfig)
-logger = logging.getLogger(__name__)
-
-# 네이버 api 사용자 정보 가져오는 함수
-def getConfigData(data):
-	try:
-		with open("./conf/config.json", 'r') as f :
-			jsonData = json.load(f)
-	except Exception as e :
-		logger.error(e)
-	return jsonData[data]
-
 
 def getRequestUrl(url, clientInfo):
     req = urllib.request.Request(url)
@@ -30,7 +17,7 @@ def getRequestUrl(url, clientInfo):
         if response.getcode() == 200 :
             return response.read().decode('utf-8')
     except Exception as e :
-        logger.error(e)
+        utils.logging.logger.error(e)
         return None
 
 
@@ -43,13 +30,13 @@ def getNaverSearch(category, start, display, clientInfo):
     responseDecode = getRequestUrl(url, clientInfo)
 
     if responseDecode == None :
-        logger.error(f"{searchTarget} crawl failed")
+        utils.logging.logger.error(f"{searchTarget} crawl failed")
         return None
 
     jsonResponse = json.loads(responseDecode)
     articles = jsonResponse["items"]
     # db 에 저장
-    mysqlConf = getConfigData("mysql")
+    mysqlConf = utils.config.getConfigData("mysql")
     conn = MySQLdb.connect(
         user = mysqlConf["user_id"],
         passwd = mysqlConf["user_password"],
@@ -73,17 +60,3 @@ def getNaverSearch(category, start, display, clientInfo):
             cursor.execute(f"INSERT INTO articles VALUES(\"{title}\", \"{category}\", \"{originalLink}\", \
                             \"{naverLink}\", \"{pubDate}\", \"내용\")")
     conn.commit()
-
-
-
-
-def main():
-    clientInfo = getConfigData("naver_api")
-
-    categories = ["정치", "IT", "경제", "세계"]
-
-    for category in categories :
-        getNaverSearch(category, 1, 50, clientInfo)
-
-if __name__ == '__main__':
-    main()
