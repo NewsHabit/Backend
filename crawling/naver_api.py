@@ -2,19 +2,22 @@ import json
 import logging
 import logging.config
 import urllib.request
+import MySQLdb
+
 from urllib.parse import quote
 
-config = json.load(open('./conf/logger.json'))
-logging.config.dictConfig(config)
+loggerConfig = json.load(open('./conf/logger.json'))
+logging.config.dictConfig(loggerConfig)
 logger = logging.getLogger(__name__)
 
-def getNaverAuthData():
+# 네이버 api 사용자 정보 가져오는 함수
+def getConfigData(data):
 	try:
-		with open("./conf/naver_api_conf.json", 'r') as f :
+		with open("./conf/config.json", 'r') as f :
 			jsonData = json.load(f)
 	except Exception as e :
 		logger.error(e)
-	return {"clientId" : jsonData["clientId"], "clientSecret" : jsonData["clientSecret"]}
+	return jsonData[data]
 
 
 def getRequestUrl(url, clientInfo):
@@ -31,7 +34,8 @@ def getRequestUrl(url, clientInfo):
         return None
 
 
-def getNaverSearch(searchTarget, start, display, clientInfo):
+def getNaverSearch(category, start, display, clientInfo):
+    searchTarget = quote(category)
     base = "https://openapi.naver.com/v1/search/news.json"
     parameters = f"?query={searchTarget}&start={start}&display={display}"
     url = base + parameters
@@ -39,19 +43,47 @@ def getNaverSearch(searchTarget, start, display, clientInfo):
     responseDecode = getRequestUrl(url, clientInfo)
 
     if responseDecode == None :
+        logger.error(f"{searchTarget} crawl failed")
         return None
-    else:
-        return json.loads(responseDecode)
+
+    jsonResponse = json.loads(responseDecode)
+    articles = jsonResponse["items"]
+    # db 에 저장
+    mysqlConf = getConfigData("mysql")
+    conn = MySQLdb.connect(
+        user = mysqlConf["user_id"],
+        passwd = mysqlConf["user_password"],
+        host = "localhost",
+        db = mysqlConf["table"]
+        # charset="utf-8"
+    )
+
+    cursor = conn.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS articles (title text, search text, \
+                   origin_url text, naver_url text, pub_date text, contents text)")
+
+    # 입력 데이터 걸러야함
+    for article in articles :
+        if "naver" in article["link"] :
+            title = article["title"]
+            originalLink = article["originallink"]
+            naverLink = article["link"]
+            pubDate = article["pubDate"]
+            description = article["description"]
+            cursor.execute(f"INSERT INTO articles VALUES(\"{title}\", \"{category}\", \"{originalLink}\", \
+                            \"{naverLink}\", \"{pubDate}\", \"내용\")")
+    conn.commit()
+
+
 
 
 def main():
-    clientInfo = getNaverAuthData()
-    searchTarget = quote('정치')
+    clientInfo = getConfigData("naver_api")
 
-    jsonResponse = getNaverSearch(searchTarget, 1, 100, clientInfo)
-    print(jsonResponse)
+    categories = ["정치", "IT", "경제", "세계"]
 
-
+    for category in categories :
+        getNaverSearch(category, 1, 50, clientInfo)
 
 if __name__ == '__main__':
     main()
