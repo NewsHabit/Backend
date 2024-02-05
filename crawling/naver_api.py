@@ -1,9 +1,9 @@
 import json
 import urllib.request
 import MySQLdb
+import logging
 
 import utils.config
-import utils.logging
 
 from urllib.parse import quote
 
@@ -17,7 +17,7 @@ def getRequestUrl(url, clientInfo):
         if response.getcode() == 200 :
             return response.read().decode('utf-8')
     except Exception as e :
-        utils.logging.logger.error(e)
+        logging.getLogger('__main__').error(e)
         return None
 
 
@@ -30,7 +30,7 @@ def getNaverSearch(category, start, display, clientInfo):
     responseDecode = getRequestUrl(url, clientInfo)
 
     if responseDecode == None :
-        utils.logging.logger.error(f"{searchTarget} crawl failed")
+        logging.getLogger('__main__').error(f"{category} crawl failed")
         return None
 
     jsonResponse = json.loads(responseDecode)

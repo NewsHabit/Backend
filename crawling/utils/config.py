@@ -1,5 +1,6 @@
 import json
-import utils.logging
+import logging
+import logging.config
 
 # 네이버 api 사용자 정보 가져오는 함수
 def getConfigData(data):
@@ -7,5 +8,6 @@ def getConfigData(data):
 		with open("./config/config.json", 'r') as f :
 			jsonData = json.load(f)
 	except Exception as e :
-		utils.logging.logger.error(e)
+		logging.getLogger('__main__').error(e)
+		exit(1)
 	return jsonData[data]
