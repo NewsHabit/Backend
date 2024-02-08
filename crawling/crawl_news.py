@@ -3,6 +3,9 @@ import json
 from bs4 import BeautifulSoup
 from tqdm.notebook import tqdm
 
+from News import News
+from utils import refine
+
 def ex_headline_url(sid, page):
     ### 뉴스 분야(sid)와 페이지(page)를 입력하면 그에 대한 링크들을 리스트로 추출하는 함수 ###
     ## 1. headline 기사만 추출된다.
@@ -43,68 +46,48 @@ def ex_normal_tag(sid, page):
          print(h)
     return ex_hrefs
 
-# def re_tag(sid, pages):
-#     ### 특정 분야의 100페이지까지의 뉴스의 링크를 수집하여 중복 제거한 리스트로 변환하는 함수 ###
-#     re_lst = []
-#     for page in tqdm(range(pages)):
-#         re_lst.extend(ex_headline_tag(sid, page+1))
-#         re_lst.extend(ex_normal_tag(sid, page+1))
-
-#     # 중복 제거
-#     re_set = set(re_lst)
-#     return list(re_set)
-
 def extractArticleFromUrl(url) :
     html = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
                                       AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"})
     soup = BeautifulSoup(html.text, "lxml")
+    news = News()
     # 제목
     meta = soup.find('meta', attrs = {"property" : "og:title"})
-    title = meta.get("content")
+    news.title = meta.get("content")
     # 사진 링크
     meta = soup.find('meta', attrs = {"property" : "og:image"})
-    imageLink = meta.get("content")
+    news.imgLink = meta.get("content")
     # 요약
     meta = soup.find('meta', attrs = {"property" : "og:description"})
-    description = meta.get("content")
+    news.description = meta.get("content")
     # 출처 신문사
     meta = soup.find('meta', attrs = {"property" : "og:article:author"})
-    source = meta.get("content")
-    # 기자
+    news.source = meta.get("content").split()[0]
+    # 기자, 이메일
     meta = soup.find('span', attrs = {"class" : "byline_s"})
-    author = meta.get_text()
+    authorEmail = refine.refineAuthorEmail(meta.get_text())
+    news.author = authorEmail["author"]
+    news.email = authorEmail["email"]
     # 강조 구문
-    strong = None
     try :
-        strong = meta.find('strong').get_text() #안되는 기사도 있음
+        news.description = meta.find('strong').get_text()
     except Exception as e :
-        e
+        pass
+    # 기사 추출 및 정제
     meta = soup.find('article', attrs={"id" : "dic_area"})
     article = meta.get_text()
     # 이미지 아래 글 삭제
     imgSummary = meta.find_all('em', attrs = {"class" : "img_desc"})
-    for summary in imgSummary :
-        article = article.replace(summary.get_text(), '')
-    # 기사 정제
-    articleList = article.split('\n')
-    for block in articleList :
-        if block == "" :
-            articleList.remove("")
-    article = ""
-    for block in articleList :
-        article += block + "\n\n"
-    
+    news.article = refine.refineArticle(article, imgSummary)
     print("[ title ]")
-    print(title)
+    print(news.title)
     print("[ imageLink ]")
-    print(imageLink)
+    print(news.imgLink)
     print("[ description ]")
-    print(description)
-    print("[ strong ]")
-    print(strong)
+    print(news.description)
     print("[ article ]")
-    print(article)
+    print(news.article)
     print("[ source ]")
-    print(source)
-    print("[ author ]")
-    print(author)
+    print(news.source)
+    print("[ author, email ]")
+    print(news.author, news.email)

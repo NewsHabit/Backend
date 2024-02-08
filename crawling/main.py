@@ -25,7 +25,7 @@ def main():
     # categories = ["정치"]# 핫 키워드 검색으로 바꿀듯
     # for category in categories :
     #     naver_api.getNaverSearch(category, 1, 50, clientInfo)
-    crawl_news.extractArticleFromUrl("https://n.news.naver.com/article/025/0003340254?ntype=RANKING")
+    crawl_news.extractArticleFromUrl("https://n.news.naver.com/article/005/0001673050?cds=news_media_pc")
 
 
 
