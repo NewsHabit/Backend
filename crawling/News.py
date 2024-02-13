@@ -1,30 +1,12 @@
 class News :
-	__article = ""
-	__author = ""
 	__description = ""
-	__email = ""
 	__imgLink = ""
-	__source = ""
+	__naverLink = ""
 	__title = ""
+	__pubDate = ""
 
 	def __init__(self) :
 		pass
-
-	@property
-	def article(self) -> str :
-		return self.__article
-
-	@article.setter
-	def article(self, article : str) -> None :
-		self.__article = article
-
-	@property
-	def author(self) -> str :
-		return self.__author
-
-	@author.setter
-	def author(self, author : str) -> None :
-		self.__author = author
 
 	@property
 	def description(self) -> str :
@@ -35,14 +17,6 @@ class News :
 		self.__description = description
 
 	@property
-	def email(self) -> str :
-		return self.__email
-
-	@email.setter
-	def email(self, email : str) -> None :
-		self.__email = email
-
-	@property
 	def imgLink(self) -> str :
 		return self.__imgLink
 
@@ -51,20 +25,12 @@ class News :
 		self.__imgLink = imgLink
 
 	@property
-	def source(self) -> str :
-		return self.__source
+	def naverLink(self) -> str :
+		return self.__naverLink
 
-	@source.setter
-	def source(self, source : str) -> None :
-		self.__source = source
-
-	@property
-	def article(self) -> str :
-		return self.__article
-
-	@article.setter
-	def article(self, article : str) -> None :
-		self.__article = article
+	@naverLink.setter
+	def naverLink(self, naverLink : str) -> None :
+		self.__naverLink = naverLink
 
 	@property
 	def title(self) -> str :
@@ -73,3 +39,11 @@ class News :
 	@title.setter
 	def title(self, title : str) -> None :
 		self.__title = title
+
+	@property
+	def pubDate(self) -> str :
+		return self.__pubDate
+
+	@pubDate.setter
+	def pubDate(self, pubDate : str) -> None :
+		self.__pubDate = pubDate

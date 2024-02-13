@@ -21,11 +21,13 @@ def main():
 
 
     # # 핫 키워드 추출 후 여기서 검색
-    # clientInfo = utils.config.getConfigData("naver_api")
+    clientInfo = utils.config.getConfigData("naver_api")
     # categories = ["정치"]# 핫 키워드 검색으로 바꿀듯
     # for category in categories :
-    #     naver_api.getNaverSearch(category, 1, 50, clientInfo)
-    crawl_news.extractArticleFromUrl("https://n.news.naver.com/article/005/0001673050?cds=news_media_pc")
+    #     
+    crawl_news.extractNewsFromUrl("https://sports.news.naver.com/news?oid=311&aid=0001691221")
+
+    # naver_api.getNaverSearch("정치", 1, 100, clientInfo)
 
 
 
