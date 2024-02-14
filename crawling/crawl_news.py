@@ -1,28 +1,39 @@
 import requests
-import json
 from bs4 import BeautifulSoup
-from tqdm.notebook import tqdm
+# from tqdm.notebook import tqdm
 
 from News import News
+import utils.config
+import logging
 
 def ex_headline_url(sid : int, page : int) -> list :
     ### 뉴스 분야(sid)와 페이지(page)를 입력하면 그에 대한 링크들을 리스트로 추출하는 함수 ###
     ## 1. headline 기사만 추출된다.
     url = f"https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1={sid}#&date=%2000:00:00&page={page}"
-    html = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
-                                      AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"})
+    try :
+        html = requests.get(url, headers={"User-Agent": utils.config.getConfigData("request_header").get("User-Agent")})
+        if html.status_code != 200 :
+            raise Exception("headline crawl failed")
+    except Exception as e :
+        logging.getLogger('__main__').error(e)
+        return []
     soup = BeautifulSoup(html.text, "lxml")
     headline_tag = soup.find_all('a', attrs={"class": "sa_text_title", "data-clk" : "airscont"})
     ## 2.
     url_set = set()
     for ex in headline_tag:
-        if ("href" in ex.attrs) : # href가 있는것만 고르는 것
+        if ("href" in ex.attrs) :
             url_set.add(ex["href"])
     return list(url_set)
 
 def extractNewsFromUrl(url : str) -> News :
-    html = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) \
-                                      AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"})
+    try :
+        html = requests.get(url, headers={"User-Agent": utils.config.getConfigData("request_header").get("User-Agent")})
+        if html.status_code != 200 :
+            raise Exception("news data crawl failed")
+    except Exception as e :
+        logging.getLogger('__main__').error(e)
+        return None
     soup = BeautifulSoup(html.text, "lxml")
     news = News()
     # 제목

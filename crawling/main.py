@@ -7,7 +7,7 @@ import time
 import naver_api
 import utils.config
 import crawl_news
-import utils.db_manager as db_manager
+import crawl_popular_searches as cps
 
 loggerConfig = json.load(open('./config/logger.json'))
 logging.config.dictConfig(loggerConfig)
@@ -30,7 +30,7 @@ def main():
 
 
     # naver_api.getNaverSearch("정치", 1, 10, clientInfo)
-    db_manager.deleteNews(24)
+    print(cps.extractRealTimePopularSearches())
 
 
 
