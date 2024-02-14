@@ -7,6 +7,7 @@ import time
 import naver_api
 import utils.config
 import crawl_news
+import utils.db_manager as db_manager
 
 loggerConfig = json.load(open('./config/logger.json'))
 logging.config.dictConfig(loggerConfig)
@@ -28,7 +29,9 @@ def main():
     # crawl_news.extractNewsFromUrl("https://sports.news.naver.com/news?oid=311&aid=0001691221")
 
 
-    naver_api.getNaverSearch("정치", 1, 10, clientInfo)
+    # naver_api.getNaverSearch("정치", 1, 10, clientInfo)
+    db_manager.deleteNews(24)
+
 
 
 
