@@ -1,3 +1,5 @@
+# 저작권 문제로 해당 로직은 사용안 할 예정
+
 def refineArticle(originArticle : str, imgSummary : str) -> str:
 	for summary in imgSummary :
 		originArticle = originArticle.replace(summary.get_text(), '')

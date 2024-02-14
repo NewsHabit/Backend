@@ -4,10 +4,11 @@ import MySQLdb
 import logging
 
 import utils.config
+import crawl_news
 
 from urllib.parse import quote
 
-def getRequestUrl(url, clientInfo):
+def getRequestUrl(url : str, clientInfo : map) -> str :
     req = urllib.request.Request(url)
     req.add_header("X-Naver-Client-Id", clientInfo["clientId"])
     req.add_header("X-Naver-Client-Secret", clientInfo["clientSecret"])
@@ -20,11 +21,11 @@ def getRequestUrl(url, clientInfo):
         logging.getLogger('__main__').error(e)
         return None
 
+# start 1 ~ 1000, display 1 ~ 100
 
-def getNaverSearch(category, start, display, clientInfo):
-    searchTarget = quote(category)
+def getNaverSearch(category : str, start : int, display : int, clientInfo : map) -> None :
     base = "https://openapi.naver.com/v1/search/news.json"
-    parameters = f"?query={searchTarget}&start={start}&display={display}"
+    parameters = f"?query={quote(category)}&start={start}&display={display}"
     url = base + parameters
 
     responseDecode = getRequestUrl(url, clientInfo)
@@ -46,17 +47,18 @@ def getNaverSearch(category, start, display, clientInfo):
     )
 
     cursor = conn.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS articles (title text, search text, \
-                   origin_url text, naver_url text, pub_date text, contents text)")
+    # cursor.execute("CREATE TABLE IF NOT EXISTS articles (naver_url varchar(128),title varchar(128),\
+    #                category varchar(128),pub_date varchar(128),img_link varchar(128),description varchar(256),\
+    #                PRIMARY KEY(naver_url))")
 
-    # 입력 데이터 걸러야함
     for article in articles :
         if "naver" in article["link"] :
-            title = article["title"]
-            originalLink = article["originallink"]
-            naverLink = article["link"]
-            pubDate = article["pubDate"]
-            description = article["description"]
-            cursor.execute(f"INSERT INTO articles VALUES(\"{title}\", \"{category}\", \"{originalLink}\", \
-                            \"{naverLink}\", \"{pubDate}\", \"내용\")")
+            news = crawl_news.extractNewsFromUrl(article["link"])
+            if news == None : continue
+            try :
+                cursor.execute(f"INSERT INTO articles VALUES(\"{news.naverLink}\", \"{news.title}\", \
+                            \"{category}\", \"{news.pubDate}\", \"{news.imgLink}\", \"{news.description}\")")
+            except Exception as e:
+                # 중복 기사일때
+                pass
     conn.commit()
