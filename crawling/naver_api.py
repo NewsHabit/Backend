@@ -10,8 +10,8 @@ from urllib.parse import quote
 
 def getRequestUrl(url : str, clientInfo : map) -> str :
     req = urllib.request.Request(url)
-    req.add_header("X-Naver-Client-Id", clientInfo["clientId"])
-    req.add_header("X-Naver-Client-Secret", clientInfo["clientSecret"])
+    req.add_header("X-Naver-Client-Id", clientInfo["X-Naver-Client-Id"])
+    req.add_header("X-Naver-Client-Secret", clientInfo["X-Naver-Client-Secret"])
 
     try:
         response = urllib.request.urlopen(req)
