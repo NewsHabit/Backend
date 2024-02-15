@@ -1,13 +1,12 @@
 import logging
 import logging.config
 import json
-import random
-import time
 import sys
 sys.path.append('../')
 
 import NaverApi
 import utils.Config
+import utils.DBManager as DBManager
 import CrawlNews
 import CrawlPopularSearches as cps
 
@@ -15,27 +14,31 @@ loggerConfig = json.load(open('../config/logger.json'))
 logging.config.dictConfig(loggerConfig)
 
 def main():
-    # 네이버 api 에 필요한 정보 config.json 에서 가져오기
-    clientInfo = utils.Config.getConfigData("naver_api")
+    try :
+        # 네이버 api 에 필요한 정보 config.json 에서 가져오기
+        clientInfo = utils.Config.getConfigData("naver_api")
 
-    # 인기 검색어 뉴스 추출
-    keywords = cps.extractRealTimePopularSearches()
-    for keyword in keywords :
-        NaverApi.getNaverSearch(keyword, 1, 10, clientInfo)
-        break
+        # 인기 검색어 뉴스 삭제
+        DBManager.deleteNewsByCategoryAndHour("HOT", 1)
+        # 인기 검색어 뉴스 추출
+        keywords = cps.extractRealTimePopularSearches()
+        for keyword in keywords :
+            newsList = NaverApi.getNewsByNaverSearch(keyword, 1, 100, clientInfo)
+            DBManager.saveNews("HOT", newsList)
 
-    # # 핫 키워드 추출 후 여기서 검색
-    # categories = ["정치"]# 핫 키워드 검색으로 바꿀듯
-    # for category in categories :
-    #     
-    # CrawlNews.extractNewsFromUrl("https://sports.news.naver.com/news?oid=311&aid=0001691221")
-
-
-    # NaverApi.getNaverSearch("정치", 1, 10, clientInfo)
-    # print(cps.extractRealTimePopularSearches())
-
-
-
+        # 주어진 시간 이전 카테고리 별 기사 삭제
+        DBManager.deleteCategoryNewsByHour(24)
+        # 카테고리 별 기사 추출
+        sids = [100, 101, 102, 103, 104, 105]
+        categories = {100 : "POLITICS", 101 : "ECONOMY", 102 : "society SOCIETY",
+                      103 : "LIFESTYLE/CULTURE", 104 : "IT/SCIENCE", 105 : "WORLD"}
+        for sid in sids :
+            urlList = CrawlNews.extractHeadlineUrl(sid, 1)
+            searchMaxCnt = 10 if len(urlList) > 10 else len(urlList)
+            newsList = CrawlNews.extractNewsFromUrlList(urlList, searchMaxCnt)
+            DBManager.saveNews(categories[sid], newsList)
+    except Exception as e :
+        logging.getLogger('__main__').error(e)
 
 if __name__ == '__main__':
     main()

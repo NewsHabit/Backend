@@ -5,7 +5,7 @@ import sys
 sys.path.append('../')
 
 from urllib.parse import quote
-import utils.DBManager as DBManager
+import src.CrawlNews as CrawlNews
 
 def getRequestUrl(url : str, clientInfo : map) -> str :
     req = urllib.request.Request(url)
@@ -22,7 +22,14 @@ def getRequestUrl(url : str, clientInfo : map) -> str :
 
 # start 1 ~ 1000, display 1 ~ 100
 
-def getNaverSearch(keyword : str, start : int, display : int, clientInfo : map) -> None :
+def getSearchedUrls(news : list) -> list :
+    urls = []
+    for info in news :
+        if "n.news" in info["link"] :
+            urls.append(info["link"])
+    return urls
+
+def getNewsByNaverSearch(keyword : str, start : int, display : int, clientInfo : map) -> list :
     base = "https://openapi.naver.com/v1/search/news.json"
     parameters = f"?query={quote(keyword)}&start={start}&display={display}"
     url = base + parameters
@@ -30,9 +37,12 @@ def getNaverSearch(keyword : str, start : int, display : int, clientInfo : map) 
     responseDecode = getRequestUrl(url, clientInfo)
 
     if responseDecode == None :
-        logging.getLogger('__main__').error(f"{keyword} crawl failed")
+        logging.getLogger('__main__').error(f"getNewsByNaverSearch [{keyword}] crawl failed")
         return None
 
     jsonResponse = json.loads(responseDecode)
-    articles = jsonResponse["items"]
-    DBManager.saveNews(keyword, articles, 2)
+    newsUrls = getSearchedUrls(jsonResponse["items"])
+    searchMaxCnt = 1
+    newsList = CrawlNews.extractNewsFromUrlList(newsUrls, searchMaxCnt)
+    return newsList
+
