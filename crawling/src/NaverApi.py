@@ -1,10 +1,11 @@
 import json
 import urllib.request
 import logging
-
-import utils.db_manager as db_manager
+import sys
+sys.path.append('../')
 
 from urllib.parse import quote
+import utils.DBManager as DBManager
 
 def getRequestUrl(url : str, clientInfo : map) -> str :
     req = urllib.request.Request(url)
@@ -21,17 +22,17 @@ def getRequestUrl(url : str, clientInfo : map) -> str :
 
 # start 1 ~ 1000, display 1 ~ 100
 
-def getNaverSearch(category : str, start : int, display : int, clientInfo : map) -> None :
+def getNaverSearch(keyword : str, start : int, display : int, clientInfo : map) -> None :
     base = "https://openapi.naver.com/v1/search/news.json"
-    parameters = f"?query={quote(category)}&start={start}&display={display}"
+    parameters = f"?query={quote(keyword)}&start={start}&display={display}"
     url = base + parameters
 
     responseDecode = getRequestUrl(url, clientInfo)
 
     if responseDecode == None :
-        logging.getLogger('__main__').error(f"{category} crawl failed")
+        logging.getLogger('__main__').error(f"{keyword} crawl failed")
         return None
 
     jsonResponse = json.loads(responseDecode)
     articles = jsonResponse["items"]
-    db_manager.saveNews(category, articles)
+    DBManager.saveNews(keyword, articles, 2)

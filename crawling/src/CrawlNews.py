@@ -1,17 +1,18 @@
 import requests
 from bs4 import BeautifulSoup
-# from tqdm.notebook import tqdm
-
-from News import News
-import utils.config
 import logging
+import sys
+sys.path.append('../')
 
-def ex_headline_url(sid : int, page : int) -> list :
+from data.News import News
+import utils.Config
+
+def extractHeadlineUrl(sid : int, page : int) -> list :
     ### 뉴스 분야(sid)와 페이지(page)를 입력하면 그에 대한 링크들을 리스트로 추출하는 함수 ###
     ## 1. headline 기사만 추출된다.
     url = f"https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1={sid}#&date=%2000:00:00&page={page}"
     try :
-        html = requests.get(url, headers={"User-Agent": utils.config.getConfigData("request_header").get("User-Agent")})
+        html = requests.get(url, headers={"User-Agent": utils.Config.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
             raise Exception("headline crawl failed")
     except Exception as e :
@@ -28,7 +29,7 @@ def ex_headline_url(sid : int, page : int) -> list :
 
 def extractNewsFromUrl(url : str) -> News :
     try :
-        html = requests.get(url, headers={"User-Agent": utils.config.getConfigData("request_header").get("User-Agent")})
+        html = requests.get(url, headers={"User-Agent": utils.Config.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
             raise Exception("news data crawl failed")
     except Exception as e :

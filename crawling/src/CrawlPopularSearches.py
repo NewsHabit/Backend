@@ -1,12 +1,12 @@
 import requests
 
 import logging
-import utils.config
+import utils.Config
 
 def extractRealTimePopularSearches() -> list :
-    url = utils.config.getConfigData("ranking_site").get("url")
+    url = utils.Config.getConfigData("ranking_site").get("url")
     try :
-        response = requests.get(url, headers={"User-Agent": utils.config.getConfigData("request_header").get("User-Agent")})
+        response = requests.get(url, headers={"User-Agent": utils.Config.getConfigData("request_header").get("User-Agent")})
         if response.status_code != 200 :
             raise Exception("headline crawl failed")
     except Exception as e :

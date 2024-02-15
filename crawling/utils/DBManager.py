@@ -1,11 +1,12 @@
 import MySQLdb
 import logging
-from datetime import datetime, timedelta
+import sys
+sys.path.append('../')
 
-import utils.config
-import crawl_news
+import utils.Config
+import src.CrawlNews as CrawlNews
 
-mysqlConf = utils.config.getConfigData("mysql")
+mysqlConf = utils.Config.getConfigData("mysql")
 
 conn = MySQLdb.connect(
 	user = mysqlConf["user_id"],
@@ -20,16 +21,19 @@ cursor = conn.cursor()
 #                category varchar(128),pub_date_time DATETIME,img_link varchar(128),description varchar(256),\
 #                PRIMARY KEY(naver_url))")
 
-def saveNews(category : str, news : list) -> None :
+def saveNews(category : str, news : list, cnt : int) -> None :
+	curCnt = 0
 	for info in news :
+		if curCnt >= cnt :
+			break
 		if "naver" in info["link"] :
-			news = crawl_news.extractNewsFromUrl(info["link"])
+			news = CrawlNews.extractNewsFromUrl(info["link"])
 			if news == None : continue
 			try :
 				cursor.execute(f"INSERT INTO articles VALUES(\"{news.naverLink}\", \"{news.title}\", \
 							\"{category}\", \"{news.pubDate}\", \"{news.imgLink}\", \"{news.description}\")")
+				curCnt += 1
 			except Exception as e:
-				# 중복 기사일때
 				pass
 	conn.commit()
 
