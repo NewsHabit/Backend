@@ -1,8 +1,6 @@
 import json
 import logging
 import logging.config
-import sys
-sys.path.append('../')
 
 # 네이버 api 사용자 정보 가져오는 함수
 def getConfigData(data : str) -> map :

@@ -1,11 +1,9 @@
 import MySQLdb
 import logging
-import sys
-sys.path.append('../')
 
-import utils.Config
+import utils.ConfigManager as ConfigManager
 
-mysqlConf = utils.Config.getConfigData("mysql")
+mysqlConf = ConfigManager.getConfigData("mysql")
 
 conn = MySQLdb.connect(
 	user = mysqlConf["user_id"],

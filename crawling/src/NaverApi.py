@@ -1,10 +1,8 @@
 import json
 import urllib.request
 import logging
-import sys
-sys.path.append('../')
-
 from urllib.parse import quote
+
 import src.CrawlNews as CrawlNews
 
 def getRequestUrl(url : str, clientInfo : map) -> str :

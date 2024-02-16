@@ -4,11 +4,9 @@ import logging
 import random
 import time
 from datetime import datetime
-import sys
-sys.path.append('../')
 
 from data.News import News
-import utils.Config
+import utils.ConfigManager as ConfigManager
 
 def extractHeadlineUrl(sid : int, page : int) -> list :
     time.sleep(random.uniform(1, 3))
@@ -16,7 +14,7 @@ def extractHeadlineUrl(sid : int, page : int) -> list :
     ## 1. headline 기사만 추출된다.
     url = f"https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1={sid}#&date=%2000:00:00&page={page}"
     try :
-        html = requests.get(url, headers={"User-Agent": utils.Config.getConfigData("request_header").get("User-Agent")})
+        html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
             raise Exception("headline crawl failed")
     except Exception as e :
@@ -35,7 +33,7 @@ def extractNewsFromUrl(url : str) -> News :
     time.sleep(random.uniform(1, 3))
     # print(url)################################################################
     try :
-        html = requests.get(url, headers={"User-Agent": utils.Config.getConfigData("request_header").get("User-Agent")})
+        html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
             raise Exception("news data crawl failed")
     except Exception as e :

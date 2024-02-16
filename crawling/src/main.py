@@ -3,11 +3,13 @@ import logging.config
 import json
 import sys
 sys.path.append('../')
+sys.path.append('../utils')
+sys.path.append('../data')
 
-import NaverApi
-import utils.Config
+import src.NaverApi as NaverApi
+import utils.ConfigManager as ConfigManager
 import utils.DBManager as DBManager
-import CrawlNews
+import src.CrawlNews as CrawlNews
 import CrawlPopularSearches as cps
 
 loggerConfig = json.load(open('../config/logger.json'))
@@ -16,7 +18,7 @@ logging.config.dictConfig(loggerConfig)
 def main():
     try :
         # 네이버 api 에 필요한 정보 config.json 에서 가져오기
-        clientInfo = utils.Config.getConfigData("naver_api")
+        clientInfo = ConfigManager.getConfigData("naver_api")
 
         # 인기 검색어 뉴스 추출
         keywords = cps.extractRealTimePopularSearches()
