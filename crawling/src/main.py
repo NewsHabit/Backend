@@ -1,11 +1,12 @@
 import logging
 import logging.config
 import json
+import os
+os.chdir("/Users/aoleejohn/Desktop/projects/NewsHabit_Backend/crawling/src")
 import sys
 sys.path.append('../')
 sys.path.append('../utils')
 sys.path.append('../data')
-
 import src.NaverApi as NaverApi
 import utils.ConfigManager as ConfigManager
 import utils.DBManager as DBManager
