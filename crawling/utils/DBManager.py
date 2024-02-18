@@ -1,45 +1,39 @@
 import MySQLdb
 import logging
-import sys
-sys.path.append('../')
 
-import utils.Config
-import src.CrawlNews as CrawlNews
+import utils.ConfigManager as ConfigManager
 
-mysqlConf = utils.Config.getConfigData("mysql")
+mysqlConf = ConfigManager.getConfigData("mysql")
 
 conn = MySQLdb.connect(
 	user = mysqlConf["user_id"],
 	passwd = mysqlConf["user_password"],
 	host = "localhost",
 	db = mysqlConf["table"]
-	# charset="utf-8"
 )
 
 cursor = conn.cursor()
-# cursor.execute("CREATE TABLE IF NOT EXISTS articles (naver_url varchar(128),title varchar(128),\
-#                category varchar(128),pub_date_time DATETIME,img_link varchar(128),description varchar(256),\
-#                PRIMARY KEY(naver_url))")
 
-def saveNews(category : str, news : list, cnt : int) -> None :
-	curCnt = 0
-	for info in news :
-		if curCnt >= cnt :
-			break
-		if "naver" in info["link"] :
-			news = CrawlNews.extractNewsFromUrl(info["link"])
-			if news == None : continue
-			try :
-				cursor.execute(f"INSERT INTO articles VALUES(\"{news.naverLink}\", \"{news.title}\", \
-							\"{category}\", \"{news.pubDate}\", \"{news.imgLink}\", \"{news.description}\")")
-				curCnt += 1
-			except Exception as e:
-				pass
+def saveNews(category : str, newsList : list) -> None :
+	for news in newsList :
+		try :
+			cursor.execute(f"INSERT INTO news VALUES(\"{news.naverLink}\", \"{news.title}\", \
+						\"{category}\", \"{news.crawledTime}\", \"{news.imgLink}\", \"{news.description}\")")
+		except Exception :
+			pass
 	conn.commit()
 
-def deleteNews(hour : int) -> None :
+def deleteCategoryNewsByHour(hour : int) -> None :
 	try :
-		cursor.execute(f"DELETE FROM articles WHERE pub_date < DATE_SUB(NOW(), INTERVAL {hour} HOUR)")
+		cursor.execute(f"DELETE FROM news WHERE date_time < DATE_SUB(NOW(), INTERVAL {hour} HOUR) AND category != \'HOT\'")
+	except Exception as e:
+		logging.getLogger('__main__').error(e)
+		return None
+	conn.commit()
+
+def deleteNewsByCategoryAndHour(category : str, hour : int) -> None :
+	try :
+		cursor.execute(f"DELETE FROM news WHERE date_time <= DATE_SUB(NOW(), INTERVAL {hour} HOUR) AND category = \'{category}\'")
 	except Exception as e:
 		logging.getLogger('__main__').error(e)
 		return None

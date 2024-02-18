@@ -3,7 +3,7 @@ class News :
 	__imgLink = ""
 	__naverLink = ""
 	__title = ""
-	__pubDate = ""
+	__crawledTime = ""
 
 	def __init__(self) :
 		pass
@@ -41,9 +41,9 @@ class News :
 		self.__title = title
 
 	@property
-	def pubDate(self) -> str :
-		return self.__pubDate
+	def crawledTime(self) -> str :
+		return self.__crawledTime
 
-	@pubDate.setter
-	def pubDate(self, pubDate : str) -> None :
-		self.__pubDate = pubDate
+	@crawledTime.setter
+	def crawledTime(self, crawledTime : str) -> None :
+		self.__crawledTime = crawledTime
