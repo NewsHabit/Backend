@@ -17,7 +17,9 @@ import com.gto.newsHabit.domain.news.data.NewsRepositoryImpl;
 import com.gto.newsHabit.domain.news.dto.RecommendedNewsRequestDto;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
@@ -61,7 +63,7 @@ public class NewsServiceImpl implements NewsService {
 		List<News> recommendNewsList = new ArrayList<>();
 		numByCategory.forEach(((category, targetCnt) -> {
 			List<News> categoryNewsList = categoryMap.get(category);
-			List<Integer> randomIdx = getRandomIdx(categoryNewsList.size(), targetCnt);
+			List<Integer> randomIdx = getRandomIdx(category, categoryNewsList.size(), targetCnt);
 			randomIdx.forEach(idx -> recommendNewsList.add(categoryNewsList.get(idx)));
 		}));
 		return recommendNewsList;
@@ -73,9 +75,9 @@ public class NewsServiceImpl implements NewsService {
 	 * @param cnt 고르고자하는 인덱스 개수
 	 * @return List<Integer>
 	 */
-	private List<Integer> getRandomIdx(int listSize, int cnt) {
+	private List<Integer> getRandomIdx(NewsCategory category, int listSize, int cnt) {
 		if (listSize == 0 || cnt > listSize) {
-			// 서버 에러 로깅
+			log.error("[ " + category + " ] DB DATA NOT FOUND");
 			return new ArrayList<>();
 		}
 		Set<Integer> set = new HashSet<>();
