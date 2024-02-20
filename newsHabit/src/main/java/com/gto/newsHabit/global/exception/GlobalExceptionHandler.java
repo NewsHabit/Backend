@@ -7,6 +7,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,15 +40,15 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
 	}
 
-	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	protected ResponseEntity<ErrorResponse> httpRequestMethodNotSupportedExceptionHandle(
-		HttpRequestMethodNotSupportedException ex) {
-		log.error("지원하지 않는 메소드 요청입니다.", ex.getMethod());
+	@ExceptionHandler({NoResourceFoundException.class})
+	protected ResponseEntity<ErrorResponse> NoResourceFoundExceptionHandle(
+		NoResourceFoundException ex) {
+		log.error("지원하지 않는 메소드 요청입니다.", ex);
 		ErrorResponse response = new ErrorResponse(ErrorCode.METHOD_NOT_ALLOWED);
 		return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler({Exception.class})
 	public ResponseEntity<ErrorResponse> handleException(Exception ex) {
 		log.error("!!!!!! SERVER ERROR !!!!!!", ex.getMessage());
 		ErrorResponse response = new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERR);
