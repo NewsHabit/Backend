@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gto.newsHabit.data.News;
 import com.gto.newsHabit.data.type.NewsCategory;
@@ -27,6 +28,7 @@ public class NewsServiceImpl implements NewsService {
 	 * @return List<News>
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<News> getHotNewsList() {
 		return newsRepositoryImpl.findAllByCategory(NewsCategory.HOT);
 	}
@@ -38,6 +40,7 @@ public class NewsServiceImpl implements NewsService {
 	 * @return List<News>
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public List<News> getRecommendedNewsList(RecommendedNewsRequestDto requestDto) {
 		// init
 		List<NewsCategory> newsCategories = requestDto.getCategories();
