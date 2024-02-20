@@ -22,7 +22,7 @@ public class RecommendedNewsRequestDto {
 	private List<NewsCategory> categories;
 
 	@NotNull
-	@Min(value = 1, message = "개수는 최소 한개 이상이어야 합니다.")
+	@Min(value = 3, message = "개수는 최소 3개 이상이어야 합니다.")
 	@Max(value = 5, message = "개수는 최대 5개 이하여야 합니다.")
 	private long cnt;
 
