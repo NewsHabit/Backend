@@ -32,7 +32,7 @@ def main():
         # 카테고리 별 기사 추출
         sids = [100, 101, 102, 103, 104, 105]
         categories = {100 : "POLITICS", 101 : "ECONOMY", 102 : "SOCIETY",
-                      103 : "LIFESTYLE/CULTURE", 104 : "IT/SCIENCE", 105 : "WORLD"}
+                      103 : "LIFESTYLE_CULTURE", 104 : "IT_SCIENCE", 105 : "WORLD"}
         for sid in sids :
             urlList = CrawlNews.extractHeadlineUrl(sid, 1)
             searchMaxCnt = 10 if len(urlList) > 10 else len(urlList)
