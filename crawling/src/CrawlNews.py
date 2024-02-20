@@ -31,7 +31,6 @@ def extractHeadlineUrl(sid : int, page : int) -> list :
 
 def extractNewsFromUrl(url : str) -> News :
     time.sleep(random.uniform(1, 3))
-    # print(url)################################################################
     try :
         html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
