@@ -2,17 +2,19 @@ import MySQLdb
 import logging
 
 import utils.ConfigManager as ConfigManager
+try :
+	mysqlConf = ConfigManager.getConfigData("mysql")
 
-mysqlConf = ConfigManager.getConfigData("mysql")
+	conn = MySQLdb.connect(
+		user = mysqlConf["user_id"],
+		passwd = mysqlConf["user_password"],
+		host = "localhost",
+		db = mysqlConf["table"]
+	)
 
-conn = MySQLdb.connect(
-	user = mysqlConf["user_id"],
-	passwd = mysqlConf["user_password"],
-	host = "localhost",
-	db = mysqlConf["table"]
-)
-
-cursor = conn.cursor()
+	cursor = conn.cursor()
+except Exception as e :
+	logging.getLogger('__main__').error(e)
 
 def saveNews(category : str, newsList : list) -> None :
 	for news in newsList :
