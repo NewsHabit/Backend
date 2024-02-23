@@ -5,8 +5,8 @@ import random
 import time
 from datetime import datetime
 
-from data.News import News
-import utils.ConfigManager as ConfigManager
+from News import News
+import ConfigManager
 
 def extractHeadlineUrl(sid : int, page : int) -> list :
     time.sleep(random.uniform(1, 3))

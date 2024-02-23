@@ -1,14 +1,14 @@
 import MySQLdb
 import logging
 
-import utils.ConfigManager as ConfigManager
+import ConfigManager
 try :
 	mysqlConf = ConfigManager.getConfigData("mysql")
 
 	conn = MySQLdb.connect(
 		user = mysqlConf["user_id"],
 		passwd = mysqlConf["user_password"],
-		host = "localhost",
+		host = mysqlConf["host"],
 		db = mysqlConf["table"]
 	)
 

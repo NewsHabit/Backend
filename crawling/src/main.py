@@ -1,16 +1,16 @@
 import logging
 import logging.config
 import json
-import os
-os.chdir("/Users/aoleejohn/Desktop/projects/NewsHabit_Backend/crawling/src")
 import sys
-sys.path.append('../')
-sys.path.append('../utils')
-sys.path.append('../data')
-import src.NaverApi as NaverApi
-import utils.ConfigManager as ConfigManager
-import utils.DBManager as DBManager
-import src.CrawlNews as CrawlNews
+import os
+upper_directory = os.path.dirname(os.getcwd())
+sys.path.append(upper_directory + '/utils')
+sys.path.append(upper_directory + '/data')
+import ConfigManager
+import ConfigManager
+import DBManager
+import NaverApi
+import CrawlNews
 import CrawlPopularSearches as cps
 
 loggerConfig = json.load(open('../config/logger.json'))
