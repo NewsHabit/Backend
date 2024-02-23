@@ -1,7 +1,7 @@
 import requests
 
 import logging
-import utils.ConfigManager as ConfigManager
+import ConfigManager
 
 def extractRealTimePopularSearches() -> list :
     url = ConfigManager.getConfigData("ranking_site").get("url")

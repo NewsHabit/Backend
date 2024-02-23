@@ -3,7 +3,7 @@ import urllib.request
 import logging
 from urllib.parse import quote
 
-import src.CrawlNews as CrawlNews
+import CrawlNews
 
 def getRequestUrl(url : str, clientInfo : map) -> str :
     req = urllib.request.Request(url)
