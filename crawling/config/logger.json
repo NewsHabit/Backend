@@ -17,7 +17,7 @@
 		"class": "logging.FileHandler",
 		"level": "ERROR",
 		"formatter": "basic",
-		"filename": "../logs/error.log"
+		"filename": "./logs/error.log"
 	  }
 	},
 	"loggers": {

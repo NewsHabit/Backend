@@ -4,16 +4,15 @@ import json
 import sys
 import os
 upper_directory = os.path.dirname(os.getcwd())
-sys.path.append(upper_directory + '/utils')
-sys.path.append(upper_directory + '/data')
-import ConfigManager
+sys.path.append(upper_directory + '/crawling/utils')
+sys.path.append(upper_directory + '/crawling/data')
 import ConfigManager
 import DBManager
 import NaverApi
 import CrawlNews
 import CrawlPopularSearches as cps
 
-loggerConfig = json.load(open('../config/logger.json'))
+loggerConfig = json.load(open('./config/logger.json'))
 logging.config.dictConfig(loggerConfig)
 
 def main():
