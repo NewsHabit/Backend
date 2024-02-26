@@ -42,13 +42,13 @@ def extractNewsFromUrl(url : str) -> News :
     news = News()
     # 제목
     meta = soup.find('meta', attrs = {"property" : "og:title"})
-    news.title = meta.get("content").replace('\"', '\\"').replace('\'', "\\'")
+    news.title = meta.get("content").replace('\"', '\\\\"').replace('\'', "\\\\'")
     # 사진 링크
     meta = soup.find('meta', attrs = {"property" : "og:image"})
     news.imgLink = meta.get("content")
     # 요약
     meta = soup.find('meta', attrs = {"property" : "og:description"})
-    news.description = meta.get("content").replace('\"', '\\"').replace('\'', "\\'") + "..."
+    news.description = meta.get("content").replace('\"', '\\\\"').replace('\'', "\\\\'") + "..."
     # 강조 구문
     try :
         news.description = meta.find('strong').get_text() + "..."
