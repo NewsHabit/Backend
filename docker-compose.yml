@@ -9,10 +9,13 @@ services:
       MYSQL_PASSWORD: 'crawl1234'
       MYSQL_ROOT_PASSWORD: 'root1234'
       TZ: 'Asia/Seoul'
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
     ports:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/custom.cnf
 
   spring-app:
     build:
@@ -23,7 +26,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/news_habit?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/news_habit?useUnicode=true&characterEncoding=utf8
       SPRING_DATASOURCE_USERNAME: "crawl_user"
       SPRING_DATASOURCE_PASSWORD: "crawl1234"
       TZ: "Asia/Seoul"
@@ -39,5 +42,6 @@ services:
     command: python3 ./src/main.py
     depends_on:
       - mysql
+
 volumes:
   db-data:

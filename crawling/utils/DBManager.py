@@ -6,13 +6,14 @@ import ConfigManager
 
 mysqlConf = ConfigManager.getConfigData("mysql")
 logging.getLogger('__main__').info("WAITING....")
-time.sleep(5)
+time.sleep(30)
 try :
 	conn = MySQLdb.connect(
 		user = mysqlConf["user_id"],
 		passwd = mysqlConf["user_password"],
 		host = mysqlConf["host"],
-		db = mysqlConf["table"]
+		db = mysqlConf["table"],
+		charset='utf8mb4'
 	)
 
 	cursor = conn.cursor()

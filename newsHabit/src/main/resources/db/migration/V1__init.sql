@@ -6,4 +6,4 @@ CREATE TABLE `news` (
     img_link varchar(128) DEFAULT NULL,
     description varchar(256) NOT NULL,
     PRIMARY KEY(naver_url)
-)
+) default character set utf8 collate utf8_unicode_ci;
