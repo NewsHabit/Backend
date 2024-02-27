@@ -40,7 +40,7 @@ def getNewsByNaverSearch(keyword : str, start : int, display : int, clientInfo :
 
     jsonResponse = json.loads(responseDecode)
     newsUrls = getSearchedUrls(jsonResponse["items"])
-    searchMaxCnt = 1
+    searchMaxCnt = 2
     newsList = CrawlNews.extractNewsFromUrlList(newsUrls, searchMaxCnt)
     return newsList
 
