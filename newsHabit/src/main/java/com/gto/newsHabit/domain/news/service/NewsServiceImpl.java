@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gto.newsHabit.data.News;
 import com.gto.newsHabit.data.type.NewsCategory;
 import com.gto.newsHabit.domain.news.data.NewsRepositoryImpl;
-import com.gto.newsHabit.domain.news.dto.RecommendedNewsRequestDto;
+import com.gto.newsHabit.domain.news.exception.InvalidParameterException;
+import com.gto.newsHabit.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +39,19 @@ public class NewsServiceImpl implements NewsService {
 	/**
 	 * <p>categories 의 기사를 총 cnt 개 만큼 랜덤하게 골라서 반환해 줍니다.</p>
 	 * <p>각 카테고리별 뽑는 개수는 최대한 균등하게 뽑아줍니다.</p>
-	 * @param requestDto categories, cnt
+	 * @param params categories
+	 * @param chooseCnt 개수
 	 * @return List<News>
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public List<News> getRecommendedNewsList(RecommendedNewsRequestDto requestDto) {
+	public List<News> getRecommendedNewsList(Set<NewsCategory> params, long chooseCnt) {
 		// init
-		List<NewsCategory> newsCategories = requestDto.getCategories();
+		isValidParams(params, chooseCnt);
+		List<NewsCategory> newsCategories = new ArrayList<>(params);
 		Collections.shuffle(newsCategories);
-		int cnt = (int)(requestDto.getCnt() / newsCategories.size());
-		int restCnt = (int)(requestDto.getCnt() % newsCategories.size());
+		int cnt = (int)(chooseCnt / newsCategories.size());
+		int restCnt = (int)(chooseCnt % newsCategories.size());
 
 		List<News> newsList = newsRepositoryImpl.findAllByCategoryIn(newsCategories);
 		HashMap<NewsCategory, List<News>> categoryMap = new HashMap<>();
@@ -87,5 +90,16 @@ public class NewsServiceImpl implements NewsService {
 			set.add(num);
 		}
 		return set.stream().toList();
+	}
+
+	/**
+	 * <p>서비스 로직에 맞게 쿼리 파라미터 조건 체크</p>
+	 * @param categories
+	 * @param cnt
+	 */
+	private void isValidParams(Set<NewsCategory> categories, long cnt) {
+		if (categories.size() > 6 || cnt < 3 || cnt > 5) {
+			throw new InvalidParameterException(ErrorCode.BAD_PARAMETERS);
+		}
 	}
 }

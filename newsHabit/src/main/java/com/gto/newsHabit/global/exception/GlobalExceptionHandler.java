@@ -4,10 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import com.gto.newsHabit.global.exception.custom.CustomRuntimeException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,18 +20,34 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler({BindException.class})
 	public ResponseEntity<ErrorResponse> validException(BindException ex) {
-		log.error("bind error", ex.getBindingResult().getAllErrors().get(0));
-		ErrorCode ec = ErrorCode.VALID_FAILED;
+		log.error("BIND ERROR", ex.getBindingResult().getAllErrors().get(0));
+		ErrorCode ec = ErrorCode.BIND_ERROR;
 		ec.setMessage(ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
 		ErrorResponse response = new ErrorResponse(ec);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler({CustomRuntimeException.class})
+	public ResponseEntity<ErrorResponse> customException(CustomRuntimeException ex) {
+		log.error(ex.getMessage());
+		ErrorCode ec = ex.getErrorCode();
+		ec.setMessage(ex.getMessage());
+		ErrorResponse response = new ErrorResponse(ec);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+	@ExceptionHandler({MissingServletRequestParameterException.class})
+	public ResponseEntity<ErrorResponse> missingServletRequestParameterException(MissingServletRequestParameterException ex) {
+		log.error(ex.getMessage());
+		ErrorCode ec = ErrorCode.PARAMETER_REQUIRED;
+		ErrorResponse response = new ErrorResponse(ec);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
+
+
 	@ExceptionHandler({MethodArgumentTypeMismatchException.class})
 	public ResponseEntity<ErrorResponse> typeErrorException(MethodArgumentTypeMismatchException ex) {
-		log.error("type error", ex.getMessage());
-		ErrorCode ec = ErrorCode.VALID_FAILED;
-		ec.setMessage(ex.getMessage());
+		log.error("TYPE ERROR", ex.getMessage());
+		ErrorCode ec = ErrorCode.BAD_PARAMETERS;
 		ErrorResponse response = new ErrorResponse(ec);
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}

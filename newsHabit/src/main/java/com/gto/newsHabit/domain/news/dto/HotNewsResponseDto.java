@@ -11,15 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HotNewsResponseDto {
 	private String title;
-	private String category;
 	private String naverUrl;
 	private String imgLink;
 	private String description;
 
 	@Builder
-	HotNewsResponseDto(String title, String category, String naverUrl, String imgLink, String description) {
+	HotNewsResponseDto(String title, String naverUrl, String imgLink, String description) {
 		this.title = title;
-		this.category = category;
 		this.naverUrl = naverUrl;
 		this.imgLink = imgLink;
 		this.description = description;
