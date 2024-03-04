@@ -3,9 +3,12 @@ import logging.config
 import json
 import sys
 import os
-upper_directory = os.path.dirname(os.getcwd())
-sys.path.append(upper_directory + '/crawling/utils')
-sys.path.append(upper_directory + '/crawling/data')
+curScript = os.path.realpath(__file__)
+curDir = os.path.dirname(curScript)
+upper_directory = os.path.dirname(curDir)
+os.chdir(upper_directory)
+sys.path.append(upper_directory + '/utils')
+sys.path.append(upper_directory + '/data')
 import ConfigManager
 import DBManager
 import NaverApi
