@@ -31,7 +31,7 @@ def main():
             DBManager.saveNews("HOT", newsList)
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 완료")
         # 인기 검색어 뉴스 삭제
-        DBManager.deleteNewsByCategoryAndHour("HOT", 1)
+        DBManager.deleteNewsByCategoryAndHour("HOT", 2)
         logging.getLogger('__main__').info("인기 검색어 뉴스 삭제 완료")
         # 카테고리 별 기사 추출
         logging.getLogger('__main__').info("카테고리 별 기사 추출 시작")
@@ -45,7 +45,7 @@ def main():
             DBManager.saveNews(categories[sid], newsList)
         logging.getLogger('__main__').info("카테고리 별 기사 추출 완료")
         # 주어진 시간 이전 카테고리 별 기사 삭제
-        DBManager.deleteCategoryNewsByHour(24)
+        DBManager.deleteCategoryNewsByHour(12)
         logging.getLogger('__main__').info("카테고리 별 기사 삭제 완료")
     except Exception as e :
         logging.getLogger('__main__').error(e)

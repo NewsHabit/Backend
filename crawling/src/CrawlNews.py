@@ -10,7 +10,7 @@ from News import News
 import ConfigManager
 
 def extractHeadlineUrl(sid : int, page : int) -> list :
-    time.sleep(random.uniform(1, 3))
+    time.sleep(random.uniform(2, 3))
     ### 뉴스 분야(sid)와 페이지(page)를 입력하면 그에 대한 링크들을 리스트로 추출하는 함수 ###
     ## 1. headline 기사만 추출된다.
     url = f"https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1={sid}#&date=%2000:00:00&page={page}"
