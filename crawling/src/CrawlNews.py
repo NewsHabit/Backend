@@ -4,6 +4,7 @@ import logging
 import random
 import time
 from datetime import datetime
+import pytz
 
 from News import News
 import ConfigManager
@@ -16,7 +17,7 @@ def extractHeadlineUrl(sid : int, page : int) -> list :
     try :
         html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
-            raise Exception("headline crawl failed")
+            raise Exception("headline crawl failed: " + str(html.status_code))
     except Exception as e :
         logging.getLogger('__main__').error(e)
         return []
@@ -34,7 +35,7 @@ def extractNewsFromUrl(url : str) -> News :
     try :
         html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
-            raise Exception("news data crawl failed")
+            raise Exception("news data crawl failed: " + str(html.status_code))
     except Exception as e :
         logging.getLogger('__main__').error(e)
         return None
@@ -58,7 +59,8 @@ def extractNewsFromUrl(url : str) -> News :
     meta = soup.find('meta', attrs = {"property" : "og:url"})
     news.naverLink = meta.get("content")
     # 크롤된 시간
-    news.crawledTime = datetime.now().strftime("%Y-%m-%dT%H:00:00")
+    koreaTimezone = pytz.timezone('Asia/Seoul')
+    news.crawledTime = datetime.now(pytz.utc).astimezone(koreaTimezone).strftime("%Y-%m-%dT%H:00:00")
     return news
 
 def extractNewsFromUrlList(urlList : list, maxCnt : int) -> list :

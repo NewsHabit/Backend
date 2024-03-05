@@ -8,7 +8,7 @@ def extractRealTimePopularSearches() -> list :
     try :
         response = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if response.status_code != 200 :
-            raise Exception("headline crawl failed")
+            raise Exception("headline crawl failed :" + str(response.status_code))
     except Exception as e :
         logging.getLogger('__main__').error(e)
         return []
