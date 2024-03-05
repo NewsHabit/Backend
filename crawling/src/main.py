@@ -14,8 +14,11 @@ import DBManager
 import NaverApi
 import CrawlNews
 import CrawlPopularSearches as cps
+import Logger
 
 loggerConfig = json.load(open('./config/logger.json'))
+# 'basic' formatter에 대해 KSTFormatter를 사용하도록 설정합니다.
+loggerConfig['formatters']['basic']['()'] = Logger.KSTFormatter
 logging.config.dictConfig(loggerConfig)
 
 def main():
