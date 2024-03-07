@@ -4,3 +4,5 @@ COPY . .
 
 RUN pip install --upgrade setuptools wheel
 RUN pip install --no-cache-dir --upgrade pip -r requirements.txt
+
+ENTRYPOINT ["python3", "src/main.py"]

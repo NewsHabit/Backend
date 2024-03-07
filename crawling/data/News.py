@@ -1,3 +1,6 @@
+"""
+뉴스 클래스입니다.
+"""
 class News :
 	__description = ""
 	__imgLink = ""
