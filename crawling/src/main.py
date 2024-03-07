@@ -16,8 +16,8 @@ import CrawlNews
 import CrawlPopularSearches as cps
 import Logger
 
-loggerConfig = json.load(open('./config/logger.json'))
 # 'basic' formatter에 대해 KSTFormatter를 사용하도록 설정합니다.
+loggerConfig = json.load(open('./config/logger.json'))
 loggerConfig['formatters']['basic']['()'] = Logger.KSTFormatter
 logging.config.dictConfig(loggerConfig)
 
@@ -26,7 +26,7 @@ def main():
         # 네이버 api 에 필요한 정보 config.json 에서 가져오기
         clientInfo = ConfigManager.getConfigData("naver_api")
 
-        # 인기 검색어 뉴스 추출
+        # 인기 검색어 뉴스 추출 및 저장
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 시작")
         keywords = cps.extractRealTimePopularSearches()
         hotNewsSet = set()
@@ -38,7 +38,7 @@ def main():
         # 인기 검색어 뉴스 삭제
         DBManager.deleteNewsByCategoryAndHour("HOT", 2, 10)
         logging.getLogger('__main__').info("인기 검색어 뉴스 삭제 완료")
-        # 카테고리 별 기사 추출
+        # 카테고리 별 기사 추출 및 저장
         logging.getLogger('__main__').info("카테고리 별 기사 추출 시작")
         sids = [100, 101, 102, 103, 104, 105]
         categories = {100 : "POLITICS", 101 : "ECONOMY", 102 : "SOCIETY",

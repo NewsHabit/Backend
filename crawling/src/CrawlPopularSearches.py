@@ -3,6 +3,10 @@ import requests
 import logging
 import ConfigManager
 
+"""
+실시간 인기 키워드를 크롤하는 메서드입니다.
+제대로된 응답을 받지 못한다면 빈 리스트를 반환합니다.
+"""
 def extractRealTimePopularSearches() -> list :
     url = ConfigManager.getConfigData("ranking_site").get("url")
     try :

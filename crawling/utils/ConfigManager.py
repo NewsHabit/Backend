@@ -2,7 +2,9 @@ import json
 import logging
 import logging.config
 
-# 네이버 api 사용자 정보 가져오는 함수
+"""
+외부로 노출되면 안되는 config를 가져오는 메서드입니다.
+"""
 def getConfigData(data : str) -> map :
 	try:
 		with open("./config/config.json", 'r') as f :
