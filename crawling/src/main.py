@@ -29,12 +29,14 @@ def main():
         # 인기 검색어 뉴스 추출
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 시작")
         keywords = cps.extractRealTimePopularSearches()
+        hotNewsSet = set()
         for keyword in keywords :
             newsList = NaverApi.getNewsByNaverSearch(keyword, 1, 100, clientInfo)
-            DBManager.saveNews("HOT", newsList)
+            hotNewsSet.add(frozenset(newsList))
+        DBManager.saveNews("HOT", list(hotNewsSet))
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 완료")
         # 인기 검색어 뉴스 삭제
-        DBManager.deleteNewsByCategoryAndHour("HOT", 2)
+        DBManager.deleteNewsByCategoryAndHour("HOT", 2, 10)
         logging.getLogger('__main__').info("인기 검색어 뉴스 삭제 완료")
         # 카테고리 별 기사 추출
         logging.getLogger('__main__').info("카테고리 별 기사 추출 시작")
@@ -42,13 +44,15 @@ def main():
         categories = {100 : "POLITICS", 101 : "ECONOMY", 102 : "SOCIETY",
                       103 : "LIFESTYLE_CULTURE", 104 : "IT_SCIENCE", 105 : "WORLD"}
         for sid in sids :
+            logging.getLogger('__main__').info("카테고리 [" + categories[sid] + "] 추출 시작")
             urlList = CrawlNews.extractHeadlineUrl(sid, 1)
             searchMaxCnt = 10 if len(urlList) > 10 else len(urlList)
             newsList = CrawlNews.extractNewsFromUrlList(urlList, searchMaxCnt)
             DBManager.saveNews(categories[sid], newsList)
         logging.getLogger('__main__').info("카테고리 별 기사 추출 완료")
         # 주어진 시간 이전 카테고리 별 기사 삭제
-        DBManager.deleteCategoryNewsByHour(12)
+        for sid in sids :
+            DBManager.deleteNewsByCategoryAndHour(categories[sid], 12, 10)
         logging.getLogger('__main__').info("카테고리 별 기사 삭제 완료")
     except Exception as e :
         logging.getLogger('__main__').error(e)
