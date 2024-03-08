@@ -1,6 +1,8 @@
 package com.gto.newsHabit.util;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +51,18 @@ public class TestDataUtils {
 		}
 	}
 
+	public String getRecommendedNewsQueryString(int cnt) {
+		StringBuilder sb = new StringBuilder();
+		List<NewsCategory> categories = new ArrayList<>(List.of(NewsCategory.values()));
+		Collections.shuffle(categories);
+		int chosen = 0;
+		for (int i = 0; i < NewsCategory.values().length && chosen < cnt; i++) {
+			if (categories.get(i).equals(NewsCategory.HOT)) {
+				continue;
+			}
+			sb.append("categories=").append(categories.get(i)).append("&&");
+			chosen++;
+		}
+		return sb.delete(sb.length() - 2, sb.length()).toString();
+	}
 }
