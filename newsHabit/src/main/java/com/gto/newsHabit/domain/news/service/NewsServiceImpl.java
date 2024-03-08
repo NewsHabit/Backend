@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gto.newsHabit.data.News;
 import com.gto.newsHabit.data.type.NewsCategory;
-import com.gto.newsHabit.domain.news.data.NewsRepositoryImpl;
+import com.gto.newsHabit.domain.news.data.NewsRepository;
 import com.gto.newsHabit.domain.news.exception.InvalidParameterException;
 import com.gto.newsHabit.global.exception.ErrorCode;
 
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
-	private final NewsRepositoryImpl newsRepositoryImpl;
+	private final NewsRepository newsRepository;
 
 	/**
 	 * <p>실시간 인기 검색 뉴스를 반환합니다.</p>
@@ -33,7 +33,7 @@ public class NewsServiceImpl implements NewsService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<News> getHotNewsList() {
-		return newsRepositoryImpl.findAllByCategory(NewsCategory.HOT);
+		return newsRepository.findAllByCategory(NewsCategory.HOT);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class NewsServiceImpl implements NewsService {
 		int cnt = (int)(chooseCnt / newsCategories.size());
 		int restCnt = (int)(chooseCnt % newsCategories.size());
 
-		List<News> newsList = newsRepositoryImpl.findAllByCategoryIn(newsCategories);
+		List<News> newsList = newsRepository.findAllByCategoryIn(newsCategories);
 		HashMap<NewsCategory, List<News>> categoryMap = new HashMap<>();
 		HashMap<NewsCategory, Integer> numByCategory = new HashMap<>();
 		newsCategories.forEach(category -> categoryMap.put(category, new ArrayList<>()));
@@ -98,7 +98,10 @@ public class NewsServiceImpl implements NewsService {
 	 * @param cnt
 	 */
 	private void isValidParams(Set<NewsCategory> categories, long cnt) {
-		if (categories.size() > 6 || cnt < 3 || cnt > 5) {
+		int categoryMaxSize = 6;
+		int targetCntMin = 3;
+		int targetCntMax = 5;
+		if (categories.size() > categoryMaxSize || cnt < targetCntMin || cnt > targetCntMax) {
 			throw new InvalidParameterException(ErrorCode.BAD_PARAMETERS);
 		}
 	}
