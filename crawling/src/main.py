@@ -29,11 +29,9 @@ def main():
         # 인기 검색어 뉴스 추출 및 저장
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 시작")
         keywords = cps.extractRealTimePopularSearches()
-        hotNewsSet = set()
         for keyword in keywords :
             newsList = NaverApi.getNewsByNaverSearch(keyword, 1, 100, clientInfo)
-            hotNewsSet.add(frozenset(newsList))
-        DBManager.saveNews("HOT", list(hotNewsSet))
+            DBManager.saveNews("HOT", newsList)
         logging.getLogger('__main__').info("인기 검색어 뉴스 추출 완료")
         # 인기 검색어 뉴스 삭제
         DBManager.deleteNewsByCategoryAndHour("HOT", 2, 10)

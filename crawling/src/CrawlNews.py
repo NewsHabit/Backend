@@ -13,7 +13,7 @@ import ConfigManager
 해당 분야의 headline url들을 추출하여 중복없이 리스트로 반환합니다.
 """
 def extractHeadlineUrl(sid : int, page : int) -> list :
-    time.sleep(random.uniform(5, 6))
+    time.sleep(random.uniform(3, 4))
     ###  ###
     ## 1. headline 기사만 추출된다.
     url = f"https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1={sid}#&date=%2000:00:00&page={page}"
@@ -38,7 +38,7 @@ def extractHeadlineUrl(sid : int, page : int) -> list :
 정상 응답을 받지 못한 경우 로깅을 하고 해당 기사는 넘어갑니다.
 """
 def extractNewsFromUrl(url : str) -> News :
-    time.sleep(random.uniform(5, 6))
+    time.sleep(random.uniform(3, 4))
     try :
         html = requests.get(url, headers={"User-Agent": ConfigManager.getConfigData("request_header").get("User-Agent")})
         if html.status_code != 200 :
