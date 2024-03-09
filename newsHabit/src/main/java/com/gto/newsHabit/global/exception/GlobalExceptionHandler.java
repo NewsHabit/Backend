@@ -3,7 +3,6 @@ package com.gto.newsHabit.global.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -60,7 +59,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler({NoResourceFoundException.class})
-	protected ResponseEntity<ErrorResponse> NoResourceFoundExceptionHandle(
+	public ResponseEntity<ErrorResponse> NoResourceFoundExceptionHandle(
 		NoResourceFoundException ex) {
 		log.error("지원하지 않는 메소드 요청입니다.", ex);
 		ErrorResponse response = new ErrorResponse(ErrorCode.METHOD_NOT_ALLOWED);
