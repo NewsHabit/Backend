@@ -104,5 +104,8 @@ public class NewsServiceImpl implements NewsService {
 		if (categories.size() > categoryMaxSize || cnt < targetCntMin || cnt > targetCntMax) {
 			throw new InvalidParameterException(ErrorCode.BAD_PARAMETERS);
 		}
+		categories.stream().filter(a->a.equals(NewsCategory.HOT))
+			.findAny()
+			.ifPresent(a-> {throw new InvalidParameterException(ErrorCode.BAD_PARAMETERS);});
 	}
 }
