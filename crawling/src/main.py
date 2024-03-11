@@ -51,7 +51,7 @@ def main():
         # 주어진 시간 이전 카테고리 별 기사 삭제
         for sid in sids :
             DBManager.deleteNewsByCategoryAndHour(categories[sid], 8, 10)
-        logging.getLogger('__main__').info("카테고리 별 기사 삭제 완료")
+            logging.getLogger('__main__').info("카테고리 [" + categories[sid] + "] 삭제 완료")
     except Exception as e :
         logging.getLogger('__main__').error(e)
 
