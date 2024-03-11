@@ -40,7 +40,7 @@ def main():
         logging.getLogger('__main__').info("카테고리 별 기사 추출 시작")
         sids = [100, 101, 102, 103, 104, 105]
         categories = {100 : "POLITICS", 101 : "ECONOMY", 102 : "SOCIETY",
-                      103 : "LIFESTYLE_CULTURE", 104 : "IT_SCIENCE", 105 : "WORLD"}
+                      103 : "LIFESTYLE_CULTURE", 104 : "WORLD", 105 : "IT_SCIENCE"}
         for sid in sids :
             logging.getLogger('__main__').info("카테고리 [" + categories[sid] + "] 추출 시작")
             urlList = CrawlNews.extractHeadlineUrl(sid, 1)
