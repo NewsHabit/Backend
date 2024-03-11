@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.gto.newsHabit.data.News;
 import com.gto.newsHabit.data.type.NewsCategory;
 
-public interface NewsRepositoryImpl extends JpaRepository<News, String> {
+public interface NewsRepository extends JpaRepository<News, String> {
 	List<News> findAllByCategory(NewsCategory category);
 	List<News> findAllByCategoryIn(List<NewsCategory> categories);
 }

@@ -1,7 +1,6 @@
 config.json
 *.log
 __pycache__
-test
 .DS_Store
 docker-compose.yml
 *.pem

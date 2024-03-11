@@ -7,4 +7,4 @@ WORKDIR newsHabit
 COPY build/libs/newsHabit-0.0.1-SNAPSHOT.jar newsHabit.jar
 
 # JAR 파일 실행
-ENTRYPOINT ["java","-jar","newsHabit.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.profiles.active=prod", "newsHabit.jar"]

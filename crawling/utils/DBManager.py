@@ -1,5 +1,7 @@
 import MySQLdb
 import logging
+from datetime import datetime, timedelta
+import pytz
 
 import ConfigManager
 
@@ -39,11 +41,9 @@ def saveNews(category : str, newsList : list) -> None :
 
 """
 def deleteNewsByCategoryAndHour(category : str, hour : int, targetCnt : int) -> None :
-	if isAbleToDelete(category, hour, targetCnt) == False :
-		logging.getLogger('__main__').info("TOO FEW TO DELETE")
-		return None
+	targetTime = getDeletableTime(category, hour, targetCnt)
 	try :
-		cursor.execute(f"DELETE FROM news WHERE date_time <= DATE_SUB(NOW(), INTERVAL {hour} HOUR) AND category = \'{category}\'")
+		cursor.execute(f"DELETE FROM news WHERE date_time <  \'{targetTime}\' AND category = \'{category}\'")
 	except Exception as e:
 		logging.getLogger('__main__').error(e)
 		return None
@@ -52,14 +52,20 @@ def deleteNewsByCategoryAndHour(category : str, hour : int, targetCnt : int) -> 
 """
 해당 카테고리의 (현재 시간 - hour ~ 현재 시간)을 만족하는 타겟 개수가 targetCnt 보다 크다면 삭제하는 조건
 """
-def isAbleToDelete(category : str, hour : int, targetCnt : int) -> bool :
+def getDeletableTime(category : str, hour : int, targetCnt : int) -> str :
 	try :
-		cursor.execute(f"SELECT COUNT(*) FROM news WHERE date_time BETWEEN DATE_SUB(NOW(), INTERVAL {hour} HOUR) AND NOW() AND category = \'{category}\'")
+		koreaTimezone = pytz.timezone('Asia/Seoul')
+		availableTime = datetime.now(pytz.utc).astimezone(koreaTimezone).replace(minute=0, second=0, microsecond=0)
+		targetTime = availableTime.strftime("%Y-%m-%dT%H:00:00")
+		availableTime = availableTime - timedelta(hours=hour)
+		cursor.execute(f"SELECT date_time FROM news WHERE category = \'{category}\' ORDER BY date_time DESC")
+		result = cursor.fetchall()
+		for r in result :
+			if targetCnt <= 0 :
+				targetTime = r[0]
+				break
+			targetCnt -= 1
 	except Exception as e:
 		logging.getLogger('__main__').error(e)
-		return False
-	result = cursor.fetchone()
-	resultCnt = result[0]
-	if resultCnt < targetCnt :
-		return False
-	return True
+	targetTime = koreaTimezone.localize(targetTime)
+	return min(targetTime, availableTime).strftime("%Y-%m-%dT%H:00:00")
