@@ -1,7 +1,10 @@
-# 📰 NewsHabit 백엔드 디렉토리입니다.
+# <img src="https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/2c35e329-6332-44d5-bf72-861ecfaf8223" width="30" height="30"/> NewsHabit 백엔드 디렉토리입니다.
+
+
 
 ##  프로젝트 소개
 > *뉴스를 잘 접하지 않는 사용자들을 위해 가볍게 접할 수 있도록 추천 뉴스를 제공하는 ios 애플리케이션입니다.*
+
 
 ## 기능 소개
 - Crawling
