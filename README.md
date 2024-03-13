@@ -1,12 +1,7 @@
 # 📰 NewsHabit 백엔드 디렉토리입니다.
 
-## 🔗 관련 링크
-[NewsHabit_iOS 디렉토리](https://github.com/Green-Tea-organization/NewsHabit_iOS)
-
-[블로그](https://songs4ri.vercel.app/news-habit)
-
 ##  프로젝트 소개
-*뉴스를 잘 접하지 않는 사용자들을 위해 가볍게 접할 수 있도록 추천 뉴스를 제공하는 ios 애플리케이션입니다.*
+> *뉴스를 잘 접하지 않는 사용자들을 위해 가볍게 접할 수 있도록 추천 뉴스를 제공하는 ios 애플리케이션입니다.*
 
 ## 기능 소개
 - Crawling
@@ -35,9 +30,14 @@
 ## 프로젝트 관리
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"></a>
 ## 프로젝트 개발 기간
-2024.02.10 ~ 2024.03.
+`2024.02.10 ~ 2024.03.`
 ## 프로젝트 아키텍쳐
 ![AWS 아키텍쳐](https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/4e681c82-5d41-423a-86ad-38755746e872)
+
+## 🔗 관련 링크
+[NewsHabit_iOS 디렉토리](https://github.com/Green-Tea-organization/NewsHabit_iOS)
+
+[블로그](https://songs4ri.vercel.app/news-habit)
 
 <details>
   <summary>필요 파일</summary>
