@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/news-habit")
+@RequestMapping("/api")
 public class NewsControllerImpl implements NewsController {
 	private final NewsService newsService;
 	private final ModelMapper modelMapper;
@@ -35,7 +35,7 @@ public class NewsControllerImpl implements NewsController {
 	 * <p>현재 시간대의 인기 검색어 기반 기사를 가져온다.</p>
 	 * @return HotNewsResponseDtoList
 	 */
-	@GetMapping("/issue")
+	@GetMapping("/issues")
 	@Override
 	public ResponseEntity<HotNewsResponseDtoList> getHotNewsList() {
 		List<News> newsList = newsService.getHotNewsList();
@@ -54,7 +54,7 @@ public class NewsControllerImpl implements NewsController {
 	 * @param cnt 개수
 	 * @return RecommendedNewsResponseDtoList
 	 */
-	@GetMapping("/recommendation")
+	@GetMapping("/recommendations")
 	@Override
 	public ResponseEntity<RecommendedNewsResponseDtoList> getRecommendedNewsList(
 		@RequestParam Set<NewsCategory> categories, @RequestParam long cnt) {
