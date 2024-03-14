@@ -5,19 +5,6 @@
 ##  프로젝트 소개
 > *뉴스를 잘 접하지 않는 사용자들을 위해 가볍게 접할 수 있도록 추천 뉴스를 제공하는 ios 애플리케이션입니다.*
 
-
-## 기능 소개
-- Crawling
-  - Naver Open API를 사용하여 검색어를 기반으로 뉴스에 대한 정보를 얻습니다.
-  - Python 스크립트를 Docker 컨테이너로 일정 기간마다 실행시켜 AWS RDS에 임시 저장하고 삭제합니다.
-- API
-  - `/news-habit/issue`
-    - 현재 시간을 기준으로 최근 인기 급상승 중인 뉴스의 간단한 정보를 제공합니다.
-  - `/news-habit/recommendation?categories=카테고리&&...&&cnt=개수`
-    -  선택한 카테고리들 중 원하는 cnt 만큼의 기사를 랜덤하게 제공합니다.
-- Spring Security 를 활용해 정해진 API 에 대해서만 응답을 합니다.
-- AWS CloudFront와 ACM을 사용하여 `https` 를 사용합니다.
-
 ## 기술 스택
 <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"></a>
 <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
@@ -30,6 +17,18 @@
 
 <img src="https://img.shields.io/badge/amazon_aws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"></a>
 
+## 기능 소개
+- Crawling
+  - Naver Open API를 사용하여 검색어를 기반으로 뉴스에 대한 정보를 얻습니다.
+  - Python 스크립트를 Docker 컨테이너로 일정 기간마다 실행시켜 AWS RDS에 임시 저장하고 삭제합니다.
+- API
+  - `/api/issues`
+    - 현재 시간을 기준으로 최근 인기 급상승 중인 뉴스의 간단한 정보를 제공합니다.
+  - `/api/recommendations?categories=카테고리&&...&&cnt=개수`
+    -  선택한 카테고리들 중 원하는 cnt 만큼의 기사를 랜덤하게 제공합니다.
+- Spring Security 를 활용해 정해진 API 에 대해서만 응답을 합니다.
+- AWS CloudFront와 ACM을 사용하여 `https` 를 사용합니다.
+
 ## 프로젝트 관리
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"></a>
 ## 프로젝트 개발 기간
@@ -39,6 +38,8 @@
 
 ## 🔗 관련 링크
 [NewsHabit_iOS 디렉토리](https://github.com/Green-Tea-organization/NewsHabit_iOS)
+
+[NewsHabit](https://newshabit.org)
 
 [블로그](https://songs4ri.vercel.app/news-habit)
 
