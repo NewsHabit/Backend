@@ -26,11 +26,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// flyway
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
+	// modelmapper
 	implementation 'org.modelmapper:modelmapper:2.4.4'
-	// security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -40,4 +42,24 @@ dependencies {
 }
 test {
 	useJUnitPlatform()
+}
+
+//유닛 테스트
+task UnitTest(type: Test) {
+	group = 'verification'
+	description = 'Runs the unit tests.'
+	useJUnitPlatform {
+		includeTags 'UnitTest'
+		excludeTags 'IntegrationTest'
+	}
+}
+
+//통합 테스트
+task IntegrationTest(type: Test) {
+	group = 'verification'
+	description = 'Runs the integration tests.'
+	useJUnitPlatform {
+		includeTags 'IntegrationTest'
+		excludeTags 'UnitTest'
+	}
 }
