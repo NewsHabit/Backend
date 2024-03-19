@@ -13,10 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gto.newsHabit.data.type.NewsCategory;
@@ -24,13 +21,9 @@ import com.gto.newsHabit.domain.news.data.NewsRepository;
 import com.gto.newsHabit.domain.news.dto.HotNewsResponseDtoList;
 import com.gto.newsHabit.domain.news.dto.RecommendedNewsResponseDtoList;
 import com.gto.newsHabit.util.TestDataUtils;
+import com.gto.newsHabit.util.annotation.IntegrationTest;
 
-import lombok.RequiredArgsConstructor;
-
-@SpringBootTest
-@AutoConfigureMockMvc
-@RequiredArgsConstructor
-@Transactional
+@IntegrationTest
 class NewsControllerIntegrationTest {
 	@Autowired MockMvc mockMvc;
 	@Autowired ObjectMapper objectMapper;
@@ -53,7 +46,7 @@ class NewsControllerIntegrationTest {
 		@DisplayName("success")
 		void success() throws Exception {
 			// given
-			String url = "/news-habit/issue";
+			String url = "/api/issues";
 			// when, then
 			String contentAsString = mockMvc.perform(get(url))
 				.andExpect(status().isOk())
@@ -73,7 +66,7 @@ class NewsControllerIntegrationTest {
 		void success(int cnt) throws Exception {
 			// given
 			String query = testDataUtils.getRecommendedNewsQueryString(cnt);
-			String url = "/news-habit/recommendation?" + query + "&&cnt=" + cnt;
+			String url = "/api/recommendations?" + query + "&&cnt=" + cnt;
 			// when, then
 			String contentAsString = mockMvc.perform(get(url))
 				.andExpect(status().isOk())
@@ -90,7 +83,7 @@ class NewsControllerIntegrationTest {
 		void fail1(int cnt) throws Exception {
 			// given
 			String query = testDataUtils.getRecommendedNewsQueryString(cnt);
-			String url = "/news-habit/recommendation?" + query + "&&cnt=" + cnt;
+			String url = "/api/recommendations?" + query + "&&cnt=" + cnt;
 			// when, then
 			String contentAsString = mockMvc.perform(get(url))
 				.andExpect(status().isBadRequest())
@@ -102,7 +95,7 @@ class NewsControllerIntegrationTest {
 		@DisplayName("잘못된 쿼리 파라미터")
 		void fail2() throws Exception {
 			// given
-			String url = "/news-habit/recommendation?something=wrong";
+			String url = "/api/recommendations?something=wrong";
 			// when, then
 			String contentAsString = mockMvc.perform(get(url))
 				.andExpect(status().isBadRequest())
@@ -114,12 +107,28 @@ class NewsControllerIntegrationTest {
 		@DisplayName("카테고리 개수 6개 초과")
 		void fail3() throws Exception {
 			// given
-			String url = "/news-habit/recommendation?categories=HOT&&categories=POLITICS&&"
+			String url = "/api/recommendations?categories=HOT&&categories=POLITICS&&"
 				+ "categories=ECONOMY&&categories=SOCIETY&&categories=LIFESTYLE_CULTURE&&"
 				+ "categories=IT_SCIENCE&&categories=WORLD&&cnt=4";
 			// when, then
 			String contentAsString = mockMvc.perform(get(url))
 				.andExpect(status().isBadRequest())
+				.andReturn().getResponse().getContentAsString();
+			System.out.println(contentAsString);
+		}
+	}
+
+	@Nested
+	@DisplayName("thymeleaf 테스트")
+	class ThymeleafIntegrationTest {
+		@Test
+		@DisplayName("success")
+		void success() throws Exception {
+			// given
+			String url = "/";
+			// when, then
+			String contentAsString = mockMvc.perform(get(url))
+				.andExpect(status().isOk())
 				.andReturn().getResponse().getContentAsString();
 			System.out.println(contentAsString);
 		}
