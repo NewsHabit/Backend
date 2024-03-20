@@ -5,6 +5,13 @@
 ##  프로젝트 소개
 > *뉴스를 잘 접하지 않는 사용자들을 위해 가볍게 접할 수 있도록 추천 뉴스를 제공하는 iOS 애플리케이션입니다.*
 
+<img src="https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/7b0d7a48-457e-4e79-8e34-7f1d17957ae2" width="207" height="368"/>
+<img src="https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/cb212fa3-e2ad-4b8b-bd7d-961e3e72f930" width="207" height="368"/>
+<img src="https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/9b8284bc-8dd4-44ec-92b3-14deeb15a7c8" width="207" height="368"/>
+<img src="https://github.com/Green-Tea-organization/NewsHabit_Backend/assets/100538007/c798861c-ce90-4dec-a375-fc95492fb3de" width="207" height="368"/>
+
+
+
 ## 프로젝트 개발 기간
 `2024.02.10 ~ 2024.03.`
 ## 프로젝트 관리
