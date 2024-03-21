@@ -1,20 +1,13 @@
-@font-face {
-    font-family: 'NanumSquareRound';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
-h1, h2, b {
-    font-weight: 900;
-}
-
 body {
     font-family: 'NanumSquareRound', sans-serif;
     padding: 0 20px;
     margin: 0;
-    font-size: 12px;
-    background-color: #f6f8fa;
+    font-size: 14px;
+    background-color: #F6F8FA;
+}
+
+b {
+    font-family: 'NanumSquareRoundExtraBold', sans-serif;
 }
 
 a {
@@ -31,8 +24,9 @@ a:hover {
     margin: 0 auto;
 }
 
-.title {
-    color: #7aa085;
+.app-img {
+    width: 100%;
+    height: auto;
 }
 
 .team {
@@ -61,6 +55,7 @@ a:hover {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    font-size: 12px;
 }
 
 .profile-message {
