@@ -66,7 +66,7 @@
 
 
 ## 🔗 관련 링크
-[NewsHabit_iOS 디렉토리](https://github.com/Green-Tea-organization/NewsHabit_iOS)
+[NewsHabit_iOS 디렉토리](https://github.com/NewsHabit/iOS)
 
 [NewsHabit 소개 페이지](https://newshabit.org)
 
