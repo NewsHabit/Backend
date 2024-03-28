@@ -13,7 +13,7 @@
 
 
 ## 프로젝트 개발 기간
-`2024.02.10 ~ 2024.03.`
+`2024.02.10 ~ 2024.04.`
 ## 프로젝트 관리
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"></a>
 ## 기술 스택
