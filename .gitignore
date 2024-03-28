@@ -1,1 +1,6 @@
-naver_api_conf.json
+config.json
+*.log
+__pycache__
+.DS_Store
+docker-compose.yml
+*.pem
