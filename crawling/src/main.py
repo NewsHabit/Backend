@@ -54,6 +54,7 @@ def main():
             logging.getLogger('__main__').info("카테고리 [" + categories[sid] + "] 삭제 완료")
     except Exception as e :
         logging.getLogger('__main__').error(e)
+    DBManager.disconnectDB()
 
 if __name__ == '__main__':
     main()

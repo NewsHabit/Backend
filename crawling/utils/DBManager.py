@@ -9,7 +9,6 @@ import ConfigManager
 DB 연결
 """
 mysqlConf = ConfigManager.getConfigData("mysql")
-logging.getLogger('__main__').info("WAITING....")
 try :
 	conn = MySQLdb.connect(
 		user = mysqlConf["user_id"],
@@ -21,7 +20,18 @@ try :
 	cursor = conn.cursor()
 except Exception as e :
 	logging.getLogger('__main__').error(e)
+	exit(1)
 logging.getLogger('__main__').info("DB CONNECTED!!!")
+
+"""
+DB 연결 해제
+"""
+def disconnectDB() -> None :
+	if cursor:
+		cursor.close()
+	if conn:
+		conn.close()
+	logging.getLogger('__main__').info("DB DISCONNECTED!!!")
 
 """
 뉴스 기사를 DB에 저장하는 메서드입니다.
@@ -41,8 +51,8 @@ def saveNews(category : str, newsList : list) -> None :
 
 """
 def deleteNewsByCategoryAndHour(category : str, hour : int, targetCnt : int) -> None :
-	targetTime = getDeletableTime(category, hour, targetCnt)
 	try :
+		targetTime = getDeletableTime(category, hour, targetCnt)
 		cursor.execute(f"DELETE FROM news WHERE date_time <  \'{targetTime}\' AND category = \'{category}\'")
 	except Exception as e:
 		logging.getLogger('__main__').error(e)
@@ -56,16 +66,17 @@ def getDeletableTime(category : str, hour : int, targetCnt : int) -> str :
 	try :
 		koreaTimezone = pytz.timezone('Asia/Seoul')
 		availableTime = datetime.now(pytz.utc).astimezone(koreaTimezone).replace(minute=0, second=0, microsecond=0)
-		targetTime = availableTime.strftime("%Y-%m-%dT%H:00:00")
+		targetTime = availableTime
 		availableTime = availableTime - timedelta(hours=hour)
 		cursor.execute(f"SELECT date_time FROM news WHERE category = \'{category}\' ORDER BY date_time DESC")
 		result = cursor.fetchall()
+
 		for r in result :
 			if targetCnt <= 0 :
 				targetTime = r[0]
 				break
 			targetCnt -= 1
+		targetTime = koreaTimezone.localize(targetTime)
 	except Exception as e:
 		logging.getLogger('__main__').error(e)
-	targetTime = koreaTimezone.localize(targetTime)
 	return min(targetTime, availableTime).strftime("%Y-%m-%dT%H:00:00")
