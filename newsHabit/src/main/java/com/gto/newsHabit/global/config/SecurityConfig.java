@@ -13,8 +13,10 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((authz) -> authz
+				.requestMatchers("/img", "/css")
+				.denyAll()
 				.requestMatchers("/", "/api/issues", "/api/recommendations",
-					"/img/**", "/css/**", "/favicon.ico")
+				"/img/**", "/css/**", "/favicon.ico")
 				.permitAll()
 				.anyRequest()
 				.denyAll())// 나머지 요청은 모두 거부
