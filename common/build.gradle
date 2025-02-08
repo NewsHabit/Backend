@@ -6,10 +6,6 @@ bootJar { enabled = false }
 jar { enabled = true }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-stream'
-
-    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
-    testImplementation 'org.springframework.security:spring-security-test'
+//    implementation 'org.springframework.cloud:spring-cloud-stream'
+//    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 }

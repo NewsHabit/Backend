@@ -35,6 +35,7 @@ subprojects {
 
     // 모든 서브 모듈에서 사용될 공통 의존성들을 추가함
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
         compileOnly 'org.projectlombok:lombok'
