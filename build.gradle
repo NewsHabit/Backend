@@ -3,14 +3,12 @@ buildscript {
 
 }
 
-
 // plugin 이란 미리 구성해놓은 task 들의 모음이며, 특정 빌드과정에 필요한 기본정보를 포함함
 plugins {
     id 'java' // 테스트, 번들링 기능과 함께 Java 컴파일을 추가해주며, 다른 JVM 언어 플러그인의 기반이 됨
     id 'org.springframework.boot' version '3.4.2' // 실행가능한 jar 또는 war로 패키징하여 애플리케이션 실행이 가능하도록 하며, spring-boot-dependencies 기반의 의존성 관리를 사용함
     id 'io.spring.dependency-management' version '1.1.7' // 자동으로 spring-boot-dependencies bom을 끌어와서 버전 관리를 해줌
 }
-
 
 // 현재의 root 프로젝트와 앞으로 추가될 서브 모듈에 대한 설정
 allprojects {
@@ -20,6 +18,7 @@ allprojects {
     // 라이브러리들을 받아올 원격 저장소들을 설정함
     repositories {
         mavenCentral()
+        maven { url 'https://repo.spring.io/milestone' }
     }
 }
 
@@ -42,6 +41,18 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    // Spring Cloud 버전 관리
+    ext {
+        set('springCloudVersion', "2024.0.0")
+    }
+
+    // Spring Cloud BOM 적용 (Kafka 바인더 포함)
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
     }
 
     // 모든 서브 모듈에서 Junit을 사용하기 위한 설정
