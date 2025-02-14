@@ -17,5 +17,5 @@ dependencies {
     testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 
     // crawl
-    implementation 'org.jsoup:jsoup'
+    implementation 'org.jsoup:jsoup:1.15.4'
 }

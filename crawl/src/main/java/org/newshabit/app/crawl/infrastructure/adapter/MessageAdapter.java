@@ -1,43 +1,34 @@
 package org.newshabit.app.crawl.infrastructure.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.crawl.application.port.CrawlInputPort;
+import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.crawl.application.port.MessageOutputPort;
-import org.newshabit.app.crawl.domain.Category;
-import org.newshabit.app.crawl.domain.News;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
-public class MessageAdapter implements MessageOutputPort {
-	private final CrawlInputPort crawlInputPort;
+public class MessageAdapter<T> implements MessageOutputPort<T> {
 	private final StreamBridge streamBridge;
 
-	@Scheduled(cron = "0 0 * * * *")
-	public void sendNewsAtExactHour() {
-		List<String> urls = new ArrayList<>();
-		List<News> newsList = new ArrayList<>();
-
-		for (Category category : Category.values()) {
-			crawlInputPort.crawlNewsUrl(category, 10);
-			newsList.addAll(crawlInputPort.crawlNewsContents(urls));
+	@Override
+	public void publishMessage(T message, String targetTopic) {
+		boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
+		if (!sent) {
+			log.error("message publish to {} failed: {}", targetTopic, message);
 		}
+	}
 
-		newsList.forEach(news -> {
-			try {
-				boolean sent = streamBridge.send("output-out-0", MessageBuilder.withPayload(news).build());
+	@Override
+	public void publishMessages(List<T> messages, String targetTopic) {
+		messages.forEach(message -> {
+				boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
 				if (!sent) {
-					System.err.println("[FAIL] crawl server -> crawl topic: " + news);
+					log.error("message publish to {} failed: {}", targetTopic, message);
 				}
-			} catch (Exception e) {
-				System.err.println(e.getMessage());
-				System.err.println("[FAIL] crawl server -> crawl topic: " + news);
-			}
 		});
 	}
 }
