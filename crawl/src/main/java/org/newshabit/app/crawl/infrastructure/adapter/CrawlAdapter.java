@@ -1,6 +1,7 @@
 package org.newshabit.app.crawl.infrastructure.adapter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -18,18 +19,28 @@ public class CrawlAdapter implements CrawlOutputPort {
 	@Override
 	public List<String> crawlHeadlineUrls(String url) {
 		try {
-			Document document = Jsoup.connect(url).get();
+			String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
+			Document document = Jsoup.connect(url).userAgent(userAgent).get();
 
-			// 제목 가져오기
-			String title = document.title();
-			System.out.println("페이지 제목: " + title);
+			List<String> headlineUrls = new ArrayList<>();
 
-			// 모든 링크 가져오기
-			Elements links = document.select("a[href]");
-			System.out.println("\n페이지 내 링크 목록:");
-			for (Element link : links) {
-				System.out.println(link.text() + " -> " + link.attr("href"));
+			Elements items = document.select("li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
+			for (Element item : items) {
+				Elements links = item.select("div.sa_text a[data-imp-index]");
+				for (Element link : links) {
+					String indexStr = link.attr("data-imp-index");
+					try {
+						int index = Integer.parseInt(indexStr);
+						if (1 <= index && index <= 10) {
+							String href = link.attr("href");
+							headlineUrls.add(href);
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("잘못된 data-imp-index 값: " + indexStr);
+					}
+				}
 			}
+
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -39,5 +50,15 @@ public class CrawlAdapter implements CrawlOutputPort {
 	@Override
 	public News crawlNews(String url) {
 		return null;
+	}
+
+	public static void main(String[] args) {
+		try {
+			CrawlAdapter crawlAdapter = new CrawlAdapter();
+			String url = "https://news.naver.com/section/100";
+			crawlAdapter.crawlHeadlineUrls(url);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
 	}
 }

@@ -13,4 +13,5 @@ public class News {
 	private String content;
 	private String originalLink;
 	private LocalDateTime crawledTime;
+	private Category category;
 }
