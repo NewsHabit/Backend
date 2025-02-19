@@ -1,64 +1,95 @@
 package org.newshabit.app.crawl.infrastructure.adapter;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.newshabit.app.common.util.SleepUtil;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
+import org.newshabit.app.crawl.domain.Category;
 import org.newshabit.app.crawl.domain.News;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class CrawlAdapter implements CrawlOutputPort {
+	private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
 
 	@Override
-	public List<String> crawlHeadlineUrls(String url) {
+	public List<String> crawlHeadlineUrls(String url, Category category) {
 		try {
-			String userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
-			Document document = Jsoup.connect(url).userAgent(userAgent).get();
+			Document document = fetchHtmlDocument(url + category.getCode());
 
-			List<String> headlineUrls = new ArrayList<>();
-
-			Elements items = document.select("li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
-			for (Element item : items) {
-				Elements links = item.select("div.sa_text a[data-imp-index]");
-				for (Element link : links) {
-					String indexStr = link.attr("data-imp-index");
-					try {
-						int index = Integer.parseInt(indexStr);
-						if (1 <= index && index <= 10) {
-							String href = link.attr("href");
-							headlineUrls.add(href);
-						}
-					} catch (NumberFormatException e) {
-						System.out.println("잘못된 data-imp-index 값: " + indexStr);
-					}
-				}
-			}
-
+			return extractHeadlineUrls(document);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
 		}
-		return null;
+	}
+
+	private Document fetchHtmlDocument(String url) throws IOException {
+		return Jsoup.connect(url)
+			.userAgent(USER_AGENT)
+			.timeout(5000)
+			.get();
+	}
+
+	private List<String> extractHeadlineUrls(Document document) {
+		Elements items = document.select("li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
+
+		return items.stream()
+			.flatMap(item -> item.select("div.sa_text a[data-imp-index]").stream())
+			.map(this::extractValidUrl)
+			.flatMap(Optional::stream)
+			.collect(Collectors.toList());
+	}
+
+	private Optional<String> extractValidUrl(Element link) {
+		String indexStr = link.attr("data-imp-index");
+
+		try {
+			int index = Integer.parseInt(indexStr);
+			if (1 <= index && index <= 10) {
+				return Optional.of(link.attr("href"));
+			}
+		} catch (NumberFormatException ignored) {
+
+		}
+		return Optional.empty();
 	}
 
 	@Override
-	public News crawlNews(String url) {
-		return null;
+	public News crawlNews(String url, Category category) {
+		SleepUtil.randomSleep(0, 1000);
+		try {
+			Document document = fetchHtmlDocument(url);
+
+			String title = extractTitle(document);
+			String content = extractContent(document);
+
+			return News.create(title, content, url, LocalDateTime.now(), category);
+		} catch (IOException e) {
+			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
+		}
 	}
 
-	public static void main(String[] args) {
-		try {
-			CrawlAdapter crawlAdapter = new CrawlAdapter();
-			String url = "https://news.naver.com/section/100";
-			crawlAdapter.crawlHeadlineUrls(url);
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
+	private String extractTitle(Document document) throws RuntimeException {
+		return Optional.ofNullable(document.getElementById("title_area"))
+			.map(Element::text)
+			.orElseThrow(() -> new RuntimeException("제목을 찾을 수 없습니다."));
+	}
+
+	private String extractContent(Document document) throws RuntimeException {
+		return Optional.ofNullable(document.getElementById("dic_area"))
+			.map(element -> {
+				element.select(".img_desc").remove();
+				return element.text();
+			})
+			.orElseThrow(() -> new RuntimeException("본문을 찾을 수 없습니다."));
 	}
 }

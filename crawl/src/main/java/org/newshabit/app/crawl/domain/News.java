@@ -7,11 +7,22 @@ import lombok.ToString;
 
 @Getter
 @ToString
-@RequiredArgsConstructor
 public class News {
-	private String title;
-	private String content;
-	private String originalLink;
-	private LocalDateTime crawledTime;
-	private Category category;
+	private final String title;
+	private final String content;
+	private final String originalLink;
+	private final LocalDateTime crawledTime;
+	private final Category category;
+
+	private News(String title, String content, String originalLink, LocalDateTime crawledTime, Category category) {
+		this.title = title;
+		this.content = content;
+		this.originalLink = originalLink;
+		this. crawledTime = crawledTime;
+		this.category = category;
+	}
+
+	public static News create(String title, String content, String originalLink, LocalDateTime crawledTime, Category category) {
+		return new News(title, content, originalLink, crawledTime, category);
+	}
 }
