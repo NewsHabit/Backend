@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    function:
+      definition: input;dlq # 하나 이상의 함수가 정의된 경우, Spring Cloud Stream이 실행할 함수를 선택하기 위해 필요합니다.
+    stream:
+      bindings:
+        input-in-0:
+          destination: test-topic
+          content-type: application/json
+          group: test-group
+          consumer:
+            maxAttempts: 3 # 최대 3번 재시도
+            back-off-initial-interval: 1000 # 1초 간격으로 재시도
+            concurrency: 3 # 3개의 컨슈머로 병렬 처리
+        dlq-in-0:
+          destination: test-topic-dlq
+          content-type: application/json
+          group: test-dlq-group
+      kafka:
+        bindings:
+          input-in-0:
+            consumer:
+              enable-dlq: true # DLT 활성화
+              dlq-name: test-topic-dlq # DLT 토픽 이름
+              autoCommitOnError: false # 오류 발생 시 자동 커밋 방지
+        binder:
+          brokers: localhost:29092,localhost:39092,localhost:49092
+          auto-create-topics: false
