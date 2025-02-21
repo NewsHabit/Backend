@@ -13,7 +13,6 @@ public class CommonResponse<T> {
 		return new CommonResponse<>(200, "Success", data);
 	}
 
-	// 실패 응답을 위한 정적 메서드
 	public static <T> CommonResponse<T> error(int status, String message) {
 		return new CommonResponse<>(status, message, null);
 	}

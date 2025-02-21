@@ -1,16 +1,19 @@
+server:
+  port: 8080
+
 spring:
   cloud:
-    function:
-      definition: output; # 하나 이상의 함수가 정의된 경우, Spring Cloud Stream이 실행할 함수를 선택하기 위해 필요합니다.
     stream:
-      bindings:
-        output-out-0:
-          destination: crawl
-          content-type: application/json
-          group: crawl-group
-          producer:
-            errorChannelEnabled: true
       kafka:
         binder:
           brokers: localhost:29092,localhost:39092,localhost:49092
           auto-create-topics: false
+
+app:
+  kafka:
+    crawl:
+      topic: crawl
+  crawl:
+    start-time: 1000
+    end-time: 2000
+

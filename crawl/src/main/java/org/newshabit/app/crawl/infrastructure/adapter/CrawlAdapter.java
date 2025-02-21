@@ -14,12 +14,17 @@ import org.newshabit.app.common.util.SleepUtil;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
 import org.newshabit.app.crawl.domain.Category;
 import org.newshabit.app.crawl.domain.News;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class CrawlAdapter implements CrawlOutputPort {
 	private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
+	@Value("${app.crawl.start-time:1000}")
+	private String startTime;
+	@Value("${app.crawl.end-time:3000}")
+	private String endTime;
 
 	@Override
 	public List<String> crawlHeadlineUrls(String url, Category category) {
@@ -65,7 +70,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 
 	@Override
 	public News crawlNews(String url, Category category) {
-		SleepUtil.randomSleep(0, 1000);
+		SleepUtil.randomSleep(Integer.parseInt(startTime) , Integer.parseInt(endTime));
 		try {
 			Document document = fetchHtmlDocument(url);
 
