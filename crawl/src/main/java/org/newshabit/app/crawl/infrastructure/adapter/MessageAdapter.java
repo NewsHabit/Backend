@@ -1,25 +1,34 @@
 package org.newshabit.app.crawl.infrastructure.adapter;
 
-import java.util.function.Consumer;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.crawl.application.port.MessageOutputPort;
-import org.newshabit.app.crawl.domain.News;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.Message;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.stereotype.Component;
 
-@Configuration
-public class MessageAdapter implements MessageOutputPort {
-	@Bean
-	public Consumer<Message<News>> input() throws RuntimeException {
-		return message -> {
-			System.out.println("input: " + message.getPayload().toString());
-		};
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class MessageAdapter<T> implements MessageOutputPort<T> {
+	private final StreamBridge streamBridge;
+
+	@Override
+	public void publishMessage(T message, String targetTopic) {
+		boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
+		if (!sent) {
+			log.error("message publish to {} failed: {}", targetTopic, message);
+		}
 	}
 
-	@Bean
-	public Consumer<Message<News>> dlq() throws RuntimeException {
-		return message -> {
-			System.out.println("DLQ: " + message.getPayload());
-		};
+	@Override
+	public void publishMessages(List<T> messages, String targetTopic) {
+		messages.forEach(message -> {
+				boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
+				if (!sent) {
+					log.error("message publish to {} failed: {}", targetTopic, message);
+				}
+		});
 	}
 }
