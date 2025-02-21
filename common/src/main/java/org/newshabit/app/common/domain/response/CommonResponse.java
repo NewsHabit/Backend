@@ -1,4 +1,4 @@
-package org.newshabit.app.common.domain;
+package org.newshabit.app.common.domain.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

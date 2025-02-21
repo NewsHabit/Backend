@@ -10,10 +10,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.common.util.SleepUtil;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
-import org.newshabit.app.crawl.domain.Category;
-import org.newshabit.app.crawl.domain.News;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 	private String endTime;
 
 	@Override
-	public List<String> crawlHeadlineUrls(String url, Category category) {
+	public List<String> crawlHeadlineUrls(String url, NewsCategory category) {
 		try {
 			Document document = fetchHtmlDocument(url + category.getCode());
 
@@ -69,7 +69,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 	}
 
 	@Override
-	public News crawlNews(String url, Category category) {
+	public CrawledNews crawlNews(String url, NewsCategory category) {
 		SleepUtil.randomSleep(Integer.parseInt(startTime) , Integer.parseInt(endTime));
 		try {
 			Document document = fetchHtmlDocument(url);
@@ -77,7 +77,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 			String title = extractTitle(document);
 			String content = extractContent(document);
 
-			return News.create(title, content, url, LocalDateTime.now(), category);
+			return CrawledNews.create(title, content, url, LocalDateTime.now(), category);
 		} catch (IOException e) {
 			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
 		}

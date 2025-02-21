@@ -2,4 +2,5 @@ rootProject.name = 'app'
 include 'crawl'
 include 'news'
 include 'common'
+include 'ai-converter'
 

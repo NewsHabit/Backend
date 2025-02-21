@@ -2,10 +2,10 @@ package org.newshabit.app.crawl.bootstrap.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.CommonResponse;
+import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.response.CommonResponse;
 import org.newshabit.app.crawl.application.port.CrawlInputPort;
 import org.newshabit.app.crawl.application.port.MessageInputPort;
-import org.newshabit.app.crawl.domain.News;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +22,8 @@ public class CrawlingPublisherController {
 	@GetMapping("/produce")
 	public ResponseEntity<CommonResponse<String>> crawlNewsAndProduce() {
 		try {
-			List<News> crawledNews = crawlInputPort.crawlNews();
-			messageInputPort.publishCrawledNews(crawledNews);
+			List<CrawledNews> crawledNewsList = crawlInputPort.crawlNews();
+			messageInputPort.publishCrawledNews(crawledNewsList);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(CommonResponse.error(500, e.getMessage()));
 		}

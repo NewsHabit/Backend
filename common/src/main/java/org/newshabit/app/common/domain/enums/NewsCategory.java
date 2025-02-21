@@ -1,10 +1,10 @@
-package org.newshabit.app.crawl.domain;
+package org.newshabit.app.common.domain.enums;
 
 
 import lombok.Getter;
 
 @Getter
-public enum Category {
+public enum NewsCategory {
 	POLITICS(100),
 	ECONOMY(101),
 	SOCIETY(102),
@@ -14,7 +14,7 @@ public enum Category {
 
 	private final int code;
 
-	Category(int code) {
+	NewsCategory(int code) {
 		this.code = code;
 	}
 }
