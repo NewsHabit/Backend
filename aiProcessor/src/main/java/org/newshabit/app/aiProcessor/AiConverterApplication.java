@@ -7,8 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages = {"org.newshabit.app.common",
-    "org.newshabit.app.aiProcessor"})
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.aiProcessor"})
 
 public class AiConverterApplication {
 

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RefinedNewsRepository extends JpaRepository<RefinedNews, Long> {
 
-	Optional<Boolean> findByUrl(String url);
+	boolean existsByOriginalUrl(String url);
 }

@@ -16,9 +16,10 @@ public class RefineNewsUseCase implements RefineNewsInputPort {
 
 	@Override
 	public RefinedNews refineCrawledNews(CrawledNews crawledNews) {
-		refinedNewsRepositoryOutputPort.findByUrl(crawledNews.getOriginalLink()).ifPresent(refinedNews -> {
+		boolean exists = refinedNewsRepositoryOutputPort.existsByOriginalUrl(crawledNews.getOriginalLink());
+		if (exists) {
 			throw new RuntimeException("duplicate url: " + crawledNews.getOriginalLink());
-		});
+		}
 
 		return aiOutputPort.aiProcessNews(crawledNews);
 	}

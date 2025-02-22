@@ -12,7 +12,7 @@ public class RefinedNewsRepositoryAdapter implements RefinedNewsRepositoryOutput
 	private final RefinedNewsRepository refinedNewsRepository;
 
 	@Override
-	public Optional<Boolean> findByUrl(String url) {
-		return refinedNewsRepository.findByUrl(url);
+	public boolean existsByOriginalUrl(String url) {
+		return refinedNewsRepository.existsByOriginalUrl(url);
 	}
 }

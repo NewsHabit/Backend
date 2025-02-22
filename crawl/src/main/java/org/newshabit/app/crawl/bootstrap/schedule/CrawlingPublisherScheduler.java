@@ -17,7 +17,7 @@ public class CrawlingPublisherScheduler {
 	private final CrawlInputPort crawlInputPort;
 	private final MessageInputPort messageInputPort;
 
-	@Scheduled(cron = "0 * * * * *")
+	@Scheduled(cron = "0 0 * * * *")
 	public void crawlNewsAndProduce() {
 		try {
 			log.info("CrawlingPublisherScheduler Started: {}", LocalDateTime.now());
