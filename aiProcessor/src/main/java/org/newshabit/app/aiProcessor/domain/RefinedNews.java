@@ -11,12 +11,14 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class RefinedNews {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,25 @@ public class RefinedNews {
 	private String title;
 
 	@Column(columnDefinition = "TEXT")
-	private String fiveWoneH;
+	private String who;
+
+	@Column(columnDefinition = "TEXT")
+	private String when;
+
+	@Column(columnDefinition = "TEXT")
+	private String where;
+
+	@Column(columnDefinition = "TEXT")
+	private String what;
+
+	@Column(columnDefinition = "TEXT")
+	private String why;
+
+	@Column(columnDefinition = "TEXT")
+	private String how;
+
+	@Column(columnDefinition = "TEXT")
+	private String keyword;
 
 	@Column(columnDefinition = "TEXT")
 	private String summary;

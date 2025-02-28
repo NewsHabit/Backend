@@ -1,5 +1,6 @@
 package org.newshabit.app.aiProcessor.application.usecase;
 
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.aiProcessor.application.port.AiOutputPort;
 import org.newshabit.app.aiProcessor.application.port.RefineNewsInputPort;
@@ -21,6 +22,10 @@ public class RefineNewsUseCase implements RefineNewsInputPort {
 			throw new RuntimeException("duplicate url: " + crawledNews.getOriginalLink());
 		}
 
-		return aiOutputPort.aiProcessNews(crawledNews);
+		try {
+			return aiOutputPort.aiProcessNews(crawledNews);
+		} catch (IOException | InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

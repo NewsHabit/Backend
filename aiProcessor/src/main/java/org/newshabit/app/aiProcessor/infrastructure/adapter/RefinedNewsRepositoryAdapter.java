@@ -1,6 +1,5 @@
 package org.newshabit.app.aiProcessor.infrastructure.adapter;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.aiProcessor.application.port.RefinedNewsRepositoryOutputPort;
 import org.newshabit.app.aiProcessor.infrastructure.repository.RefinedNewsRepository;

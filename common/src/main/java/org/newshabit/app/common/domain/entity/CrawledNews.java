@@ -18,7 +18,7 @@ public class CrawledNews {
 		this.title = title;
 		this.content = content;
 		this.originalLink = originalLink;
-		this. crawledTime = crawledTime;
+		this.crawledTime = crawledTime;
 		this.newsCategory = newsCategory;
 	}
 
