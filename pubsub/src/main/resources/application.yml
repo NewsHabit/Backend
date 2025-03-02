@@ -1,0 +1,57 @@
+server:
+  port: 8081
+
+spring:
+  cloud:
+    function:
+      definition: refineNews;sinkRefinedNews;
+    stream:
+      bindings:
+        refineNews-in-0:
+          destination: crawl
+          content-type: application/json
+          group: refine-group
+          consumer:
+            partitioned: true
+            maxAttempts: 3
+            back-off-initial-interval: 1000
+            concurrency: 2
+        refineNews-out-0:
+          destination: refinedNews
+          content-type: application/json
+          group: refine-group
+
+        sinkRefinedNews-in-0:
+          destination: refinedNews
+          content-type: application/json
+          group: sink-group
+          consumer:
+            partitioned: true
+            maxAttempts: 3
+            back-off-initial-interval: 1000
+            concurrency: 2
+
+      kafka:
+        binder:
+          brokers: localhost:29092,localhost:39092,localhost:49092
+          auto-create-topics: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/newshabit?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+app:
+  ai:
+    url: "${GEMINI_API_KEY}"
+    prompt: "모든 응답은 20대 대학생도 이해하기 쉽게 뉴스기사 형식으로. 응답에 특수문자나 이모티콘 제외 및 UTF-8로. originTitle을 수정해서 title에 작성. originContent를 100토큰 이내로 요약해서 summary에 작성. summary를 바탕으로 육하원칙을 각각 who, what, when, where, why, how에 작성. summary에서 핵심 키워드 10개를 선정해 영어로 keyword에 작성."
+

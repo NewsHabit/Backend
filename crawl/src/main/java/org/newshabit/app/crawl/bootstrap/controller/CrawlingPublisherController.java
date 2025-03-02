@@ -2,7 +2,7 @@ package org.newshabit.app.crawl.bootstrap.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.response.CommonResponse;
 import org.newshabit.app.crawl.application.port.CrawlInputPort;
 import org.newshabit.app.crawl.application.port.MessageInputPort;

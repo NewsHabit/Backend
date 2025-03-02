@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.crawl.application.port.CrawlInputPort;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;

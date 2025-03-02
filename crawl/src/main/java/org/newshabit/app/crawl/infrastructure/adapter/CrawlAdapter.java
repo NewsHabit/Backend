@@ -10,7 +10,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.common.util.SleepUtil;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
