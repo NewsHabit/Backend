@@ -1,0 +1,8 @@
+server:
+  port: 8081
+
+app:
+  ai:
+    url: "${GEMINI_API_KEY}"
+    prompt: "모든 응답은 20대 대학생도 이해하기 쉽게 뉴스기사 형식으로. 응답에 특수문자나 이모티콘 제외 및 UTF-8로. originTitle을 수정해서 title에 작성. originContent를 100토큰 이내로 요약해서 summary에 작성. summary를 바탕으로 육하원칙을 각각 who, what, when, where, why, how에 작성. summary에서 핵심 키워드 10개를 선정해 영어로 keyword에 작성."
+

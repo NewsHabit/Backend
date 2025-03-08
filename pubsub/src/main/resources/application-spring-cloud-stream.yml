@@ -1,0 +1,34 @@
+spring:
+  cloud:
+    function:
+      definition: refineNews;sinkRefinedNews;
+    stream:
+      bindings:
+        refineNews-in-0:
+          destination: crawl
+          content-type: application/json
+          group: refine-group
+          consumer:
+            partitioned: true
+            maxAttempts: 3
+            back-off-initial-interval: 1000
+            concurrency: 2
+        refineNews-out-0:
+          destination: refinedNews
+          content-type: application/json
+          group: refine-group
+
+        sinkRefinedNews-in-0:
+          destination: refinedNews
+          content-type: application/json
+          group: sink-group
+          consumer:
+            partitioned: true
+            maxAttempts: 3
+            back-off-initial-interval: 1000
+            concurrency: 2
+
+      kafka:
+        binder:
+          brokers: localhost:29092,localhost:39092,localhost:49092
+          auto-create-topics: false

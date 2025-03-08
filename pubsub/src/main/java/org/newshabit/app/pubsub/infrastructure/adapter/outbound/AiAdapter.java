@@ -1,4 +1,4 @@
-package org.newshabit.app.pubsub.infrastructure.adapter;
+package org.newshabit.app.pubsub.infrastructure.adapter.outbound;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

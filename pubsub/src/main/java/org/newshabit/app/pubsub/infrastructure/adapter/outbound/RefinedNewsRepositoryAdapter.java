@@ -1,4 +1,4 @@
-package org.newshabit.app.pubsub.infrastructure.adapter;
+package org.newshabit.app.pubsub.infrastructure.adapter.outbound;
 
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.model.RefinedNews;

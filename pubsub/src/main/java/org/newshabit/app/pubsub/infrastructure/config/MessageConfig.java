@@ -27,7 +27,7 @@ public class MessageConfig {
 				RefinedNews refinedNews = refineNewsInputPort.refineCrawledNews(message.getPayload());
 				return MessageBuilder.withPayload(refinedNews).build();
 			} catch (Exception e) {
-				log.error(e.getMessage(), e);
+				log.error(e.getMessage());
 				return null;
 			}
 		};
