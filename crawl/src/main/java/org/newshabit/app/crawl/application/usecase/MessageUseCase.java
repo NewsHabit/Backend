@@ -2,7 +2,7 @@ package org.newshabit.app.crawl.application.usecase;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.entity.CrawledNews;
+import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.crawl.application.port.MessageInputPort;
 import org.newshabit.app.crawl.application.port.MessageOutputPort;
 import org.springframework.beans.factory.annotation.Value;

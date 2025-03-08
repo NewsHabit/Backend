@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+app:
+  kafka:
+    crawl:
+      topic: crawl
+  crawl:
+    headline-uri: ${HEADLINE_URI}
+    user-agent: ${USER_AGENT}
+    start-time: 1000
+    end-time: 2000
+
