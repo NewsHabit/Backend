@@ -1,4 +1,4 @@
-package org.newshabit.app.crawl.bootstrap.schedule;
+package org.newshabit.app.crawl.application.schedule;
 
 import java.time.LocalDateTime;
 import java.util.List;

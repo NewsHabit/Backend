@@ -1,4 +1,4 @@
-package org.newshabit.app.crawl.infrastructure.adapter;
+package org.newshabit.app.crawl.infrastructure.adapter.outbound;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -20,41 +20,42 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class CrawlAdapter implements CrawlOutputPort {
-	private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
+	@Value("${app.crawl.user-agent}")
+	private String userAgent;
 	@Value("${app.crawl.start-time:1000}")
 	private String startTime;
 	@Value("${app.crawl.end-time:3000}")
 	private String endTime;
 
 	@Override
-	public List<String> crawlHeadlineUrls(String url, NewsCategory category) {
+	public List<String> crawlHeadlineUris(String uri, NewsCategory category) {
 		try {
-			Document document = fetchHtmlDocument(url + category.getCode());
+			Document document = fetchHtmlDocument(uri + category.getCode());
 
-			return extractHeadlineUrls(document);
+			return extractHeadlineUris(document);
 		} catch (IOException e) {
 			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
 		}
 	}
 
-	private Document fetchHtmlDocument(String url) throws IOException {
-		return Jsoup.connect(url)
-			.userAgent(USER_AGENT)
+	private Document fetchHtmlDocument(String uri) throws IOException {
+		return Jsoup.connect(uri)
+			.userAgent(userAgent)
 			.timeout(5000)
 			.get();
 	}
 
-	private List<String> extractHeadlineUrls(Document document) {
+	private List<String> extractHeadlineUris(Document document) {
 		Elements items = document.select("li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
 
 		return items.stream()
 			.flatMap(item -> item.select("div.sa_text a[data-imp-index]").stream())
-			.map(this::extractValidUrl)
+			.map(this::extractValidUri)
 			.flatMap(Optional::stream)
 			.collect(Collectors.toList());
 	}
 
-	private Optional<String> extractValidUrl(Element link) {
+	private Optional<String> extractValidUri(Element link) {
 		String indexStr = link.attr("data-imp-index");
 
 		try {
@@ -69,15 +70,15 @@ public class CrawlAdapter implements CrawlOutputPort {
 	}
 
 	@Override
-	public CrawledNews crawlNews(String url, NewsCategory category) {
+	public CrawledNews crawlNews(String uri, NewsCategory category) {
 		SleepUtil.randomSleep(Integer.parseInt(startTime) , Integer.parseInt(endTime));
 		try {
-			Document document = fetchHtmlDocument(url);
+			Document document = fetchHtmlDocument(uri);
 
 			String title = extractTitle(document);
 			String content = extractContent(document);
 
-			return CrawledNews.create(title, content, url, LocalDateTime.now(), category);
+			return CrawledNews.create(title, content, uri, LocalDateTime.now(), category);
 		} catch (IOException e) {
 			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
 		}

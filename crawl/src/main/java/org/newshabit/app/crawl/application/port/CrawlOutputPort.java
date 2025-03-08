@@ -5,6 +5,6 @@ import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 
 public interface CrawlOutputPort {
-	List<String> crawlHeadlineUrls(String url, NewsCategory category);
+	List<String> crawlHeadlineUris(String url, NewsCategory category);
 	CrawledNews crawlNews(String url, NewsCategory category);
 }

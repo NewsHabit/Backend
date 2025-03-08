@@ -1,4 +1,4 @@
-package org.newshabit.app.crawl.bootstrap.controller;
+package org.newshabit.app.crawl.infrastructure.adapter.inbound;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

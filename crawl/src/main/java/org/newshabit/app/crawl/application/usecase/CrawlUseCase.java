@@ -10,6 +10,7 @@ import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.crawl.application.port.CrawlInputPort;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CrawlUseCase implements CrawlInputPort {
 	private final CrawlOutputPort crawlOutputPort;
-	private static final String CRAWL_URL = "https://news.naver.com/section/";
+	@Value("${app.crawl.headline-uri}")
+	private String headlineUris;
 
 	@Override
 	public List<CrawledNews> crawlNews() {
@@ -30,7 +32,7 @@ public class CrawlUseCase implements CrawlInputPort {
 	private List<CrawledNews> crawlCategoryNews(NewsCategory category) {
 		log.info("Start Crawl Headlines: {}", category);
 
-		List<String> headlines = crawlOutputPort.crawlHeadlineUrls(CRAWL_URL, category);
+		List<String> headlines = crawlOutputPort.crawlHeadlineUris(headlineUris, category);
 
 		List<CrawledNews> newsList = headlines.stream()
 			.map(headline -> safeCrawlNews(headline, category))
@@ -42,11 +44,11 @@ public class CrawlUseCase implements CrawlInputPort {
 		return newsList;
 	}
 
-	private Optional<CrawledNews> safeCrawlNews(String headlineUrl, NewsCategory category) {
+	private Optional<CrawledNews> safeCrawlNews(String headlineUri, NewsCategory category) {
 		try {
-			return Optional.ofNullable(crawlOutputPort.crawlNews(headlineUrl, category));
+			return Optional.ofNullable(crawlOutputPort.crawlNews(headlineUri, category));
 		} catch (Exception e) {
-			log.error("{}: {}", e.getMessage(), headlineUrl);
+			log.error("{}: {}", e.getMessage(), headlineUri);
 			return Optional.empty();
 		}
 	}
