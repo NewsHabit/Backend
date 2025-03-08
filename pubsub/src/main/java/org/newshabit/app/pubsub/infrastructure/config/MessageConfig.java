@@ -4,8 +4,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.pubsub.application.port.RefineNewsInputPort;
 import org.newshabit.app.common.domain.model.RefinedNews;
+import org.newshabit.app.pubsub.application.port.RefineNewsInputPort;
 import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.util.SleepUtil;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +24,11 @@ public class MessageConfig {
 		return message -> {
 			try {
 				SleepUtil.randomSleep(1000, 3000);
-				RefinedNews refinedNews = refineNewsInputPort.refineCrawledNews(message.getPayload());
-				return MessageBuilder.withPayload(refinedNews).build();
+				return refineNewsInputPort.refineCrawledNews(message.getPayload())
+					.map(refinedNews -> MessageBuilder.withPayload(refinedNews).build())
+					.orElse(null);
 			} catch (Exception e) {
-				log.error(e.getMessage());
+				log.error("Refinement error: {}", e.getMessage());
 				return null;
 			}
 		};
@@ -35,8 +36,6 @@ public class MessageConfig {
 
 	@Bean
 	public Consumer<Message<RefinedNews>> sinkRefinedNews() {
-		return message -> {
-			refineNewsInputPort.sinkRefinedNews(message.getPayload());
-		};
+		return message -> refineNewsInputPort.sinkRefinedNews(RefinedNews.toRefinedNewsEntity(message.getPayload()));
 	}
 }

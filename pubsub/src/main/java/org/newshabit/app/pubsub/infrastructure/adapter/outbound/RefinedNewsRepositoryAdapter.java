@@ -1,7 +1,7 @@
 package org.newshabit.app.pubsub.infrastructure.adapter.outbound;
 
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.model.RefinedNews;
+import org.newshabit.app.common.domain.entity.RefinedNewsEntity;
 import org.newshabit.app.pubsub.application.port.RefinedNewsRepositoryOutputPort;
 import org.newshabit.app.pubsub.infrastructure.repository.RefinedNewsRepository;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ public class RefinedNewsRepositoryAdapter implements RefinedNewsRepositoryOutput
 		return refinedNewsRepository.existsByOriginalUrl(url);
 	}
 
-	public RefinedNews save(RefinedNews refinedNews) {
-		return refinedNewsRepository.save(refinedNews);
+	public RefinedNewsEntity save(RefinedNewsEntity refinedNewsEntity) {
+		return refinedNewsRepository.save(refinedNewsEntity);
 	}
 }

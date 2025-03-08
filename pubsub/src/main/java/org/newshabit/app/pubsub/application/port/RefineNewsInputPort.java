@@ -1,9 +1,11 @@
 package org.newshabit.app.pubsub.application.port;
 
-import org.newshabit.app.common.domain.model.RefinedNews;
+import java.util.Optional;
+import org.newshabit.app.common.domain.entity.RefinedNewsEntity;
 import org.newshabit.app.common.domain.model.CrawledNews;
+import org.newshabit.app.common.domain.model.RefinedNews;
 
 public interface RefineNewsInputPort {
-	RefinedNews refineCrawledNews(CrawledNews crawledNews);
-	void sinkRefinedNews(RefinedNews refinedNews);
+	Optional<RefinedNews> refineCrawledNews(CrawledNews crawledNews);
+	void sinkRefinedNews(RefinedNewsEntity refinedNewsEntity);
 }

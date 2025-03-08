@@ -8,6 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.pubsub.application.port.AiOutputPort;
@@ -29,8 +30,37 @@ public class AiAdapter implements AiOutputPort {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
-	public AiProcessedNews aiProcessNews(CrawledNews crawledNews) throws IOException, InterruptedException {
-		GeminiRequest request = new GeminiRequest(
+	public Optional<AiProcessedNews> aiProcessNews(CrawledNews crawledNews) throws IOException, InterruptedException {
+		GeminiRequest request = createGeminiRequest(crawledNews);
+
+		String jsonBody = objectMapper.writeValueAsString(request);
+
+		HttpClient client = HttpClient.newHttpClient();
+
+		HttpRequest httpRequest = HttpRequest.newBuilder()
+			.uri(URI.create(API_URL))
+			.header("Content-Type", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+			.build();
+
+		GeminiResponse response = objectMapper.readValue(
+			client.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body(),
+			GeminiResponse.class
+		);
+
+		if (response.candidates() == null) {
+			log.warn("No candidates found for request: {}", response);
+			return Optional.empty();
+		}
+
+		return Optional.ofNullable(objectMapper.readValue(
+			response.candidates().get(0).content().parts().get(0).text(),
+			AiProcessedNews.class
+		));
+	}
+
+	private GeminiRequest createGeminiRequest(CrawledNews crawledNews) {
+		return new GeminiRequest(
 			List.of(new GeminiRequest.Content(
 				List.of(
 					new GeminiRequest.Part(PROMPT),
@@ -58,26 +88,6 @@ public class AiAdapter implements AiOutputPort {
 					"required", List.of("title", "who", "what", "when", "why", "where", "how", "summary", "keyword")
 				)
 			)
-		);
-
-		String jsonBody = objectMapper.writeValueAsString(request);
-
-		HttpClient client = HttpClient.newHttpClient();
-
-		HttpRequest httpRequest = HttpRequest.newBuilder()
-			.uri(URI.create(API_URL))
-			.header("Content-Type", "application/json")
-			.POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-			.build();
-
-		GeminiResponse response = objectMapper.readValue(
-			client.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body(),
-			GeminiResponse.class
-		);
-
-		return objectMapper.readValue(
-			response.candidates().get(0).content().parts().get(0).text(),
-			AiProcessedNews.class
 		);
 	}
 }
