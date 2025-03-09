@@ -4,8 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.response.CommonResponse;
-import org.newshabit.app.crawl.application.port.CrawlInputPort;
-import org.newshabit.app.crawl.application.port.MessageInputPort;
+import org.newshabit.app.crawl.application.port.CrawlUseCase;
+import org.newshabit.app.crawl.application.port.MessageUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/v1/admin/crawl")
 public class CrawlingPublisherController {
-	private final CrawlInputPort crawlInputPort;
-	private final MessageInputPort messageInputPort;
+	private final CrawlUseCase crawlUseCase;
+	private final MessageUseCase messageUseCase;
 
 	@GetMapping("/produce")
 	public ResponseEntity<CommonResponse<String>> crawlNewsAndProduce() {
 		try {
-			List<CrawledNews> crawledNewsList = crawlInputPort.crawlNews();
-			messageInputPort.publishCrawledNews(crawledNewsList);
+			List<CrawledNews> crawledNewsList = crawlUseCase.crawlNews();
+			messageUseCase.publishCrawledNews(crawledNewsList);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(CommonResponse.error(500, e.getMessage()));
 		}

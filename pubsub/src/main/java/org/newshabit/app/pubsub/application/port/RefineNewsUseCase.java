@@ -5,7 +5,7 @@ import org.newshabit.app.common.domain.entity.RefinedNewsEntity;
 import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.model.RefinedNews;
 
-public interface RefineNewsInputPort {
+public interface RefineNewsUseCase {
 	Optional<RefinedNews> refineCrawledNews(CrawledNews crawledNews);
 	void sinkRefinedNews(RefinedNewsEntity refinedNewsEntity);
 }

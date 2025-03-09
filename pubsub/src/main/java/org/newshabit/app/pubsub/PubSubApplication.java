@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.pubsub"})
-@EntityScan(basePackages = "org.newshabit.app.common.domain")
+@EntityScan(basePackages = "org.newshabit.app.common.domain.entity")
 public class PubSubApplication {
 
     public static void main(String[] args) {
