@@ -1,4 +1,4 @@
-package org.newshabit.app.crawl.application.usecase;
+package org.newshabit.app.crawl.application.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.common.domain.model.CrawledNews;
 import org.newshabit.app.common.domain.enums.NewsCategory;
-import org.newshabit.app.crawl.application.port.CrawlInputPort;
+import org.newshabit.app.crawl.application.port.CrawlUseCase;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CrawlUseCase implements CrawlInputPort {
+public class CrawlService implements CrawlUseCase {
 	private final CrawlOutputPort crawlOutputPort;
 	@Value("${app.crawl.headline-uri}")
 	private String headlineUris;
