@@ -3,7 +3,7 @@ package org.newshabit.app.crawl.infrastructure.adapter.inbound;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.model.CrawledNews;
-import org.newshabit.app.common.domain.response.CommonResponse;
+import org.newshabit.app.common.util.response.CommonResponse;
 import org.newshabit.app.crawl.application.port.CrawlUseCase;
 import org.newshabit.app.crawl.application.port.MessageUseCase;
 import org.springframework.http.HttpStatus;

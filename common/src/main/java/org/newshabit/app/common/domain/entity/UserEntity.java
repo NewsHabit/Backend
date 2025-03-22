@@ -1,13 +1,14 @@
 package org.newshabit.app.common.domain.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +18,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.newshabit.app.common.domain.converter.NewsCategoryListConverter;
 import org.newshabit.app.common.domain.enums.NewsCategory;
-import org.newshabit.app.common.domain.enums.UserRole;
 
 @Entity
 @Getter
@@ -31,22 +31,15 @@ public class UserEntity {
 	private Long id;
 
 	@Column(nullable = false, length = 50)
-	private String userName;
+	private String username;
 
-	@Column(nullable = false)
-	private LocalDateTime userNameLastModified;
+	@Column(name = "username_last_modified", nullable = false)
+	private LocalDateTime usernameLastModified;
 
-	@Column(nullable = false, length = 128)
+	@Column(name = "interested_category", nullable = false, length = 128)
 	@Convert(converter = NewsCategoryListConverter.class)
 	private List<NewsCategory> interestedCategory;
 
-	@Column(nullable = false, unique = true)
-	private String authToken;
-
-	@Column(nullable = false)
-	private LocalDateTime authTokenLastModified;
-
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private UserRole userRole;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private UserAuthEntity userAuth;
 }
