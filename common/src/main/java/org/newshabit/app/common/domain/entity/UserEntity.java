@@ -15,7 +15,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.newshabit.app.common.domain.converter.NewsCategoryListConverter;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 
@@ -23,7 +22,6 @@ import org.newshabit.app.common.domain.enums.NewsCategory;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "user")
 public class UserEntity {
 	@Id

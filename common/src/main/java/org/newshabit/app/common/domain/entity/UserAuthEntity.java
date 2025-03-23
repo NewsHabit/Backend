@@ -13,14 +13,12 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.newshabit.app.common.domain.enums.UserRole;
 
 @Entity
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name = "user_auth")
 public class UserAuthEntity {
 	@Id
