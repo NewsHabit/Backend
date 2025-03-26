@@ -1,4 +1,13 @@
 spring:
-  config:
-    import: "classpath:application-common-jdbc.yml"
-
+  datasource:
+    url: jdbc:mysql://localhost:3306/newshabit?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true

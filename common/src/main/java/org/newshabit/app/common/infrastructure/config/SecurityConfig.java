@@ -35,6 +35,8 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers("/v1/admin/**").hasRole("ADMIN")
+				.requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/v1/guest/**").hasAnyRole("USER", "ADMIN", "GUEST")
 				.anyRequest().authenticated()
 			)
 			.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)

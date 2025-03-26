@@ -1,14 +1,15 @@
-package org.newshabit.app.common.domain.entity;
+package org.newshabit.app.user.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,13 +32,21 @@ public class UserEntity {
 	@Column(nullable = false, length = 50)
 	private String username;
 
-	@Column(name = "username_last_modified", nullable = false)
-	private LocalDateTime usernameLastModified;
+	@Column(name = "username_modified_at", nullable = false)
+	private LocalDateTime usernameModifiedAt;
 
-	@Column(name = "interested_category", nullable = false, length = 128)
+	@Column(name = "interest_categories", length = 255)
 	@Convert(converter = NewsCategoryListConverter.class)
-	private List<NewsCategory> interestedCategory;
+	private List<NewsCategory> interestCategories;
 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	private UserAuthEntity userAuth;
+	@Column(name = "social_id", nullable = false, unique = true, length = 100)
+	private String socialId;
+
+	@Column(nullable = false, length = 20)
+	@Enumerated(EnumType.STRING)
+	private String role;
+
+	// 연관 관계 (읽기 전용 매핑)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AuthEntity> authList;
 }

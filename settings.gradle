@@ -3,4 +3,5 @@ include 'crawl'
 include 'news'
 include 'common'
 include 'pubsub'
+include 'user'
 
