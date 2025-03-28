@@ -1,34 +1,64 @@
 spring:
   cloud:
     function:
-      definition: refineNews;sinkRefinedNews;
+      definition: refineNews;sinkRefinedNews
     stream:
       bindings:
         refineNews-in-0:
           destination: crawl
-          content-type: application/json
+          content-type: application/avro
           group: refine-group
           consumer:
             partitioned: true
             maxAttempts: 3
             back-off-initial-interval: 1000
-            concurrency: 2
+            concurrency: 1
+            use-native-decoding: true
         refineNews-out-0:
-          destination: refinedNews
-          content-type: application/json
+          destination: refined-news
+          content-type: application/avro
           group: refine-group
-
+          producer:
+            use-native-encoding: true
         sinkRefinedNews-in-0:
-          destination: refinedNews
-          content-type: application/json
+          destination: refined-news
+          content-type: application/avro
           group: sink-group
           consumer:
             partitioned: true
             maxAttempts: 3
             back-off-initial-interval: 1000
-            concurrency: 2
-
+            concurrency: 3
+            use-native-decoding: true
       kafka:
         binder:
           brokers: localhost:29092,localhost:39092,localhost:49092
           auto-create-topics: false
+        bindings:
+          refineNews-in-0:
+            consumer:
+              configuration:
+                key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                schema.registry.url: http://localhost:18081
+                linger.ms: 1000
+                specific.avro.reader: true
+          refineNews-out-0:
+            producer:
+              configuration:
+                key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                schema.registry.url: http://localhost:18081
+                linger.ms: 1000
+                auto.register.schemas: true
+                specific.avro.reader: true
+          sinkRefinedNews-in-0:
+            consumer:
+              reset-offsets: true
+              start-offset: earliest
+              configuration:
+                key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+                schema.registry.url: http://localhost:18081
+                linger.ms: 1000
+                specific.avro.reader: true

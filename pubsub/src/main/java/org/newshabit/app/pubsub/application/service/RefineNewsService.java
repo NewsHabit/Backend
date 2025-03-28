@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.common.domain.model.RefinedNews;
+import org.newshabit.app.avro.CrawledNews;
+import org.newshabit.app.avro.RefinedNews;
 import org.newshabit.app.pubsub.application.port.AiOutputPort;
 import org.newshabit.app.pubsub.application.port.RefineNewsUseCase;
 import org.newshabit.app.pubsub.application.port.RefinedNewsRepositoryOutputPort;
-import org.newshabit.app.common.domain.entity.RefinedNewsEntity;
-import org.newshabit.app.common.domain.model.CrawledNews;
+import org.newshabit.app.pubsub.domain.entity.RefinedNewsEntity;
 import org.newshabit.app.pubsub.domain.dto.AiProcessedNews;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +52,7 @@ public class RefineNewsService implements RefineNewsUseCase {
 
 	@Override
 	public void sinkRefinedNews(RefinedNewsEntity refinedNewsEntity) {
-		refinedNewsRepositoryOutputPort.save(refinedNewsEntity);
+		RefinedNewsEntity saved = refinedNewsRepositoryOutputPort.save(refinedNewsEntity);
+		log.info("sinked refined news: {}: {}", saved.getId(), saved.getOriginalUrl());
 	}
 }

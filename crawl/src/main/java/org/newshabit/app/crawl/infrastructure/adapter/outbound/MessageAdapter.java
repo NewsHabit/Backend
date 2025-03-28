@@ -15,20 +15,22 @@ public class MessageAdapter<T> implements MessageOutputPort<T> {
 	private final StreamBridge streamBridge;
 
 	@Override
-	public void publishMessage(T message, String targetTopic) {
-		boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
+	public void publishMessage(T message, String topic) {
+		boolean sent = streamBridge.send(topic, MessageBuilder.withPayload(message).build());
 		if (!sent) {
-			log.error("message publish to {} failed: {}", targetTopic, message);
+			log.error("message publish to {} failed: {}", topic, message);
 		}
 	}
 
 	@Override
-	public void publishMessages(List<T> messages, String targetTopic) {
+	public void publishMessages(List<T> messages, String topic) {
 		messages.forEach(message -> {
-				boolean sent = streamBridge.send(targetTopic, MessageBuilder.withPayload(message).build());
-				if (!sent) {
-					log.error("message publish to {} failed: {}", targetTopic, message);
-				}
+			try {
+				boolean sent = streamBridge.send(topic, MessageBuilder.withPayload(message).build());
+			} catch (Exception e) {
+				log.error("message publish to {} failed: {}", topic, message);
+				throw new RuntimeException(e);
+			}
 		});
 	}
 }

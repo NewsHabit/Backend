@@ -4,14 +4,11 @@ jar { enabled = false }
 
 dependencies {
     implementation project(':common')
+    implementation project(':auth')
+    implementation project(":common-event")
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation("org.springframework.boot:spring-boot-starter-security")
-
-    //jpa
-    implementation'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
@@ -21,4 +18,8 @@ dependencies {
 
     // crawl
     implementation 'org.jsoup:jsoup:1.15.4'
+
+    // avro
+    implementation("org.apache.avro:avro:1.11.1")
+    implementation("io.confluent:kafka-avro-serializer:7.8.0")
 }

@@ -1,7 +1,7 @@
 package org.newshabit.app.pubsub.infrastructure.adapter.outbound;
 
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.entity.RefinedNewsEntity;
+import org.newshabit.app.pubsub.domain.entity.RefinedNewsEntity;
 import org.newshabit.app.pubsub.application.port.RefinedNewsRepositoryOutputPort;
 import org.newshabit.app.pubsub.infrastructure.repository.RefinedNewsRepository;
 import org.springframework.stereotype.Component;

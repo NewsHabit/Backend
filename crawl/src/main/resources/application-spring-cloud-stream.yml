@@ -1,7 +1,27 @@
 spring:
   cloud:
     stream:
+      bindings:
+        crawl-out-0:
+          destination: crawl
+          content-type: application/avro
+          group: crawl-group
+          producer:
+            use-native-encoding: true
       kafka:
         binder:
           brokers: localhost:29092,localhost:39092,localhost:49092
           auto-create-topics: false
+        bindings:
+          crawl-out-0:
+            producer:
+              configuration:
+                key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+                schema.registry.url: http://localhost:18081
+                linger.ms: 1000
+                auto.register.schemas: true
+app:
+  kafka:
+    crawl:
+      topic: crawl-out-0

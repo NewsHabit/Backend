@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.newshabit.app.common.domain.model.CrawledNews;
+import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.crawl.application.port.CrawlUseCase;
 import org.newshabit.app.crawl.application.port.MessageUseCase;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -16,7 +16,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.newshabit.app.common.domain.converter.NewsCategoryListConverter;
+import org.newshabit.app.user.domain.converter.NewsCategoryListConverter;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 
 @Entity

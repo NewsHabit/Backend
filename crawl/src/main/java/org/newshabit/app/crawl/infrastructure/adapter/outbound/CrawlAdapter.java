@@ -1,7 +1,9 @@
 package org.newshabit.app.crawl.infrastructure.adapter.outbound;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,10 +12,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.newshabit.app.common.domain.model.CrawledNews;
-import org.newshabit.app.common.domain.enums.NewsCategory;
+import org.newshabit.app.avro.CrawledNews;
+import org.newshabit.app.avro.NewsCategory;
 import org.newshabit.app.common.util.SleepUtil;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
+import org.newshabit.app.crawl.infrastructure.mapper.NewsCategoryMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +30,15 @@ public class CrawlAdapter implements CrawlOutputPort {
 	@Value("${app.crawl.end-time:3000}")
 	private String endTime;
 
+	@Value("${app.crawl.start-idx:1}")
+	private int startIdx;
+	@Value("${app.crawl.end-idx:10}")
+	private int endIdx;
+
 	@Override
-	public List<String> crawlHeadlineUris(String uri, NewsCategory category) {
+	public List<String> crawlHeadlineUris(String uri, NewsCategory category) throws RuntimeException  {
 		try {
-			Document document = fetchHtmlDocument(uri + category.getCode());
+			Document document = fetchHtmlDocument(uri + NewsCategoryMapper.toDomain(category).getCode());
 
 			return extractHeadlineUris(document);
 		} catch (IOException e) {
@@ -60,7 +68,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 
 		try {
 			int index = Integer.parseInt(indexStr);
-			if (1 <= index && index <= 10) {
+			if (startIdx <= index && index <= endIdx) {
 				return Optional.of(link.attr("href"));
 			}
 		} catch (NumberFormatException ignored) {
@@ -70,7 +78,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 	}
 
 	@Override
-	public CrawledNews crawlNews(String uri, NewsCategory category) {
+	public CrawledNews crawlNews(String uri, NewsCategory category) throws RuntimeException {
 		SleepUtil.randomSleep(Integer.parseInt(startTime) , Integer.parseInt(endTime));
 		try {
 			Document document = fetchHtmlDocument(uri);
@@ -78,7 +86,17 @@ public class CrawlAdapter implements CrawlOutputPort {
 			String title = extractTitle(document);
 			String content = extractContent(document);
 
-			return CrawledNews.create(title, content, uri, LocalDateTime.now(), category);
+			Instant crawledTime = LocalDateTime.now()
+				.atZone(ZoneId.of("Asia/Seoul"))
+				.toInstant();
+
+			return CrawledNews.newBuilder()
+				.setTitle(title)
+				.setContent(content)
+				.setCrawledTime(crawledTime)
+				.setNewsCategory(category)
+				.setOriginalLink(uri)
+				.build();
 		} catch (IOException e) {
 			throw new RuntimeException("크롤링 중 오류 발생: " + e.getMessage(), e);
 		}

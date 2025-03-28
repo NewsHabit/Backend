@@ -74,14 +74,29 @@ services:
     image: provectuslabs/kafka-ui
     container_name: kafka-ui
     ports:
-      - 18080:8080
+      - "18080:8080"
     restart: always
     environment:
       - KAFKA_CLUSTERS_0_NAME=newshabit
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker-1:19092,broker-2:19092,broker-3:19092
-      - AUTH_TYPE= "LOGIN_FORM"
-      - SPRING_SECURITY_USER_NAME=${KAFKA_UI_SECURITY_USER_NAME}
-      - SPRING_SECURITY_USER_PASSWORD=${KAFKA_UI_SECURITY_USER_PASSWORD}
+#      - AUTH_TYPE= "LOGIN_FORM"
+#      - SPRING_SECURITY_USER_NAME=${KAFKA_UI_SECURITY_USER_NAME}
+#      - SPRING_SECURITY_USER_PASSWORD=${KAFKA_UI_SECURITY_USER_PASSWORD}
+      - KAFKA_CLUSTERS_0_SCHEMAREGISTRY=http://schema-registry:8081
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.1
+    container_name: schema-registry
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
+    ports:
+      - "18081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://broker-1:19092,PLAINTEXT://broker-2:19092,PLAINTEXT://broker-3:19092
 
   mysql:
     image: mysql:8.0
@@ -96,6 +111,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
+
 
 volumes:
   broker1-data:

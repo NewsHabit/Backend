@@ -4,4 +4,6 @@ include 'news'
 include 'common'
 include 'pubsub'
 include 'user'
+include 'common-event'
+include 'auth'
 
