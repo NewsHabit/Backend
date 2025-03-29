@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component;
 public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 	private final UserRepository userRepository;
 
-	public Optional<UserEntity> save(UserEntity user) {
-		return Optional.of(userRepository.save(user));
+	public UserEntity save(UserEntity user) {
+		return userRepository.save(user);
+	}
+
+	@Override
+	public Optional<UserEntity> findBySocialId(String socialId) {
+		return Optional.of(userRepository.findUserEntityBySocialId(socialId));
 	}
 }

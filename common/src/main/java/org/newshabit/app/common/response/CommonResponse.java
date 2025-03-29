@@ -9,6 +9,11 @@ public class CommonResponse<T> {
 	private int status;
 	private String message;
 	private T data;
+
+	public static <T> CommonResponse<T> success() {
+		return new CommonResponse<>(200, "Success", null);
+	}
+
 	public static <T> CommonResponse<T> success(T data) {
 		return new CommonResponse<>(200, "Success", data);
 	}

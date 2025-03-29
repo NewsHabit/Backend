@@ -23,10 +23,11 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
 		String authHeader = request.getHeader("Authorization");
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			throw new RuntimeException("No Bearer token found in request headers");
+		String token = "";
+
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			token = authHeader.substring(7);
 		}
-		String token = authHeader.substring(7);
 
 		TokenAuthentication authRequest = new TokenAuthentication(token);
 		return getAuthenticationManager().authenticate(authRequest);
