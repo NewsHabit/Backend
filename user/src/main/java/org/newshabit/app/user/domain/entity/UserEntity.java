@@ -49,7 +49,7 @@ public class UserEntity {
 
 	// 연관 관계 (읽기 전용 매핑)
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AuthEntity> authList;
+	private List<AuthEntity> authList = new ArrayList<>();
 
 	private UserEntity(String username, LocalDateTime usernameModifiedAt, List<NewsCategory> interestCategories, String socialId, UserRole role) {
 		this.id = null;
@@ -58,7 +58,6 @@ public class UserEntity {
 		this.interestCategories = interestCategories;
 		this.socialId = socialId;
 		this.role = role;
-		authList = new ArrayList<>();
 	}
 
 	public static UserEntity from(RegisterRequest registerRequest) {

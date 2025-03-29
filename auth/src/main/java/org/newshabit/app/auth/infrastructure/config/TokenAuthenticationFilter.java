@@ -4,8 +4,12 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import org.newshabit.app.auth.infrastructure.exception.AccessTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
@@ -15,9 +19,19 @@ import java.io.IOException;
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
 	public TokenAuthenticationFilter(AuthenticationManager authenticationManager) {
-		// "Authorization" 헤더에 대해 필터를 동작하도록 설정 (Bearer 토큰 형식)
 		super(new RequestHeaderRequestMatcher("Authorization"));
 		setAuthenticationManager(authenticationManager);
+		setAuthenticationFailureHandler((request, response, exception) -> {
+			if (!response.isCommitted()) {
+				response.resetBuffer();
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				response.setContentType("application/json;charset=UTF-8");
+				String json = "{\"status\": 401, \"message\": \"" + exception.getMessage() + "\", \"data\": null}";
+				PrintWriter writer = response.getWriter();
+				writer.write(json);
+				writer.flush();
+			}
+		});
 	}
 
 	@Override
@@ -30,15 +44,25 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 		}
 
 		TokenAuthentication authRequest = new TokenAuthentication(token);
-		return getAuthenticationManager().authenticate(authRequest);
+		try {
+			return getAuthenticationManager().authenticate(authRequest);
+		} catch (AccessTokenException e) {
+			throw new BadCredentialsException(e.getMessage());
+		}
 	}
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 		FilterChain chain, Authentication authResult)
 		throws IOException, ServletException {
-		// SecurityContext에 인증 결과를 저장하고 다음 필터로 진행
 		SecurityContextHolder.getContext().setAuthentication(authResult);
 		chain.doFilter(request, response);
+	}
+
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException failed)
+		throws IOException, ServletException {
+		getFailureHandler().onAuthenticationFailure(request, response, failed);
 	}
 }

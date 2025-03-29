@@ -12,7 +12,7 @@ public class NotFoundException extends BaseException {
 	}
 	@Getter
 	public enum ErrorMessage implements Message {
-		USER_NOT_FOUND("access token has expired.", HttpStatus.NOT_FOUND);
+		USER_NOT_FOUND("user not found.", HttpStatus.NOT_FOUND);
 
 		private final String message;
 		private final HttpStatus status;

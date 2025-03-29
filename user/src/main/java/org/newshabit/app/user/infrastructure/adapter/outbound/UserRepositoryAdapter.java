@@ -18,6 +18,6 @@ public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 
 	@Override
 	public Optional<UserEntity> findBySocialId(String socialId) {
-		return Optional.of(userRepository.findUserEntityBySocialId(socialId));
+		return Optional.ofNullable(userRepository.findUserEntityBySocialId(socialId));
 	}
 }

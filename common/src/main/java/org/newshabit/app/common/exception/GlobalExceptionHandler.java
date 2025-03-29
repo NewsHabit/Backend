@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.common.response.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -23,17 +24,16 @@ public class GlobalExceptionHandler {
 			.status(HttpStatus.BAD_REQUEST)
 			.body(errorResponse);
 	}
-
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<CommonResponse<Object>> handleUnknownRuntime(RuntimeException e) {
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<CommonResponse<Object>> handleAuthenticationException(AuthenticationException e) {
 		log.error("Unhandled RuntimeException: {}", e.getMessage(), e);
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			HttpStatus.UNAUTHORIZED.value(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
 		return ResponseEntity
-			.status(HttpStatus.INTERNAL_SERVER_ERROR)
+			.status(HttpStatus.UNAUTHORIZED)
 			.body(errorResponse);
 	}
 
@@ -50,8 +50,22 @@ public class GlobalExceptionHandler {
 			.body(errorResponse);
 	}
 
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<CommonResponse<Object>> handleUnknownRuntime(RuntimeException e) {
+		log.error("Unhandled RuntimeException: {}", e.getMessage(), e);
+		CommonResponse<Object> errorResponse = new CommonResponse<>(
+			HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			e.getMessage(),
+			LocalDateTime.now()
+		);
+		return ResponseEntity
+			.status(HttpStatus.INTERNAL_SERVER_ERROR)
+			.body(errorResponse);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CommonResponse<Object>> handleException(Exception e) {
+		log.error("Unhandled Exception: {}", e.getMessage(), e);
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			HttpStatus.INTERNAL_SERVER_ERROR.value(),
 			"INTERNAL SERVER ERROR",

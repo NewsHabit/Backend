@@ -39,6 +39,11 @@ public class GuestService implements GuestUseCase {
 
 		UserEntity userEntity = userEntityOptional.get();
 
+		if (userEntity.getAuthList().stream()
+			.anyMatch(authEntity -> authEntity.getDeviceId().equals(loginRequest.deviceId()))) {
+			throw new DuplicatedException(DuplicatedException.ErrorMessage.DUPLICATED_DEVICE);
+		}
+
 		List<UserRole> roles = List.of(userEntity.getRole());
 
 		String accessToken = tokenProviderUseCase.createAccessToken(userEntity.getSocialId(), roles);
@@ -63,8 +68,9 @@ public class GuestService implements GuestUseCase {
 	public void register(RegisterRequest registerRequest) throws DuplicatedException {
 		Optional<UserEntity> userEntityOptional = userRepositoryOutputPort.findBySocialId(registerRequest.socialId());
 
-		userEntityOptional.ifPresent( a -> {throw new DuplicatedException(
-			DuplicatedException.ErrorMessage.USER_ALREADY_EXIST);});
+		userEntityOptional.ifPresent( a -> {
+			throw new DuplicatedException(DuplicatedException.ErrorMessage.DUPLICATED_USER);
+		});
 
 		UserEntity userEntity = userRepositoryOutputPort.save(UserEntity.from(registerRequest));
 

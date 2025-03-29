@@ -1,6 +1,5 @@
 package org.newshabit.app.user.exception;
 
-
 import lombok.Getter;
 import org.newshabit.app.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,9 @@ public class DuplicatedException extends BaseException {
 	}
 	@Getter
 	public enum ErrorMessage implements Message {
-		USER_ALREADY_EXIST("user already exists", HttpStatus.CONFLICT);
+		DUPLICATED_USER("user already exists", HttpStatus.CONFLICT),
+		DUPLICATED_DEVICE("user device already exists", HttpStatus.CONFLICT);
+
 
 		private final String message;
 		private final HttpStatus status;

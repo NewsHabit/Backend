@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
 	private final TokenAuthenticationProvider tokenAuthenticationProvider;
+	private final CustomAccessDeniedHandler accessDeniedHandler;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,6 +35,9 @@ public class SecurityConfig {
 				.requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/v1/guest/**").permitAll()
 				.anyRequest().authenticated()
+			)
+			.exceptionHandling(config -> config
+				.accessDeniedHandler(accessDeniedHandler)
 			)
 			.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 			.httpBasic(Customizer.withDefaults());
