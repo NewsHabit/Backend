@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.common.domain.model.CrawledNews;
-import org.newshabit.app.common.domain.enums.NewsCategory;
+import org.newshabit.app.avro.CrawledNews;
+import org.newshabit.app.avro.NewsCategory;
 import org.newshabit.app.crawl.application.port.CrawlUseCase;
 import org.newshabit.app.crawl.application.port.CrawlOutputPort;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,9 +46,9 @@ public class CrawlService implements CrawlUseCase {
 
 	private Optional<CrawledNews> safeCrawlNews(String headlineUri, NewsCategory category) {
 		try {
-			return Optional.ofNullable(crawlOutputPort.crawlNews(headlineUri, category));
+			return Optional.of(crawlOutputPort.crawlNews(headlineUri, category));
 		} catch (Exception e) {
-			log.error("{}: {}", e.getMessage(), headlineUri);
+			log.error("safeCrawlNews: {}: {}", e.getMessage(), headlineUri);
 			return Optional.empty();
 		}
 	}

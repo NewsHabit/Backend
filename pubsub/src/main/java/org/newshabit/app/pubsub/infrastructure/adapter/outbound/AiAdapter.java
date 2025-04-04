@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.pubsub.application.port.AiOutputPort;
 import org.newshabit.app.pubsub.domain.dto.AiProcessedNews;
 import org.newshabit.app.pubsub.domain.dto.GeminiRequest;
 import org.newshabit.app.pubsub.domain.dto.GeminiResponse;
-import org.newshabit.app.common.domain.model.CrawledNews;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

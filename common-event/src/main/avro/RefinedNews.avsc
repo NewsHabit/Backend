@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "RefinedNews",
+  "namespace": "org.newshabit.app.avro",
+  "fields": [
+    { "name": "title", "type": "string" },
+    { "name": "whoSummary", "type": "string" },
+    { "name": "whenSummary", "type": "string" },
+    { "name": "whereSummary", "type": "string" },
+    { "name": "whatSummary", "type": "string" },
+    { "name": "whySummary", "type": "string" },
+    { "name": "howSummary", "type": "string" },
+    { "name": "keyword", "type": "string" },
+    { "name": "summary", "type": "string" },
+    { "name": "crawledTime", "type": { "type": "long", "logicalType": "timestamp-millis" } },
+    { "name": "newsCategory", "type": "org.newshabit.app.avro.NewsCategory" },
+    { "name": "clickCnt", "type": "long" },
+    { "name": "originalUrl", "type": "string" }
+  ]
+}

@@ -1,12 +1,15 @@
-bootJar { enabled = true }
+bootJar { enabled = false }
 
-jar { enabled = false }
+jar { enabled = true }
 
 dependencies {
     implementation project(':common')
+    implementation project(":common-event")
+    implementation project(":auth")
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // kafka
     implementation 'org.springframework.cloud:spring-cloud-stream'
@@ -17,4 +20,8 @@ dependencies {
     // jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // avro
+    implementation("org.apache.avro:avro:1.11.1")
+    implementation("io.confluent:kafka-avro-serializer:7.8.0")
 }

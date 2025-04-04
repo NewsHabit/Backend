@@ -7,9 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
-@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.pubsub"})
-@EntityScan(basePackages = "org.newshabit.app.common.domain.entity")
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.auth", "org.newshabit.app.pubsub"})
 public class PubSubApplication {
 
     public static void main(String[] args) {

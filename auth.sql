@@ -1,0 +1,11 @@
+CREATE TABLE auth (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    device_id VARCHAR(100) NOT NULL,
+    refresh_token VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_auth_user
+      FOREIGN KEY (user_id) REFERENCES user(id)
+          ON DELETE CASCADE
+);

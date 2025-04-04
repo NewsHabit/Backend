@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "CrawledNews",
+  "namespace": "org.newshabit.app.avro",
+  "fields": [
+    { "name": "title", "type": "string" },
+    { "name": "content", "type": "string" },
+    { "name": "originalLink", "type": "string" },
+    { "name": "newsCategory", "type": "org.newshabit.app.avro.NewsCategory" },
+    {
+      "name": "crawledTime",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}
+

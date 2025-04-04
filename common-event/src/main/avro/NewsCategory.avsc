@@ -1,0 +1,6 @@
+{
+  "type": "enum",
+  "name": "NewsCategory",
+  "namespace": "org.newshabit.app.avro",
+  "symbols": ["POLITICS", "ECONOMY", "SOCIETY", "LIFESTYLE_CULTURE", "WORLD", "IT_SCIENCE"]
+}

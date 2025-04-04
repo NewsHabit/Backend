@@ -2,8 +2,8 @@ package org.newshabit.app.crawl.infrastructure.adapter.inbound;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.common.domain.model.CrawledNews;
-import org.newshabit.app.common.util.response.CommonResponse;
+import org.newshabit.app.avro.CrawledNews;
+import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.crawl.application.port.CrawlUseCase;
 import org.newshabit.app.crawl.application.port.MessageUseCase;
 import org.springframework.http.HttpStatus;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/admin/crawl")
+@RequestMapping("/crawl")
 public class CrawlingPublisherController {
 	private final CrawlUseCase crawlUseCase;
 	private final MessageUseCase messageUseCase;
 
-	@GetMapping("/produce")
+	@GetMapping("/v2/admin/produce")
 	public ResponseEntity<CommonResponse<String>> crawlNewsAndProduce() {
 		try {
 			List<CrawledNews> crawledNewsList = crawlUseCase.crawlNews();
