@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/guest")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 	private final TokenProviderUseCase tokenProviderUseCase;
 
-	@GetMapping("/auth/refresh")
+	@GetMapping("/v2/guest/refresh")
 	public ResponseEntity<CommonResponse<ReissueAccessTokenResponse>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request) {
 
 		ReissueAccessTokenResponse response = tokenProviderUseCase.reissueAccessToken(request.refreshToken());

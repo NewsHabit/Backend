@@ -1,6 +1,7 @@
-jwt:
-  secret-key: "${JWT_SECRET_KEY}"
-  access-token:
-    valid-time: 900000
-  refresh-token:
-    valid-time: 604800000
+auth:
+  jwt:
+    secret-key: "${JWT_SECRET_KEY}"
+    access-token:
+      valid-time: 60000 #900000
+    refresh-token:
+      valid-time: 180000 #604800000

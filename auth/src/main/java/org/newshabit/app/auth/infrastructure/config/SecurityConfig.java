@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,9 +32,9 @@ public class SecurityConfig {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authz -> authz
-				.requestMatchers("/v1/admin/**").hasRole("ADMIN")
-				.requestMatchers("/v1/user/**").hasAnyRole("USER", "ADMIN")
-				.requestMatchers("/v1/guest/**").permitAll()
+				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
+				.requestMatchers(new RegexRequestMatcher(".*/user/.*", null)).hasAnyRole("USER", "ADMIN")
+				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
 				.anyRequest().authenticated()
 			)
 			.exceptionHandling(config -> config
