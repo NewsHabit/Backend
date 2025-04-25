@@ -17,7 +17,7 @@ public class CrawlingPublisherScheduler {
 	private final CrawlUseCase crawlUseCase;
 	private final MessageUseCase messageUseCase;
 
-	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(cron = "${app.kafka.crawl.cron}")
 	public void crawlNewsAndProduce() {
 		try {
 			log.info("CrawlingPublisherScheduler Started: {}", LocalDateTime.now());

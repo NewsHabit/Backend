@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  newshabit-crawl:
+    build:
+      context: .
+      dockerfile: crawl/Dockerfile
+    image: ${NEWSHABIT_CRAWL_IMAGE_NAME}:${NEWSHABIT_CRAWL_IMAGE_TAG}
+    container_name: newshabit-crawl
+    restart: always
+    volumes:
+      - /data/crawl/log:/app/log
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
+    ports:
+      - "8081:8080"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,auth,spring-cloud-stream"
+      HEADLINE_URI: ${HEADLINE_URI}
+      USER_AGENT: ${USER_AGENT}
+    networks:
+      - newshabit-2
+
+  newshabit-pubsub:
+    build:
+      context: .
+      dockerfile: pubsub/Dockerfile
+    image: ${NEWSHABIT_PUBSUB_IMAGE_NAME}:${NEWSHABIT_PUBSUB_IMAGE_TAG}
+    container_name: newshabit-pubsub
+    restart: always
+    ports:
+      - "8082:8080"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,auth,ai,jdbc,spring-cloud-stream"
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_PROMPT: ${GEMINI_PROMPT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      RDS_USERNAME: ${RDS_USERNAME}
+      RDS_PASSWORD: ${RDS_PASSWORD}
+      RDS_URL: ${RDS_URL}
+      CRAWL_TOPIC: ${CRAWL_TOPIC}
+      REFINED_NEWS_TOPIC: ${REFINED_NEWS_TOPIC}
+      SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
+
+    volumes:
+      - /data/pubsub/log:/app/log
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
+    networks:
+      - newshabit-2
+
+networks:
+  newshabit-2:
+    driver: bridge

@@ -3,14 +3,14 @@ spring:
     stream:
       bindings:
         crawl-out-0:
-          destination: crawl
+          destination: ${CRAWL_TOPIC}
           content-type: application/avro
           group: crawl-group
           producer:
             use-native-encoding: true
       kafka:
         binder:
-          brokers: localhost:29092,localhost:39092,localhost:49092
+          brokers: localhost:29092
           auto-create-topics: false
         bindings:
           crawl-out-0:
@@ -18,10 +18,10 @@ spring:
               configuration:
                 key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: http://localhost:18081
+                schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 auto.register.schemas: true
 app:
   kafka:
     crawl:
-      topic: crawl-out-0
+      binding: ${CRAWL_BINDING}

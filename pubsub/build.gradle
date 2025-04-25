@@ -22,6 +22,6 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // avro
-    implementation("org.apache.avro:avro:1.11.1")
+    implementation('org.apache.avro:avro:1.11.4')
     implementation("io.confluent:kafka-avro-serializer:7.8.0")
 }

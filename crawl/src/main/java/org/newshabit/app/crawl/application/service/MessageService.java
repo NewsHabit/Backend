@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 public class MessageService implements MessageUseCase {
 	private final MessageOutputPort<CrawledNews> messageOutputPort;
 
-	@Value("${app.kafka.crawl.topic}")
-	private String defaultTopic;
+	@Value("${app.kafka.crawl.binding}")
+	private String binding;
 
 	@Override
 	public void publishCrawledNews(List<CrawledNews> newsList) {
 		log.info("Publishing crawled news: {}", newsList);
-		messageOutputPort.publishMessages(newsList, defaultTopic);
+		messageOutputPort.publishMessages(newsList, binding);
 	}
 }

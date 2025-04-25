@@ -1,12 +1,14 @@
-bootJar { enabled = false }
+bootJar { enabled = true }
 
-jar { enabled = true }
+jar { enabled = false }
+
+version="2.0.0"
 
 dependencies {
     implementation project(':common')
 
-    compileOnly("org.springframework.boot:spring-boot-starter-web")
-    compileOnly("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
 
     //jwt
@@ -15,4 +17,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+springBoot {
+    mainClass.set("org.newshabit.app.auth.bootstrap.AuthApplication")
 }

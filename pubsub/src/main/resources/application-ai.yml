@@ -1,0 +1,6 @@
+app:
+  ai:
+    url: "${GEMINI_API_KEY}"
+    prompt: "${GEMINI_PROMPT}"
+
+

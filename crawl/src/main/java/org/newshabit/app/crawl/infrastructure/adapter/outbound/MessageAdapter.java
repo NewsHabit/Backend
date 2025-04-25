@@ -23,12 +23,12 @@ public class MessageAdapter<T> implements MessageOutputPort<T> {
 	}
 
 	@Override
-	public void publishMessages(List<T> messages, String topic) {
+	public void publishMessages(List<T> messages, String binding) {
 		messages.forEach(message -> {
 			try {
-				boolean sent = streamBridge.send(topic, MessageBuilder.withPayload(message).build());
+				boolean sent = streamBridge.send(binding, MessageBuilder.withPayload(message).build());
 			} catch (Exception e) {
-				log.error("message publish to {} failed: {}", topic, message);
+				log.error("message publish to {} failed: {}", binding, message);
 				throw new RuntimeException(e);
 			}
 		});

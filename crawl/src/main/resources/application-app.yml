@@ -5,8 +5,9 @@ app:
   crawl:
     headline-uri: ${HEADLINE_URI}
     user-agent: ${USER_AGENT}
-    start-time: 1000
-    end-time: 2000
+    cron: ${CRAWL_CRON:0 0 * * * *}
+    sleep-min: 1000
+    sleep-max: 2000
     start-idx: 1
-    end-idx: 2
+    end-idx: 10
 
