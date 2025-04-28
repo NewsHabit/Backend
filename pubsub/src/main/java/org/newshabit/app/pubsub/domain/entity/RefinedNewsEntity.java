@@ -21,50 +21,50 @@ import org.newshabit.app.avro.RefinedNews;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "refined_news")
+@Table(name = "news")
 public class RefinedNewsEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
-	@Column(nullable = false)
+	@Column(name = "title", nullable = false, length = 255)
 	private String title;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "who_summary", length = 255)
 	private String whoSummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "when_summary", length = 255)
 	private String whenSummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "where_summary", length = 255)
 	private String whereSummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "what_summary", length = 255)
 	private String whatSummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "why_summary", length = 255)
 	private String whySummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "how_summary", length = 255)
 	private String howSummary;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "keyword", length = 255)
 	private String keyword;
 
-	@Column(columnDefinition = "TEXT")
+	@Column(name = "summary", length = 255)
 	private String summary;
 
-	@Column(nullable = false)
+	@Column(name = "published_at", nullable = false)
 	private LocalDateTime publishedAt;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 50)
+	@Column(name = "news_category", nullable = false)
 	private NewsCategory newsCategory;
 
-	@Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
-	private Long clickCnt;
+	@Column(name = "click_cnt", nullable = false)
+	private Integer clickCnt;
 
-	@Column(nullable = false)
+	@Column(name = "original_url", nullable = false)
 	private String originalUrl;
 
 	public static RefinedNewsEntity fromAvro(RefinedNews refinedNews) {

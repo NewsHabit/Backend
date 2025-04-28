@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 @Slf4j
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
 			.status(HttpStatus.BAD_REQUEST)
 			.body(errorResponse);
 	}
+
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<CommonResponse<Object>> handleAuthenticationException(AuthenticationException e) {
 		log.error("Unhandled RuntimeException: {}", e.getMessage(), e);
@@ -47,6 +49,19 @@ public class GlobalExceptionHandler {
 		);
 		return ResponseEntity
 			.status(e.getStatus())
+			.body(errorResponse);
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<CommonResponse<Object>> handleNoResourceFoundException(NoResourceFoundException e) {
+		log.error("Unhandled ResourceException: {}", e.getMessage(), e);
+		CommonResponse<Object> errorResponse = new CommonResponse<>(
+			HttpStatus.NOT_FOUND.value(),
+			e.getMessage(),
+			LocalDateTime.now()
+		);
+		return ResponseEntity
+			.status(errorResponse.getStatus())
 			.body(errorResponse);
 	}
 

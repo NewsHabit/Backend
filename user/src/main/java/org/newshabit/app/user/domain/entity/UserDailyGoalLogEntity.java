@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @NoArgsConstructor
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class UserDailyGoalLogEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(name = "daily_goal", nullable = false)
 	private int dailyGoal;
@@ -29,8 +31,9 @@ public class UserDailyGoalLogEntity {
 	@Column(name = "end_date")
 	private LocalDate endDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private UserEntity user;
 
 	private UserDailyGoalLogEntity(int dailyGoal, LocalDate startDate, LocalDate endDate, UserEntity user) {

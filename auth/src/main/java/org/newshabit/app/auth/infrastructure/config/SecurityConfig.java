@@ -33,7 +33,7 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
-				.requestMatchers(new RegexRequestMatcher(".*/user/.*", null)).hasAnyRole("USER", "ADMIN")
+				.requestMatchers(new RegexRequestMatcher(".*/member/.*", null)).hasAnyRole("MEMBER", "ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
 				.anyRequest().authenticated()
 			)
