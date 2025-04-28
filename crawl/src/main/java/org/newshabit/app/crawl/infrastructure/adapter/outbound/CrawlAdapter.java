@@ -25,10 +25,10 @@ import org.springframework.stereotype.Component;
 public class CrawlAdapter implements CrawlOutputPort {
 	@Value("${app.crawl.user-agent}")
 	private String userAgent;
-	@Value("${app.crawl.start-time:1000}")
-	private String startTime;
-	@Value("${app.crawl.end-time:3000}")
-	private String endTime;
+	@Value("${app.crawl.sleep-min:1000}")
+	private String sleepMin;
+	@Value("${app.crawl.sleep-max:3000}")
+	private String sleepMax;
 
 	@Value("${app.crawl.start-idx:1}")
 	private int startIdx;
@@ -79,7 +79,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 
 	@Override
 	public CrawledNews crawlNews(String uri, NewsCategory category) throws RuntimeException {
-		SleepUtil.randomSleep(Integer.parseInt(startTime) , Integer.parseInt(endTime));
+		SleepUtil.randomSleep(Integer.parseInt(sleepMin) , Integer.parseInt(sleepMax));
 		try {
 			Document document = fetchHtmlDocument(uri);
 

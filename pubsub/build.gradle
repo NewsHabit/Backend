@@ -2,6 +2,8 @@ bootJar { enabled = false }
 
 jar { enabled = true }
 
+version="2.0.0"
+
 dependencies {
     implementation project(':common')
     implementation project(":common-event")
@@ -22,6 +24,6 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     // avro
-    implementation("org.apache.avro:avro:1.11.1")
+    implementation('org.apache.avro:avro:1.11.4')
     implementation("io.confluent:kafka-avro-serializer:7.8.0")
 }

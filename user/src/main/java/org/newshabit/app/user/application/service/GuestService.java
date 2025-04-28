@@ -13,12 +13,12 @@ import org.newshabit.app.user.domain.dto.RegisterRequest;
 import org.newshabit.app.user.domain.entity.AuthEntity;
 import org.newshabit.app.user.domain.entity.UserDailyGoalLogEntity;
 import org.newshabit.app.user.domain.entity.UserEntity;
-import org.newshabit.app.user.exception.DuplicatedException;
-import org.newshabit.app.user.exception.NotFoundException;
+import org.newshabit.app.user.common.exception.DuplicatedException;
+import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.application.port.GuestUseCase;
 import org.newshabit.app.user.application.port.UserRepositoryOutputPort;
 
-import org.newshabit.app.user.exception.NotFoundException.ErrorMessage;
+import org.newshabit.app.user.common.exception.NotFoundException.ErrorMessage;
 import org.newshabit.app.user.infrastructure.repository.UserDailyGoalLogRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,19 +1,18 @@
-package org.newshabit.app.user.exception;
+package org.newshabit.app.user.common.exception;
+
 
 import lombok.Getter;
 import org.newshabit.app.common.exception.BaseException;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class DuplicatedException extends BaseException {
-	public DuplicatedException(ErrorMessage message) {
+public class NotFoundException extends BaseException {
+	public NotFoundException(ErrorMessage message) {
 		super(message);
 	}
 	@Getter
 	public enum ErrorMessage implements Message {
-		DUPLICATED_USER("user already exists", HttpStatus.CONFLICT),
-		DUPLICATED_DEVICE("user device already exists", HttpStatus.CONFLICT);
-
+		USER_NOT_FOUND("user not found.", HttpStatus.NOT_FOUND);
 
 		private final String message;
 		private final HttpStatus status;

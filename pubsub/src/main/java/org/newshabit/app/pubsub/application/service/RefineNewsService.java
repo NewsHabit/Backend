@@ -42,7 +42,7 @@ public class RefineNewsService implements RefineNewsUseCase {
 				aiProcessedNews.summary(),
 				crawledNews.getCrawledTime(),
 				crawledNews.getNewsCategory(),
-				0L,
+				0,
 				crawledNews.getOriginalLink()
 			));
 		} catch (IOException | InterruptedException e) {

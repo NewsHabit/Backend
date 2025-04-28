@@ -14,7 +14,7 @@
     { "name": "summary", "type": "string" },
     { "name": "crawledTime", "type": { "type": "long", "logicalType": "timestamp-millis" } },
     { "name": "newsCategory", "type": "org.newshabit.app.avro.NewsCategory" },
-    { "name": "clickCnt", "type": "long" },
+    { "name": "clickCnt", "type": "int" },
     { "name": "originalUrl", "type": "string" }
   ]
 }

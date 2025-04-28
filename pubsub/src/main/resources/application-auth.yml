@@ -1,7 +1,7 @@
 auth:
   jwt:
-    secret-key: "news-habit-secret-key-since-2024-03"
+    secret-key: ${JWT_SECRET_KEY}
     access-token:
-      valid-time: 60000 #900000
+      valid-time: ${ACCESS_TOKEN_VALID_TIME:900000}
     refresh-token:
-      valid-time: 180000 #604800000
+      valid-time: ${REFRESH_TOKEN_VALID_TIME:604800000}
