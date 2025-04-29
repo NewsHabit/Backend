@@ -1,5 +1,6 @@
 package org.newshabit.app.auth.infrastructure.config;
 
+import java.security.interfaces.RSAPublicKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,11 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
@@ -17,30 +23,48 @@ import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 @RequiredArgsConstructor
 @ConditionalOnClass(name = "org.springframework.security.config.annotation.web.builders.HttpSecurity")
 public class SecurityConfig {
-
 	private final TokenAuthenticationProvider tokenAuthenticationProvider;
 	private final CustomAccessDeniedHandler accessDeniedHandler;
+	private final RSAPublicKey publicKey;
+
+	@Bean
+	public JwtDecoder jwtDecoder() {
+		return NimbusJwtDecoder.withPublicKey(publicKey).build();
+	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		// 커스텀 AuthenticationManager 생성
 		AuthenticationManager authManager = new ProviderManager(tokenAuthenticationProvider);
-
-		// 커스텀 토큰 필터 생성 및 등록
 		TokenAuthenticationFilter tokenFilter = new TokenAuthenticationFilter(authManager);
+
+		// JWT -> Authorities 변환기 (scope/roles를 Spring Authority로 매핑)
+		JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+		grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+		grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+		JwtAuthenticationConverter jwtAuthConverter = new JwtAuthenticationConverter();
+		jwtAuthConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
 
 		http
 			.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+			// 사용자 JWT 필터
+			.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+
+			// 권한별 엔드포인트 접근제어
 			.authorizeHttpRequests(authz -> authz
+				.requestMatchers(new RegexRequestMatcher(".*/internal/.*", null)).authenticated()
 				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/member/.*", null)).hasAnyRole("MEMBER", "ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
 				.anyRequest().authenticated()
 			)
+			.oauth2ResourceServer(o -> o
+				.jwt(j -> j.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthConverter))
+			)
 			.exceptionHandling(config -> config
 				.accessDeniedHandler(accessDeniedHandler)
 			)
-			.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 			.httpBasic(Customizer.withDefaults());
 
 		return http.build();
