@@ -10,7 +10,7 @@ services:
       - /data/news/log:/app/log
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     ports:
-      - "8081:8080"
+      - "8084:8084"
     environment:
       JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
       SPRING_PROFILES_ACTIVE: "app,auth,jdbc,spring-cloud-stream"

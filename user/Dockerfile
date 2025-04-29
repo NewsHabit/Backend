@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=builder /app/user/build/libs/user-*.jar newshabit-user.jar
 
 ENV JAVA_OPTS="-Xms128m -Xmx512m -XX:+UseG1GC"
-EXPOSE 8082
+EXPOSE 8085
 
 # 2-3) 셸 형식 ENTRYPOINT로 $JAVA_OPTS 확장 보장
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/newshabit-user.jar"]

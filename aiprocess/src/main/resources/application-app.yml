@@ -1,2 +1,9 @@
 server:
   port: 8081
+  error:
+    whitelabel:
+      enabled: false
+
+services:
+  news:
+    url: ${NEWSHABIT_NEWS_URL:http://localhost:8084}
