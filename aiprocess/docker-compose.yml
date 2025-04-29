@@ -1,0 +1,28 @@
+services:
+  newshabit-aiprocess:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${NEWSHABIT_AIPROCESS_IMAGE_NAME}:${NEWSHABIT_AIPROCESS_IMAGE_TAG}
+    container_name: newshabit-aiprocess
+    restart: always
+    ports:
+      - "8082:8080"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,ai,spring-cloud-stream"
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_PROMPT: ${GEMINI_PROMPT}
+      CRAWL_TOPIC: ${CRAWL_TOPIC}
+      REFINED_NEWS_TOPIC: ${REFINED_NEWS_TOPIC}
+      SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
+
+    volumes:
+      - /data/aiprocess/log:/app/log
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
+    networks:
+      - newshabit-2
+
+networks:
+  newshabit-2:
+    driver: bridge

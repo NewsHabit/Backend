@@ -1,0 +1,30 @@
+services:
+  newshabit-news:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${NEWSHABIT_NEWS_IMAGE_NAME}:${NEWSHABIT_NEWS_IMAGE_TAG}
+    container_name: newshabit-news
+    restart: always
+    volumes:
+      - /data/news/log:/app/log
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
+    ports:
+      - "8081:8080"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,auth,jdbc,spring-cloud-stream"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
+      REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
+      RDS_URL: ${RDS_URL}
+      RDS_USERNAME: ${RDS_USERNAME}
+      RDS_PASSWORD: ${RDS_PASSWORD}
+      REFINED_NEWS_TOPIC: ${REFINED_NEWS_TOPIC}
+      SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
+    networks:
+      - newshabit-2
+
+networks:
+  newshabit-2:
+    driver: bridge
