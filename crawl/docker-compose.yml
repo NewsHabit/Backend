@@ -1,0 +1,26 @@
+services:
+  newshabit-crawl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${NEWSHABIT_CRAWL_IMAGE_NAME}:${NEWSHABIT_CRAWL_IMAGE_TAG}
+    container_name: newshabit-crawl
+    restart: always
+    volumes:
+      - /data/crawl/log:/app/log
+      - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
+    ports:
+      - "8081:8080"
+    environment:
+      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,auth,spring-cloud-stream"
+      HEADLINE_URI: ${HEADLINE_URI}
+      USER_AGENT: ${USER_AGENT}
+      ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
+      REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
+    networks:
+      - newshabit-2
+
+networks:
+  newshabit-2:
+    driver: bridge
