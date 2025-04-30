@@ -13,8 +13,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.RegexRequestMatcher;
@@ -37,13 +35,6 @@ public class SecurityConfig {
 		AuthenticationManager authManager = new ProviderManager(tokenAuthenticationProvider);
 		TokenAuthenticationFilter tokenFilter = new TokenAuthenticationFilter(authManager);
 
-		// JWT -> Authorities 변환기 (scope/roles를 Spring Authority로 매핑)
-		JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-		grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-		grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-		JwtAuthenticationConverter jwtAuthConverter = new JwtAuthenticationConverter();
-		jwtAuthConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-
 		http
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -53,14 +44,11 @@ public class SecurityConfig {
 
 			// 권한별 엔드포인트 접근제어
 			.authorizeHttpRequests(authz -> authz
-				.requestMatchers(new RegexRequestMatcher(".*/internal/.*", null)).authenticated()
+				.requestMatchers(new RegexRequestMatcher(".*/internal/.*", null)).hasRole("INTERNAL")
 				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/member/.*", null)).hasAnyRole("MEMBER", "ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
 				.anyRequest().authenticated()
-			)
-			.oauth2ResourceServer(o -> o
-				.jwt(j -> j.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthConverter))
 			)
 			.exceptionHandling(config -> config
 				.accessDeniedHandler(accessDeniedHandler)

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NewsController {
 	private final RefinedNewsRepositoryOutputPort refinedNewsRepositoryOutputPort;
 
-	@GetMapping("/v2/admin/exist")
+	@GetMapping("/v2/internal/exist")
 	public ResponseEntity<CommonResponse<Boolean>> existNews(@RequestParam("url") String url) {
 
 		return ResponseEntity.ok(CommonResponse.success(refinedNewsRepositoryOutputPort.existsByOriginalUrl(url)));

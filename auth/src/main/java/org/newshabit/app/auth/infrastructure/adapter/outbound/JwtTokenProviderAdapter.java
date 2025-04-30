@@ -109,7 +109,7 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 		try {
 			return jwtParser.parseClaimsJws(token).getBody();
 		} catch (JwtException e) {
-			log.error("JWT 파싱 실패: {}", e.getMessage(), e);
+			log.debug("JWT 파싱 실패: {}", e.getMessage(), e);
 			throw new AccessTokenException(ErrorMessage.INVALID_TOKEN.getMessage());
 		}
 	}

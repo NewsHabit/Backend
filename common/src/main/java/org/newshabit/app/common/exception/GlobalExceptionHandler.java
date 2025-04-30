@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<CommonResponse<Object>> handleAuthenticationException(AuthenticationException e) {
-		log.error("AuthenticationException: {}", e.getMessage(), e);
+		log.error("AuthenticationException: {}", e.getMessage());
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			HttpStatus.UNAUTHORIZED.value(),
 			e.getMessage(),
