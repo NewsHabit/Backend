@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.newshabit.app.aiprocess.application.port.NewsOutputPort;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.RefinedNews;
 import org.newshabit.app.aiprocess.application.port.AiOutputPort;
@@ -16,11 +17,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RefineNewsService implements RefineNewsUseCase {
 	private final AiOutputPort aiOutputPort;
+	private final NewsOutputPort newsOutputPort;
 
 	@Override
 	public Optional<RefinedNews> refineCrawledNews(CrawledNews crawledNews) {
-
-		// db 체크 해야함
+		boolean exists = newsOutputPort.existNews(crawledNews.getOriginalLink());
+		if (exists) {
+			log.warn("Duplicate URL detected: {}", crawledNews.getOriginalLink());
+			return Optional.empty();
+		}
 
 		try {
 			Optional<AiProcessedNews> aiProcessedNewsOptional = aiOutputPort.aiProcessNews(crawledNews);

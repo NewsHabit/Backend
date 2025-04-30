@@ -10,7 +10,7 @@ services:
       - /data/crawl/log:/app/log
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     ports:
-      - "8081:8080"
+      - "8083:8083"
     environment:
       JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
       SPRING_PROFILES_ACTIVE: "app,auth,spring-cloud-stream"
@@ -18,6 +18,8 @@ services:
       USER_AGENT: ${USER_AGENT}
       ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
       REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
+      RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
+      RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
     networks:
       - newshabit-2
 

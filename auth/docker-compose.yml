@@ -7,14 +7,14 @@ services:
     container_name: newshabit-auth
     restart: always
     ports:
-      - "8082:8080"
+      - "8082:8082"
     environment:
       JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
       SPRING_PROFILES_ACTIVE: "app,auth"
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
       REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
-
+      RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
+      RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
     volumes:
       - /data/auth/log:/app/log
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro

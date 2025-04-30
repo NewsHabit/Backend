@@ -28,7 +28,7 @@ public class MessageConfig {
 					.map(refinedNews -> MessageBuilder.withPayload(refinedNews).build())
 					.orElse(null);
 			} catch (Exception e) {
-				log.error("Refinement error: {}", e.getMessage());
+				log.error("Refinement error: {}", e.getMessage(), e);
 				return null;
 			}
 		};

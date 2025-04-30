@@ -1,0 +1,9 @@
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout:  5000
+  news:
+    url: ${NEWSHABIT_NEWS_URL:http://localhost:8084}
+  internal-access-token: ${INTERNAL_ACCESS_TOKEN}

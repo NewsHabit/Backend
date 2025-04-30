@@ -26,7 +26,7 @@ COPY --from=builder /app/auth/build/libs/auth-*.jar newshabit-auth.jar
 
 # 2-2) JVM 옵션과 포트 설정
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
-EXPOSE 8081
+EXPOSE 8082
 
 # 2-3) 프로파일 활성화하여 애플리케이션 실행
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/newshabit-auth.jar"]

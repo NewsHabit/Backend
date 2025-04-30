@@ -2,5 +2,6 @@ package org.newshabit.app.common.domain.enums;
 
 public enum UserRole {
 	ADMIN,
-	MEMBER
+	MEMBER,
+	INTERNAL
 }

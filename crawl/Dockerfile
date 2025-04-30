@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=builder /app/crawl/build/libs/crawl-*.jar newshabit-crawl.jar
 
 ENV JAVA_OPTS="-Xms128m -Xmx512m -XX:+UseG1GC"
-EXPOSE 8080
+EXPOSE 8083
 
 # 2-3) 셸 형식 ENTRYPOINT로 $JAVA_OPTS 확장 보장
 ENTRYPOINT ["sh","-c","java $JAVA_OPTS -jar /app/newshabit-crawl.jar"]

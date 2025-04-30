@@ -4,10 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
-import java.nio.charset.StandardCharsets;
-import java.security.Key;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,26 +24,24 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
-	@Value("${auth.jwt.secret-key}")
-	private String secretKey;
+	private final RSAPrivateKey privateKey;
+	private final RSAPublicKey publicKey;
 
-	private Key hmacShaKey;
 	private JwtParser jwtParser;
 	private static final String ROLES_FILED_NAME = "roles";
 
-	@Value("${auth.jwt.access-token.valid-time}")
-	private long accessTokenValidityInMilliseconds = 15 * 60 * 1000;
+	@Value("${auth.jwt.access-token.valid-time:900000}")
+	private long accessTokenValidityInMilliseconds;
 
-	@Value("${auth.jwt.refresh-token.valid-time}")
-	private long refreshTokenValidityInMilliseconds = 7 * 24 * 60 * 60 * 1000;
+	@Value("${auth.jwt.refresh-token.valid-time:604800000}")
+	private long refreshTokenValidityInMilliseconds;
 
 	private CustomUserDetail guestUserDetail;
 
 	@PostConstruct
 	public void init() {
-		this.hmacShaKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 		this.jwtParser = Jwts.parserBuilder()
-			.setSigningKey(hmacShaKey)
+			.setSigningKey(publicKey)
 			.build();
 		this.guestUserDetail = CustomUserDetail.createGuestUser();
 	}
@@ -77,17 +75,16 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 
 	private String createToken(String socialId, List<UserRole> userRoles, long validityInMilliseconds) {
 		Claims claims = Jwts.claims().setSubject(socialId);
-		List<String> roles = userRoles.stream().map(Enum::name).toList();
-		claims.put(ROLES_FILED_NAME, roles);
+		claims.put(ROLES_FILED_NAME, userRoles.stream().map(Enum::name).toList());
 
 		Date now = new Date();
-		Date validity = new Date(now.getTime() + validityInMilliseconds);
+		Date expireDate = new Date(now.getTime() + validityInMilliseconds);
 
 		return Jwts.builder()
 			.setClaims(claims)
 			.setIssuedAt(now)
-			.setExpiration(validity)
-			.signWith(hmacShaKey)
+			.setExpiration(expireDate)
+			.signWith(privateKey, SignatureAlgorithm.RS256)
 			.compact();
 	}
 
@@ -112,6 +109,7 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 		try {
 			return jwtParser.parseClaimsJws(token).getBody();
 		} catch (JwtException e) {
+			log.debug("JWT 파싱 실패: {}", e.getMessage(), e);
 			throw new AccessTokenException(ErrorMessage.INVALID_TOKEN.getMessage());
 		}
 	}
