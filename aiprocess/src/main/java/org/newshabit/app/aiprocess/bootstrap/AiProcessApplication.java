@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableFeignClients(basePackages = "org.newshabit.app.aiprocess")
-@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.aiprocess", "org.newshabit.app.auth"})
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.aiprocess", "org.newshabit.common.auth"})
 public class AiProcessApplication {
 
     public static void main(String[] args) {

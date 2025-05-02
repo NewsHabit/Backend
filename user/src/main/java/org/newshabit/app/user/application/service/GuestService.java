@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.auth.application.port.TokenProviderUseCase;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.application.port.AuthOutputPort;
 import org.newshabit.app.user.domain.dto.LoginRequest;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GuestService implements GuestUseCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
-	private final TokenProviderUseCase tokenProviderUseCase;
 	private final UserDailyGoalLogRepository userDailyGoalLogRepository;
 	private final AuthOutputPort authOutputPort;
 

@@ -1,4 +1,4 @@
-package org.newshabit.app.auth.infrastructure.exception;
+package org.newshabit.common.auth.infrastructure.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

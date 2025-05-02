@@ -5,5 +5,6 @@ include 'common'
 include 'aiprocess'
 include 'user'
 include 'common-event'
+include 'common-auth'
 include 'auth'
 
