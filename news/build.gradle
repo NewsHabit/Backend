@@ -7,7 +7,7 @@ version="2.0.0"
 dependencies {
     implementation project(':common')
     implementation project(":common-event")
-    implementation project(":auth")
+    implementation project(":common-auth")
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

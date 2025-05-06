@@ -1,4 +1,4 @@
-package org.newshabit.app.auth.infrastructure.config;
+package org.newshabit.common.auth.infrastructure.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

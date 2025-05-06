@@ -53,12 +53,6 @@ public class UserEntity {
 		cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH },
 		orphanRemoval = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<AuthEntity> authList = new ArrayList<>();
-
-	@OneToMany(mappedBy = "user",
-		cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH },
-		orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private List<UserDailyGoalLogEntity> dailyGoalList = new ArrayList<>();
 
 	private UserEntity(String username, LocalDateTime usernameModifiedAt, List<NewsCategory> interestCategories, String socialId, UserRole role) {

@@ -1,11 +1,9 @@
 package org.newshabit.app.user.application.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.auth.application.port.TokenProviderUseCase;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.application.port.AuthOutputPort;
 import org.newshabit.app.user.domain.dto.LoginRequest;
@@ -13,7 +11,6 @@ import org.newshabit.app.user.domain.dto.LoginResponse;
 import org.newshabit.app.user.domain.dto.LoginTokenPublishRequest;
 import org.newshabit.app.user.domain.dto.LoginTokenPublishResponse;
 import org.newshabit.app.user.domain.dto.RegisterRequest;
-import org.newshabit.app.user.domain.entity.AuthEntity;
 import org.newshabit.app.user.domain.entity.UserDailyGoalLogEntity;
 import org.newshabit.app.user.domain.entity.UserEntity;
 import org.newshabit.app.user.common.exception.DuplicatedException;
@@ -29,7 +26,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GuestService implements GuestUseCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
-	private final TokenProviderUseCase tokenProviderUseCase;
 	private final UserDailyGoalLogRepository userDailyGoalLogRepository;
 	private final AuthOutputPort authOutputPort;
 
@@ -43,28 +39,11 @@ public class GuestService implements GuestUseCase {
 
 		UserEntity userEntity = userEntityOptional.get();
 
-		if (userEntity.getAuthList().stream()
-			.anyMatch(authEntity -> authEntity.getDeviceId().equals(loginRequest.deviceId()))) {
-			throw new DuplicatedException(DuplicatedException.ErrorMessage.DUPLICATED_DEVICE);
-		}
-
 		List<UserRole> roles = List.of(userEntity.getRole());
 
 		LoginTokenPublishResponse publishedToken = authOutputPort.getTokens(
-			new LoginTokenPublishRequest(userEntity.getSocialId(), roles)
+			new LoginTokenPublishRequest(loginRequest.socialId(), loginRequest.deviceId(), userEntity.getId(), roles)
 		);
-
-		AuthEntity newAuthEntity = new AuthEntity(
-			null,
-			userEntity,
-			loginRequest.deviceId(),
-			publishedToken.refreshToken(),
-			LocalDateTime.now()
-		);
-
-		userEntity.getAuthList().add(newAuthEntity);
-
-		userRepositoryOutputPort.save(userEntity);
 
 		return new LoginResponse(publishedToken.accessToken(), publishedToken.refreshToken());
 	}

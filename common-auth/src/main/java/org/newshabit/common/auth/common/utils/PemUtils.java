@@ -1,4 +1,4 @@
-package org.newshabit.app.auth.common.utils;
+package org.newshabit.common.auth.common.utils;
 
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;

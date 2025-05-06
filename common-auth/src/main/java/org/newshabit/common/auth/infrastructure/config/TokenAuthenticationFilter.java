@@ -1,11 +1,11 @@
-package org.newshabit.app.auth.infrastructure.config;
+package org.newshabit.common.auth.infrastructure.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import org.newshabit.app.auth.infrastructure.exception.AccessTokenException;
+import org.newshabit.common.auth.infrastructure.exception.AccessTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

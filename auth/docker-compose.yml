@@ -1,7 +1,7 @@
 services:
   newshabit-auth:
     build:
-      context: .
+      context: ../common-auth
       dockerfile: Dockerfile
     image: ${NEWSHABIT_AUTH_IMAGE_NAME}:${NEWSHABIT_AUTH_IMAGE_TAG}
     container_name: newshabit-auth

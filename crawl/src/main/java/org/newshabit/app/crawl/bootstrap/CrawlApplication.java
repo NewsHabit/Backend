@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.crawl", "org.newshabit.app.auth"})
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.crawl", "org.newshabit.common.auth"})
 public class CrawlApplication {
 
     public static void main(String[] args) {

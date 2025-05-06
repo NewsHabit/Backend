@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EntityScan(basePackages = "org.newshabit.app.news.domain.entity")
 @EnableJpaRepositories(basePackages = "org.newshabit.app.news.infrastructure.repository")
-@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.auth", "org.newshabit.app.news"})
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.common.auth", "org.newshabit.app.news"})
 public class NewsApplication {
 
     public static void main(String[] args) {

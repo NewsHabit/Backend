@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan(basePackages = "org.newshabit.app.user.domain.entity")
 @EnableFeignClients(basePackages = "org.newshabit.app.user")
+@EntityScan(basePackages = "org.newshabit.app.user.domain.entity")
 @EnableJpaRepositories(basePackages = "org.newshabit.app.user.infrastructure.repository")
-@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.user", "org.newshabit.app.auth"})
+@ComponentScan(basePackages = {"org.newshabit.app.common", "org.newshabit.app.user", "org.newshabit.common.auth"})
 public class UserApplication {
 
     public static void main(String[] args) {
