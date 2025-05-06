@@ -1,0 +1,12 @@
+package org.newshabit.app.auth.infrastructure.repository;
+
+import java.util.Optional;
+import org.newshabit.app.auth.domain.entity.AuthEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AuthRepository extends JpaRepository<AuthEntity, Integer> {
+
+	Optional<AuthEntity> findAuthEntityByUserIdAndDeviceId(int userId, String deviceId);
+}

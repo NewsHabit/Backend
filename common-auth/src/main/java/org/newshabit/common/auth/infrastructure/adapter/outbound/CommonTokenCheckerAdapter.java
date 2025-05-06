@@ -25,6 +25,8 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 	private JwtParser jwtParser;
 
 	private static final String ROLES_FILED_NAME = "roles";
+	private static final String DEVICE_ID_FILED_NAME = "deviceId";
+	private static final String USER_ID_FILED_NAME = "userId";
 
 	private CustomUserDetail guestUserDetail;
 
@@ -47,10 +49,11 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 		checkExpiration(claims);
 
 		String socialId = claims.getSubject();
-
+		Integer userId = claims.get(USER_ID_FILED_NAME, Integer.class);
+		String deviceId = claims.get(DEVICE_ID_FILED_NAME, String.class);
 		List<String> roles = getRoles(claims);
 
-		return CustomUserDetail.createUser(socialId, token, roles);
+		return CustomUserDetail.createUser(socialId, userId, deviceId, token, roles);
 	}
 
 	private Claims getClaims(String token) throws AccessTokenException {

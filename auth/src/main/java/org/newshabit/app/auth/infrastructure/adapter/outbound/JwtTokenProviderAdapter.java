@@ -27,6 +27,8 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 
 	private JwtParser jwtParser;
 	private static final String ROLES_FILED_NAME = "roles";
+	private static final String DEVICE_ID_FILED_NAME = "deviceId";
+	private static final String USER_ID_FILED_NAME = "userId";
 
 	@Value("${auth.jwt.access-token.valid-time:900000}")
 	private long accessTokenValidityInMilliseconds;
@@ -42,24 +44,25 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 	}
 	
 	@Override
-	public String createAccessToken(String socialId, List<UserRole> userRoles) {
-		return createToken(socialId, userRoles, accessTokenValidityInMilliseconds);
+	public String createAccessToken(String socialId, int userId, String deviceId, List<UserRole> userRoles) {
+		return createToken(socialId, userId, deviceId, userRoles, accessTokenValidityInMilliseconds);
 	}
 	
 	@Override
-	public String createRefreshToken(String socialId, List<UserRole> userRoles) {
-		return createToken(socialId, userRoles, refreshTokenValidityInMilliseconds);
+	public String createRefreshToken(String socialId, int userId, String deviceId, List<UserRole> userRoles) {
+		return createToken(socialId, userId, deviceId, userRoles, refreshTokenValidityInMilliseconds);
 	}
 
 	@Override
-	public String createCustomToken(String socialId, List<UserRole> userRoles, long tokenValidityInMilliseconds) {
-		return createToken(socialId, userRoles, tokenValidityInMilliseconds);
+	public String createCustomServerToken(String socialId, int userId, String deviceId, List<UserRole> userRoles, long tokenValidityInMilliseconds) {
+		return createToken(socialId, userId, deviceId, userRoles, tokenValidityInMilliseconds);
 	}
 
-	private String createToken(String socialId, List<UserRole> userRoles, long validityInMilliseconds) {
+	private String createToken(String socialId, int userId, String deviceId, List<UserRole> userRoles, long validityInMilliseconds) {
 		Claims claims = Jwts.claims().setSubject(socialId);
 		claims.put(ROLES_FILED_NAME, userRoles.stream().map(Enum::name).toList());
-
+		claims.put(DEVICE_ID_FILED_NAME, deviceId);
+		claims.put(USER_ID_FILED_NAME, userId);
 		Date now = new Date();
 		Date expireDate = new Date(now.getTime() + validityInMilliseconds);
 
