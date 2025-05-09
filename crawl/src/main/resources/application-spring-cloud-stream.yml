@@ -24,4 +24,4 @@ spring:
 app:
   kafka:
     crawl:
-      binding: ${CRAWL_BINDING}
+      binding: "crawl-out-0"

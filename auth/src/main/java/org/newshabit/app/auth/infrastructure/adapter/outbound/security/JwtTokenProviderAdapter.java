@@ -1,4 +1,4 @@
-package org.newshabit.app.auth.infrastructure.adapter.outbound;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
@@ -12,7 +12,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.auth.application.port.TokenProviderOutputPort;
-import org.newshabit.common.auth.infrastructure.adapter.outbound.CommonTokenCheckerAdapter;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 	private final RSAPrivateKey privateKey;
 	private final RSAPublicKey publicKey;
-	private final CommonTokenCheckerAdapter commonTokenCheckerAdapter;
 
 	private JwtParser jwtParser;
 	private static final String ROLES_FILED_NAME = "roles";

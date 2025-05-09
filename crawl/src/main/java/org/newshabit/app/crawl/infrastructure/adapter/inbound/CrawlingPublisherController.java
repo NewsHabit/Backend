@@ -21,12 +21,9 @@ public class CrawlingPublisherController {
 
 	@GetMapping("/v2/admin/produce")
 	public ResponseEntity<CommonResponse<String>> crawlNewsAndProduce() {
-		try {
-			List<CrawledNews> crawledNewsList = crawlUseCase.crawlNews();
-			messageUseCase.publishCrawledNews(crawledNewsList);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(CommonResponse.error(500, e.getMessage()));
-		}
+
+		List<CrawledNews> crawledNewsList = crawlUseCase.crawlNews();
+		messageUseCase.publishCrawledNews(crawledNewsList);
 
 		return ResponseEntity.ok(CommonResponse.success("crawled successfully"));
 	}

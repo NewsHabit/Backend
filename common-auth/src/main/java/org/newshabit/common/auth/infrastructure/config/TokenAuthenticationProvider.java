@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.common.auth.domain.model.CustomUserDetail;
 import org.newshabit.common.auth.infrastructure.adapter.outbound.CommonTokenCheckerAdapter;
-import org.newshabit.common.auth.infrastructure.exception.AccessTokenException;
+import org.newshabit.common.auth.common.exception.AccessTokenException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
