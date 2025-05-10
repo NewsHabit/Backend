@@ -1,8 +1,8 @@
 services:
   newshabit-crawl:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: crawl/Dockerfile
     image: ${NEWSHABIT_CRAWL_IMAGE_NAME}:${NEWSHABIT_CRAWL_IMAGE_TAG}
     container_name: newshabit-crawl
     restart: always
@@ -23,7 +23,7 @@ services:
       RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
       CRAWL_TOPIC: ${CRAWL_TOPIC}
       SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
-      CRAWL_BINDING: ${CRAWL_BINDING}
+      KAFKA_URL: ${KAFKA_URL}
     networks:
       - newshabit-2
 
