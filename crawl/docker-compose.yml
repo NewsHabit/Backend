@@ -6,7 +6,7 @@ services:
     image: ${NEWSHABIT_CRAWL_IMAGE_NAME}:${NEWSHABIT_CRAWL_IMAGE_TAG}
     container_name: newshabit-crawl
     cpus: 0.125
-    mem_limit: 128M
+    mem_limit: 256M
     restart: on-failure:3
     volumes:
       - /data/crawl/log:/app/log
