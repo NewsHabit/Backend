@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.application.port.AuthOutputPort;
+import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.domain.dto.LoginRequest;
 import org.newshabit.app.user.domain.dto.LoginResponse;
 import org.newshabit.app.user.domain.dto.LoginTokenPublishRequest;
@@ -18,7 +19,6 @@ import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.application.port.GuestUseCase;
 import org.newshabit.app.user.application.port.UserRepositoryOutputPort;
 
-import org.newshabit.app.user.common.exception.NotFoundException.ErrorMessage;
 import org.newshabit.app.user.infrastructure.repository.UserDailyGoalLogRepository;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,7 @@ public class GuestService implements GuestUseCase {
 		Optional<UserEntity> userEntityOptional = userRepositoryOutputPort.findBySocialId(loginRequest.socialId());
 
 		if (userEntityOptional.isEmpty()) {
-			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND);
+			throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
 		}
 
 		UserEntity userEntity = userEntityOptional.get();
@@ -53,7 +53,7 @@ public class GuestService implements GuestUseCase {
 		Optional<UserEntity> userEntityOptional = userRepositoryOutputPort.findBySocialId(registerRequest.socialId());
 
 		userEntityOptional.ifPresent( a -> {
-			throw new DuplicatedException(DuplicatedException.ErrorMessage.DUPLICATED_USER);
+			throw new DuplicatedException(ErrorCode.DUPLICATED_USER);
 		});
 
 		UserEntity userEntity = userRepositoryOutputPort.save(UserEntity.from(registerRequest));

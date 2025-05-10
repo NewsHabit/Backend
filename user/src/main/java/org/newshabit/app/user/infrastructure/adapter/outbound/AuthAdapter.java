@@ -20,7 +20,7 @@ public class AuthAdapter implements AuthOutputPort {
 	public LoginTokenPublishResponse getTokens(LoginTokenPublishRequest request) {
 		CommonResponse<LoginTokenPublishResponse> response = authClient.getTokens(request);
 
-		if (response.getStatus() != HttpStatus.OK.value()) {
+		if (response.getStatus() != HttpStatus.OK.toString()) {
 			log.error("auth service error: {}", response.getStatus());
 			throw new RuntimeException("loginTokenPublish");
 		}

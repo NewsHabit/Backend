@@ -12,14 +12,18 @@ services:
     ports:
       - "8083:8083"
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
+      JAVA_OPTS: "-Xms256m -Xmx256m -XX:+UseG1GC"
       SPRING_PROFILES_ACTIVE: "app,auth,spring-cloud-stream"
       HEADLINE_URI: ${HEADLINE_URI}
       USER_AGENT: ${USER_AGENT}
+      CRAWL_CRON: ${CRAWL_CRON}
       ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
       REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
       RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
       RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
+      CRAWL_TOPIC: ${CRAWL_TOPIC}
+      SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
+      CRAWL_BINDING: ${CRAWL_BINDING}
     networks:
       - newshabit-2
 

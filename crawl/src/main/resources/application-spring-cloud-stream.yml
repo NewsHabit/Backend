@@ -10,7 +10,7 @@ spring:
             use-native-encoding: true
       kafka:
         binder:
-          brokers: localhost:29092
+          brokers: ${KAFKA_URL:localhost:29092}
           auto-create-topics: false
         bindings:
           crawl-out-0:
@@ -18,10 +18,10 @@ spring:
               configuration:
                 key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: ${SCHEMA_REGISTRY_URL}
+                schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:18081}
                 linger.ms: 1000
                 auto.register.schemas: true
 app:
   kafka:
     crawl:
-      binding: ${CRAWL_BINDING}
+      binding: "crawl-out-0"

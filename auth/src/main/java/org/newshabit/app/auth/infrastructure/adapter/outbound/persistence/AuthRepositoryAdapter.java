@@ -1,10 +1,8 @@
-package org.newshabit.app.auth.infrastructure.adapter.outbound;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.persistence;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.auth.application.port.AuthRepositoryOutputPort;
-import org.newshabit.app.auth.domain.entity.AuthEntity;
-import org.newshabit.app.auth.infrastructure.repository.AuthRepository;
 import org.springframework.stereotype.Component;
 
 @Component

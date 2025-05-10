@@ -1,4 +1,4 @@
-package org.newshabit.app.aiprocess.infrastructure.adapter.outbound;
+package org.newshabit.app.aiprocess.infrastructure.adapter.outbound.gemini;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;

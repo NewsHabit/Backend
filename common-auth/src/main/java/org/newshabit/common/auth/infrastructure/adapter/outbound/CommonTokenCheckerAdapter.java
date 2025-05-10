@@ -11,9 +11,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.common.auth.application.port.TokenCheckerOutputPort;
+import org.newshabit.common.auth.common.exception.ErrorCode;
 import org.newshabit.common.auth.domain.model.CustomUserDetail;
-import org.newshabit.common.auth.infrastructure.exception.AccessTokenException;
-import org.newshabit.common.auth.infrastructure.exception.AccessTokenException.ErrorMessage;
+import org.newshabit.common.auth.common.exception.AccessTokenException;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -61,14 +61,14 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 			return jwtParser.parseClaimsJws(token).getBody();
 		} catch (JwtException e) {
 			log.debug("JWT 파싱 실패: {}", e.getMessage(), e);
-			throw new AccessTokenException(ErrorMessage.INVALID_TOKEN.getMessage());
+			throw new AccessTokenException(ErrorCode.INVALID_TOKEN);
 		}
 	}
 
 	private void checkExpiration(Claims claims) throws AccessTokenException {
 		Date expiration = claims.getExpiration();
 		if (expiration.before(new Date())) {
-			throw new AccessTokenException(ErrorMessage.EXPIRED_TOKEN.getMessage());
+			throw new AccessTokenException(ErrorCode.EXPIRED_TOKEN);
 		}
 	}
 
@@ -80,10 +80,10 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 				.map(String.class::cast)
 				.toList();
 			if (roles.isEmpty()) {
-				throw new AccessTokenException(ErrorMessage.AUTH_ROLE_MISSING_TOKEN.getMessage());
+				throw new AccessTokenException(ErrorCode.AUTH_ROLE_MISSING_TOKEN);
 			}
 			return roles;
 		}
-		throw new AccessTokenException(ErrorMessage.INVALID_TOKEN.getMessage());
+		throw new AccessTokenException(ErrorCode.INVALID_TOKEN);
 	}
 }

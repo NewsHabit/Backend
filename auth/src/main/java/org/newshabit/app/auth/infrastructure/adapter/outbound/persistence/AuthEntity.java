@@ -1,4 +1,4 @@
-package org.newshabit.app.auth.domain.entity;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

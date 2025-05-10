@@ -1,4 +1,4 @@
-package org.newshabit.app.aiprocess.infrastructure.config;
+package org.newshabit.app.aiprocess.infrastructure.adapter.outbound.stream;
 
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.messaging.Message;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class MessageConfig {
+public class RefineNewsAdapter {
 	private final RefineNewsUseCase refineNewsUseCase;
 
 	@Bean

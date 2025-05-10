@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleIllegalArgumentException(IllegalArgumentException e) {
 		log.warn("handleIllegalArgumentException called {}", e.getMessage());
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.BAD_REQUEST.value(),
+			HttpStatus.BAD_REQUEST.toString(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleAuthenticationException(AuthenticationException e) {
 		log.error("AuthenticationException: {}", e.getMessage());
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.UNAUTHORIZED.value(),
+			HttpStatus.UNAUTHORIZED.toString(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
@@ -43,12 +43,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleBaseException(BaseException e) {
 		log.warn("{} called: {}", e.getClass().getSimpleName(), e.getMessage());
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			e.getStatus().value(),
+			e.getErrorCode(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
 		return ResponseEntity
-			.status(e.getStatus())
+			.status(e.getHttpStatus())
 			.body(errorResponse);
 	}
 
@@ -56,12 +56,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleNoResourceFoundException(NoResourceFoundException e) {
 		log.error("Unhandled ResourceException: {}", e.getMessage(), e);
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.NOT_FOUND.value(),
+			HttpStatus.NOT_FOUND.toString(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
 		return ResponseEntity
-			.status(errorResponse.getStatus())
+			.status(HttpStatus.NOT_FOUND)
 			.body(errorResponse);
 	}
 
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleUnknownRuntime(RuntimeException e) {
 		log.error("Unhandled RuntimeException: {}", e.getMessage(), e);
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 			e.getMessage(),
 			LocalDateTime.now()
 		);
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<CommonResponse<Object>> handleException(Exception e) {
 		log.error("Unhandled Exception: {}", e.getMessage(), e);
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
-			HttpStatus.INTERNAL_SERVER_ERROR.value(),
+			HttpStatus.INTERNAL_SERVER_ERROR.toString(),
 			"INTERNAL SERVER ERROR",
 			LocalDateTime.now()
 		);

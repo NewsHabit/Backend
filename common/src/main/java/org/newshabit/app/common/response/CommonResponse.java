@@ -6,19 +6,19 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CommonResponse<T> {
-	private int status;
+	private String status;
 	private String message;
 	private T data;
 
 	public static <T> CommonResponse<T> success() {
-		return new CommonResponse<>(200, "Success", null);
+		return new CommonResponse<>("SUCCESS", "Success", null);
 	}
 
 	public static <T> CommonResponse<T> success(T data) {
-		return new CommonResponse<>(200, "Success", data);
+		return new CommonResponse<>("SUCCESS", "Success", data);
 	}
 
-	public static <T> CommonResponse<T> error(int status, String message) {
+	public static <T> CommonResponse<T> error(String status, String message) {
 		return new CommonResponse<>(status, message, null);
 	}
 }

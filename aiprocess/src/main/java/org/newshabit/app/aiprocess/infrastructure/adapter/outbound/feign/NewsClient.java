@@ -1,4 +1,4 @@
-package org.newshabit.app.aiprocess.infrastructure.client;
+package org.newshabit.app.aiprocess.infrastructure.adapter.outbound.feign;
 
 import org.newshabit.app.aiprocess.infrastructure.config.FeignConfig;
 import org.newshabit.app.common.response.CommonResponse;

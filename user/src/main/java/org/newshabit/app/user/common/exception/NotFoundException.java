@@ -3,23 +3,11 @@ package org.newshabit.app.user.common.exception;
 
 import lombok.Getter;
 import org.newshabit.app.common.exception.BaseException;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public class NotFoundException extends BaseException {
-	public NotFoundException(ErrorMessage message) {
-		super(message);
+	public NotFoundException(ErrorCode errorCode) {
+		super(errorCode);
 	}
-	@Getter
-	public enum ErrorMessage implements Message {
-		USER_NOT_FOUND("user not found.", HttpStatus.NOT_FOUND);
 
-		private final String message;
-		private final HttpStatus status;
-
-		ErrorMessage(String message, HttpStatus status) {
-			this.message = message;
-			this.status = status;
-		}
-	}
 }
