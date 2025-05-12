@@ -10,6 +10,7 @@ services:
     restart: on-failure:3
     volumes:
       - /data/crawl/log:/app/log
+      - /data/auth/rsa:/data/auth/rsa
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     ports:
       - "8083:8083"
