@@ -23,8 +23,6 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
 		String accessToken = (String) authentication.getCredentials();
 		CustomUserDetail userDetail = commonTokenCheckerAdapter.getUserDetail(accessToken);
 
-		log.info(userDetail.toString());
-
 		return new UsernamePasswordAuthenticationToken(userDetail, accessToken, userDetail.getAuthorities());
 	}
 

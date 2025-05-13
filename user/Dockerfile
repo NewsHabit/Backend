@@ -10,10 +10,10 @@ COPY build.gradle .
 
 # 1-2) 의존성 캐시를 위해 common, common-event plain JAR만 먼저 빌드
 RUN chmod +x gradlew \
- && ./gradlew clean :common:jar :auth:jar --no-daemon -x test
+ && ./gradlew clean :common:jar :common-auth:jar --no-daemon -x test
 
 COPY common/ common/
-COPY auth/ auth/
+COPY common-auth/ common-auth/
 COPY user/ user/
 
 RUN ./gradlew :user:bootJar --no-daemon -x test
@@ -23,7 +23,6 @@ WORKDIR /app
 
 COPY --from=builder /app/user/build/libs/user-*.jar newshabit-user.jar
 
-ENV JAVA_OPTS="-Xms128m -Xmx512m -XX:+UseG1GC"
 EXPOSE 8085
 
 # 2-3) 셸 형식 ENTRYPOINT로 $JAVA_OPTS 확장 보장
