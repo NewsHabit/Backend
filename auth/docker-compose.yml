@@ -1,8 +1,8 @@
 services:
   newshabit-auth:
     build:
-      context: ../common-auth
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: auth/Dockerfile
     image: ${NEWSHABIT_AUTH_IMAGE_NAME}:${NEWSHABIT_AUTH_IMAGE_TAG}
     container_name: newshabit-auth
     cpus: 0.2
@@ -23,8 +23,8 @@ services:
       - /data/auth:/data/auth
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     networks:
-      - newshabit-2
+      - newshabit-3
 
 networks:
-  newshabit-2:
+  newshabit-3:
     driver: bridge
