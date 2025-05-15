@@ -5,6 +5,8 @@ services:
       dockerfile: aiprocess/Dockerfile
     image: ${NEWSHABIT_AIPROCESS_IMAGE_NAME}:${NEWSHABIT_AIPROCESS_IMAGE_TAG}
     container_name: newshabit-aiprocess
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     cpus: 0.125
     mem_limit: 128M
     restart: on-failure:3

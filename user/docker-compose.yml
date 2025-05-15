@@ -5,6 +5,8 @@ services:
       dockerfile: user/Dockerfile
     image: ${NEWSHABIT_USER_IMAGE_NAME}:${NEWSHABIT_USER_IMAGE_TAG}
     container_name: newshabit-user
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     cpus: 0.2
     mem_limit: 256M
     restart: on-failure:3

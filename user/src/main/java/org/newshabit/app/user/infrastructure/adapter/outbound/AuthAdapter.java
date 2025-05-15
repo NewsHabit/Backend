@@ -18,6 +18,8 @@ public class AuthAdapter implements AuthOutputPort {
 
 	@Override
 	public LoginTokenPublishResponse getTokens(LoginTokenPublishRequest request) {
+		// 에러 잡아야함
+
 		CommonResponse<LoginTokenPublishResponse> response = authClient.getTokens(request);
 
 		if (!Objects.equals(response.getStatus(), "SUCCESS")) {
