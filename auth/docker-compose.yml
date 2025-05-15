@@ -1,26 +1,30 @@
 services:
   newshabit-auth:
     build:
-      context: ../common-auth
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: auth/Dockerfile
     image: ${NEWSHABIT_AUTH_IMAGE_NAME}:${NEWSHABIT_AUTH_IMAGE_TAG}
     container_name: newshabit-auth
-    restart: always
+    cpus: 0.2
+    mem_limit: 256M
+    restart: on-failure:3
     ports:
       - "8082:8082"
     environment:
-      JAVA_OPTS: "-Xms128m -Xmx512m -XX:+UseG1GC"
-      SPRING_PROFILES_ACTIVE: "app,auth"
-      ACCESS_TOKEN_VALID_TIME: ${ACCESS_TOKEN_VALID_TIME}
-      REFRESH_TOKEN_VALID_TIME: ${REFRESH_TOKEN_VALID_TIME}
+      JAVA_OPTS: "-Xms256m -Xmx256m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "app,auth,jdbc"
       RSA_PRIVATE_KEY: ${RSA_PRIVATE_KEY}
       RSA_PUBLIC_KEY: ${RSA_PUBLIC_KEY}
+      RDS_URL: ${RDS_URL}
+      RDS_USERNAME: ${RDS_USERNAME}
+      RDS_PASSWORD: ${RDS_PASSWORD}
     volumes:
       - /data/auth/log:/app/log
+      - /data/auth:/data/auth
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     networks:
-      - newshabit-2
+      - newshabit-3
 
 networks:
-  newshabit-2:
+  newshabit-3:
     driver: bridge

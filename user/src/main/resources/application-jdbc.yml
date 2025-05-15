@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${RDS_URL}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
+    url: "jdbc:mysql://${RDS_URL:localhost:3306}/newshabit?serverTimezone=Asia/Seoul&characterEncoding=UTF-8"
+    username: "${RDS_USERNAME}"
+    password: "${RDS_PASSWORD}"
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

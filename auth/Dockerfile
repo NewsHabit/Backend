@@ -10,10 +10,11 @@ COPY build.gradle .
 
 # 1-2) common 모듈의 plain JAR만 미리 빌드해 의존성 캐시 활용
 RUN chmod +x gradlew \
- && ./gradlew clean :common:jar --no-daemon -x test
+ && ./gradlew clean :common:jar :common-auth:jar --no-daemon -x test
 
 # 1-3) 실제 소스 복사 및 auth 모듈 Fat JAR 빌드
 COPY common/ common/
+COPY common-auth/ common-auth/
 COPY auth/ auth/
 RUN ./gradlew :auth:bootJar --no-daemon -x test
 
@@ -25,7 +26,6 @@ WORKDIR /app
 COPY --from=builder /app/auth/build/libs/auth-*.jar newshabit-auth.jar
 
 # 2-2) JVM 옵션과 포트 설정
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
 EXPOSE 8082
 
 # 2-3) 프로파일 활성화하여 애플리케이션 실행
