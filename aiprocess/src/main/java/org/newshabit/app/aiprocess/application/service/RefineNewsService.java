@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.aiprocess.application.port.NewsOutputPort;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.RefinedNews;
-import org.newshabit.app.aiprocess.application.port.AiOutputPort;
-import org.newshabit.app.aiprocess.application.port.RefineNewsUseCase;
+import org.newshabit.app.aiprocess.application.port.output.AiOutputPort;
+import org.newshabit.app.aiprocess.application.port.input.RefineNewsUseCase;
 import org.newshabit.app.aiprocess.domain.dto.AiProcessedNews;
+import org.newshabit.app.news.application.port.output.RefinedNewsRepositoryOutputPort;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RefineNewsService implements RefineNewsUseCase {
 	private final AiOutputPort aiOutputPort;
-	private final NewsOutputPort newsOutputPort;
+	private final RefinedNewsRepositoryOutputPort refinedNewsRepositoryOutputPort;
 
 	@Override
 	public Optional<RefinedNews> refineCrawledNews(CrawledNews crawledNews) {
-		boolean exists = newsOutputPort.existNews(crawledNews.getOriginalLink());
+		boolean exists = refinedNewsRepositoryOutputPort.existsByOriginalUrl(crawledNews.getOriginalLink());
 		if (exists) {
 			log.warn("Duplicate URL detected: {}", crawledNews.getOriginalLink());
 			return Optional.empty();

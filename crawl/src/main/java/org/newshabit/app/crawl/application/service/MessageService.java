@@ -4,8 +4,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.newshabit.app.avro.CrawledNews;
-import org.newshabit.app.crawl.application.port.MessageUseCase;
-import org.newshabit.app.crawl.application.port.MessageOutputPort;
+import org.newshabit.app.crawl.application.port.input.MessageUseCase;
+import org.newshabit.app.crawl.application.port.output.MessageOutputPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.RefinedNews;
-import org.newshabit.app.aiprocess.application.port.RefineNewsUseCase;
+import org.newshabit.app.aiprocess.application.port.input.RefineNewsUseCase;
 import org.newshabit.app.common.util.SleepUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

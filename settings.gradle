@@ -7,4 +7,5 @@ include 'user'
 include 'common-event'
 include 'common-auth'
 include 'auth'
+include 'newshabit'
 
