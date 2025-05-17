@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import lombok.extern.slf4j.Slf4j;
 import org.newshabit.common.auth.infrastructure.adapter.outbound.security.utils.PemUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.util.FileCopyUtils;
 
+@Slf4j
 @Configuration
 public class RSAKeyConfig {
 	@Value("${auth.rsa.private-key-path}")
@@ -22,6 +24,7 @@ public class RSAKeyConfig {
 	@Bean
 	public RSAPrivateKey rsaPrivateKey() {
 		try {
+			log.info(">> privateKeyResource: desc={} exists={}", privateKeyResource.getDescription(), privateKeyResource.exists());
 			String pem = readPem(privateKeyResource);
 			return PemUtils.parsePrivateKey(pem);
 		} catch (IOException ex) {
@@ -32,6 +35,7 @@ public class RSAKeyConfig {
 	@Bean
 	public RSAPublicKey rsaPublicKey() {
 		try {
+			log.info(">> publicKeyResource: desc={} exists={}", publicKeyResource.getDescription(), publicKeyResource.exists());
 			String pem = readPem(publicKeyResource);
 			return PemUtils.parsePublicKey(pem);
 		} catch (IOException ex) {

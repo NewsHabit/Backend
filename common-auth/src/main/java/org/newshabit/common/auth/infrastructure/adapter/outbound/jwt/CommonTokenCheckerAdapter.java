@@ -60,7 +60,7 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 		try {
 			return jwtParser.parseClaimsJws(token).getBody();
 		} catch (JwtException e) {
-			log.debug("JWT 파싱 실패: {}", e.getMessage(), e);
+			log.debug("JWT 파싱 실패...: {}", e.getMessage(), e);
 			throw new AccessTokenException(ErrorCode.INVALID_TOKEN);
 		}
 	}
@@ -79,11 +79,10 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 				.filter(String.class::isInstance)
 				.map(String.class::cast)
 				.toList();
-			if (roles.isEmpty()) {
-				throw new AccessTokenException(ErrorCode.AUTH_ROLE_MISSING_TOKEN);
+			if (!roles.isEmpty()) {
+				return roles;
 			}
-			return roles;
 		}
-		throw new AccessTokenException(ErrorCode.INVALID_TOKEN);
+		throw new AccessTokenException(ErrorCode.AUTH_ROLE_MISSING_TOKEN);
 	}
 }

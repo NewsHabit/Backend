@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.newshabit.common.auth.common.exception.AccessTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +17,7 @@ import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher
 
 import java.io.IOException;
 
+@Slf4j
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
 	public TokenAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -36,12 +38,9 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-		String authHeader = request.getHeader("Authorization");
-		String token = "";
+		String raw = request.getHeader("Authorization");
 
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-			token = authHeader.substring(7);
-		}
+		String token = (raw != null && raw.startsWith("Bearer ")) ? raw.substring(7) : raw;
 
 		TokenAuthentication authRequest = new TokenAuthentication(token);
 		try {

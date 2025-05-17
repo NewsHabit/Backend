@@ -1,12 +1,9 @@
 package org.newshabit.app.auth.infrastructure.adapter.outbound.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.annotation.PostConstruct;
 import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 	private final RSAPrivateKey privateKey;
-	private final RSAPublicKey publicKey;
 
-	private JwtParser jwtParser;
 	private static final String ROLES_FILED_NAME = "roles";
 	private static final String DEVICE_ID_FILED_NAME = "deviceId";
 	private static final String USER_ID_FILED_NAME = "userId";
@@ -34,13 +29,6 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 	@Value("${auth.jwt.refresh-token.valid-time:604800000}")
 	private long refreshTokenValidityInMilliseconds;
 
-	@PostConstruct
-	public void init() {
-		this.jwtParser = Jwts.parserBuilder()
-			.setSigningKey(publicKey)
-			.build();
-	}
-	
 	@Override
 	public String createAccessToken(String socialId, int userId, String deviceId, List<UserRole> userRoles) {
 		return createToken(socialId, userId, deviceId, userRoles, accessTokenValidityInMilliseconds);
