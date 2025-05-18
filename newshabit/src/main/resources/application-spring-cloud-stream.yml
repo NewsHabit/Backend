@@ -12,7 +12,6 @@ spring:
             partitioned: true
             maxAttempts: 3
             back-off-initial-interval: 1000
-            concurrency: 1
             use-native-decoding: true
 
         refineNews-out-0:
@@ -37,7 +36,6 @@ spring:
             partitioned: true
             maxAttempts: 3
             back-off-initial-interval: 1000
-            concurrency: 3
             use-native-decoding: true
       kafka:
         binder:
