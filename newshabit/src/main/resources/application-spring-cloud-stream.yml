@@ -39,7 +39,7 @@ spring:
             use-native-decoding: true
       kafka:
         binder:
-          brokers: ${KAFKA_URL:localhost:29092}
+          brokers: ${KAFKA_URL}
           auto-create-topics: false
         bindings:
           refineNews-in-0:
@@ -47,7 +47,7 @@ spring:
               configuration:
                 key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
                 value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-                schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:18081}
+                schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 specific.avro.reader: true
 
@@ -56,7 +56,7 @@ spring:
               configuration:
                 key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:18081}
+                schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 auto.register.schemas: true
                 specific.avro.reader: true
@@ -66,7 +66,7 @@ spring:
               configuration:
                 key.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
                 value.serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-                schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:18081}
+                schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 auto.register.schemas: true
 
@@ -77,7 +77,7 @@ spring:
               configuration:
                 key.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
                 value.deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
-                schema.registry.url: ${SCHEMA_REGISTRY_URL:http://localhost:18081}
+                schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 specific.avro.reader: true
 app:
