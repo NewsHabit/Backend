@@ -36,7 +36,7 @@ RUN ./gradlew :newshabit:bootJar --no-daemon -x test
 FROM eclipse-temurin:17-jre AS runtime
 WORKDIR /app
 
-COPY --from=builder /app/user/build/libs/newshabit-*.jar newshabit.jar
+COPY --from=builder /app/newshabit/build/libs/newshabit-*.jar newshabit.jar
 
 EXPOSE 8080
 
