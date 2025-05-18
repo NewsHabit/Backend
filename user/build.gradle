@@ -1,12 +1,11 @@
-bootJar { enabled = true }
+bootJar { enabled = false }
 
-jar { enabled = false }
-
-version="2.0.0"
+jar { enabled = true }
 
 dependencies {
     implementation project(':common')
     implementation project(':common-auth')
+    implementation project(':auth')
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -15,7 +14,4 @@ dependencies {
     //jpa
     implementation'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // feign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }

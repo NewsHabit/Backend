@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.auth.application.port.AuthRepositoryOutputPort;
-import org.newshabit.app.auth.application.port.TokenProviderOutputPort;
-import org.newshabit.app.auth.application.port.TokenProviderUseCase;
-import org.newshabit.app.auth.domain.dto.LoginTokenPublishResponse;
-import org.newshabit.app.auth.domain.dto.ReissueAccessTokenResponse;
-import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.AuthEntity;
-import org.newshabit.common.auth.application.port.TokenCheckerOutputPort;
+import org.newshabit.app.auth.application.port.output.AuthRepositoryOutputPort;
+import org.newshabit.app.auth.application.port.output.TokenProviderOutputPort;
+import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
+import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
+import org.newshabit.common.auth.domain.model.Token;
+import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.entity.AuthEntity;
+import org.newshabit.common.auth.application.port.output.TokenCheckerOutputPort;
 import org.newshabit.common.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.common.auth.common.exception.AccessTokenException;
@@ -25,7 +25,7 @@ public class TokenProviderService implements TokenProviderUseCase {
 	private final AuthRepositoryOutputPort authRepositoryOutputPort;
 
 	@Override
-	public LoginTokenPublishResponse createLoginToken(String socialId, String deviceId, int userId, List<UserRole> roles) {
+	public Token createLoginToken(String socialId, String deviceId, int userId, List<UserRole> roles) {
 		String accessToken = tokenProviderOutputPort.createAccessToken(socialId, userId, deviceId, roles);
 		String refreshToken = tokenProviderOutputPort.createRefreshToken(socialId, userId, deviceId, roles);
 
@@ -49,20 +49,9 @@ public class TokenProviderService implements TokenProviderUseCase {
 
 		authRepositoryOutputPort.save(authEntity);
 
-		return new LoginTokenPublishResponse(
+		return new Token(
 			accessToken,
 			refreshToken
-		);
-	}
-
-	@Override
-	public String createCustomServerToken(String socialId, int userId, String deviceId, List<UserRole> roles, long tokenValidityInMilliseconds) {
-		return tokenProviderOutputPort.createCustomServerToken(
-			socialId,
-			userId,
-			deviceId,
-			roles,
-			tokenValidityInMilliseconds
 		);
 	}
 
@@ -74,11 +63,11 @@ public class TokenProviderService implements TokenProviderUseCase {
 		int userId = userDetail.getUserId();
 		List<UserRole> roles = userDetail.getRoles().stream().map(UserRole::valueOf).collect(Collectors.toList());
 
-		LoginTokenPublishResponse loginToken = createLoginToken(socialId, deviceId, userId, roles);
+		Token token = createLoginToken(socialId, deviceId, userId, roles);
 
 		return new ReissueAccessTokenResponse(
-			loginToken.accessToken(),
-			loginToken.refreshToken()
+			token.getAccessToken(),
+			token.getRefreshToken()
 		);
 	}
 }

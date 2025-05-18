@@ -1,9 +1,0 @@
-auth:
-  jwt:
-    access-token:
-      valid-time: ${ACCESS_TOKEN_VALID_TIME:900000}
-    refresh-token:
-      valid-time: ${REFRESH_TOKEN_VALID_TIME:604800000}
-  rsa:
-    private-key-path: ${RSA_PRIVATE_KEY:classpath:private_key.pem}
-    public-key-path: ${RSA_PUBLIC_KEY:classpath:public_key.pem}

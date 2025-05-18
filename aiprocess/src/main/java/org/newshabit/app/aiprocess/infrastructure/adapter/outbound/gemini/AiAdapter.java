@@ -12,7 +12,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.avro.CrawledNews;
-import org.newshabit.app.aiprocess.application.port.AiOutputPort;
+import org.newshabit.app.aiprocess.application.port.output.AiOutputPort;
 import org.newshabit.app.aiprocess.domain.dto.AiProcessedNews;
 import org.newshabit.app.aiprocess.domain.dto.GeminiRequest;
 import org.newshabit.app.aiprocess.domain.dto.GeminiResponse;

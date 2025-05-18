@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.NewsCategory;
-import org.newshabit.app.crawl.application.port.CrawlUseCase;
-import org.newshabit.app.crawl.application.port.CrawlOutputPort;
+import org.newshabit.app.crawl.application.port.input.CrawlUseCase;
+import org.newshabit.app.crawl.application.port.output.CrawlOutputPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

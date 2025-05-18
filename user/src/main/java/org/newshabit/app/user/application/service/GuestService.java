@@ -4,22 +4,21 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
+import org.newshabit.common.auth.domain.model.Token;
 import org.newshabit.app.common.domain.enums.UserRole;
-import org.newshabit.app.user.application.port.AuthOutputPort;
 import org.newshabit.app.user.common.exception.ErrorCode;
-import org.newshabit.app.user.domain.dto.LoginRequest;
-import org.newshabit.app.user.domain.dto.LoginResponse;
-import org.newshabit.app.user.domain.dto.LoginTokenPublishRequest;
-import org.newshabit.app.user.domain.dto.LoginTokenPublishResponse;
-import org.newshabit.app.user.domain.dto.RegisterRequest;
-import org.newshabit.app.user.domain.entity.UserDailyGoalLogEntity;
-import org.newshabit.app.user.domain.entity.UserEntity;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginRequest;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginResponse;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalLogEntity;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserEntity;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.app.user.common.exception.NotFoundException;
-import org.newshabit.app.user.application.port.GuestUseCase;
-import org.newshabit.app.user.application.port.UserRepositoryOutputPort;
+import org.newshabit.app.user.application.port.input.GuestUseCase;
+import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
 
-import org.newshabit.app.user.infrastructure.repository.UserDailyGoalLogRepository;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.repository.UserDailyGoalLogRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class GuestService implements GuestUseCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
 	private final UserDailyGoalLogRepository userDailyGoalLogRepository;
-	private final AuthOutputPort authOutputPort;
+	private final TokenProviderUseCase tokenProviderUseCase;
 
 	@Override
 	public LoginResponse login(LoginRequest loginRequest) throws NotFoundException {
@@ -41,11 +40,11 @@ public class GuestService implements GuestUseCase {
 
 		List<UserRole> roles = List.of(userEntity.getRole());
 
-		LoginTokenPublishResponse publishedToken = authOutputPort.getTokens(
-			new LoginTokenPublishRequest(loginRequest.socialId(), loginRequest.deviceId(), userEntity.getId(), roles)
+		Token token = tokenProviderUseCase.createLoginToken(
+			loginRequest.socialId(), loginRequest.deviceId(), userEntity.getId(), roles
 		);
 
-		return new LoginResponse(publishedToken.accessToken(), publishedToken.refreshToken());
+		return new LoginResponse(token.getAccessToken(), token.getRefreshToken());
 	}
 
 	@Override

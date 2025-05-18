@@ -1,8 +1,6 @@
-bootJar { enabled = true }
+bootJar { enabled = false }
 
-jar { enabled = false }
-
-version="2.0.0"
+jar { enabled = true }
 
 dependencies {
     implementation project(':common')
