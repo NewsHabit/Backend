@@ -1,22 +1,22 @@
 services:
-  newshabit-user:
+  newshabit:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: newshabit/Dockerfile
     image: ${NEWSHABIT_IMAGE_NAME}:${NEWSHABIT_IMAGE_TAG}
     container_name: newshabit
     cpus: 0.8
-    mem_limit: 518M
+    mem_limit: 1024M
     restart: on-failure:3
     volumes:
-      - /data/user/log:/app/log
+      - /data/newshabit/log:/app/log
       - /data/auth:/data/auth
       - /usr/share/zoneinfo/Asia/Seoul:/etc/localtime:ro
     ports:
-      - "8085:8085"
+      - "8080:8080"
     environment:
-      JAVA_OPTS: "-Xms256m -Xmx518m -XX:+UseG1GC"
-      SPRING_PROFILES_ACTIVE: "app,auth,jdbc,"
+      JAVA_OPTS: "-Xms512m -Xmx1024m -XX:+UseG1GC"
+      SPRING_PROFILES_ACTIVE: "ai,app,auth,jdbc,spring-cloud-stream"
 
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       GEMINI_PROMPT: ${GEMINI_PROMPT}
@@ -33,8 +33,8 @@ services:
       SCHEMA_REGISTRY_URL: ${SCHEMA_REGISTRY_URL}
 
     networks:
-      - newshabit-3
+      - newshabit
 
 networks:
-  newshabit-3:
+  newshabit:
     driver: bridge

@@ -6,7 +6,7 @@ import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAcce
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
 import org.newshabit.app.common.response.CommonResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 	private final TokenProviderUseCase tokenProviderUseCase;
 
-	@GetMapping("/v2/guest/refresh")
+	@PostMapping("/v2/guest/refresh")
 	public ResponseEntity<CommonResponse<ReissueAccessTokenResponse>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request) {
 
 		ReissueAccessTokenResponse response = tokenProviderUseCase.reissueAccessToken(
