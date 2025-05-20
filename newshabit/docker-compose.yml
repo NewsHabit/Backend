@@ -6,7 +6,7 @@ services:
     image: ${NEWSHABIT_IMAGE_NAME}:${NEWSHABIT_IMAGE_TAG}
     container_name: newshabit
     cpus: 0.8
-    mem_limit: 518M
+    mem_limit: 1024M
     restart: on-failure:3
     volumes:
       - /data/newshabit/log:/app/log
@@ -15,7 +15,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      JAVA_OPTS: "-Xms256m -Xmx518m -XX:+UseG1GC"
+      JAVA_OPTS: "-Xms512m -Xmx1024m -XX:+UseG1GC"
       SPRING_PROFILES_ACTIVE: "ai,app,auth,jdbc,spring-cloud-stream"
 
       GEMINI_API_KEY: ${GEMINI_API_KEY}
