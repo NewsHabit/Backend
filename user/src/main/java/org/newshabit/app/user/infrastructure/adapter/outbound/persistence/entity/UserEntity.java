@@ -1,6 +1,5 @@
 package org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -9,19 +8,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.converter.NewsCategoryListConverter;
 import org.newshabit.app.common.domain.enums.NewsCategory;
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
 
 @Entity
 @Getter
@@ -49,13 +43,7 @@ public class UserEntity {
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
-	@OneToMany(mappedBy = "user",
-		cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH },
-		orphanRemoval = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<UserDailyGoalLogEntity> dailyGoalList = new ArrayList<>();
-
-	private UserEntity(String username, LocalDateTime usernameModifiedAt, List<NewsCategory> interestCategories, String socialId, UserRole role) {
+	public UserEntity(String username, LocalDateTime usernameModifiedAt, List<NewsCategory> interestCategories, String socialId, UserRole role) {
 		this.id = null;
 		this.username = username;
 		this.usernameModifiedAt = usernameModifiedAt;
@@ -63,15 +51,4 @@ public class UserEntity {
 		this.socialId = socialId;
 		this.role = role;
 	}
-
-	public static UserEntity from(RegisterRequest registerRequest) {
-		return new UserEntity(
-			registerRequest.username(),
-			LocalDateTime.now().minusDays(14),
-			registerRequest.categoryList(),
-			registerRequest.socialId(),
-			UserRole.MEMBER
-		);
-	}
-
 }

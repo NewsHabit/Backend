@@ -44,7 +44,6 @@ public class SecurityConfig {
 
 			// 권한별 엔드포인트 접근제어
 			.authorizeHttpRequests(authz -> authz
-				.requestMatchers(new RegexRequestMatcher(".*/internal/.*", null)).hasRole("INTERNAL")
 				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/member/.*", null)).hasAnyRole("MEMBER", "ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
