@@ -6,9 +6,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode implements BaseErrorCode {
-	DUPLICATED_USER("", "user already exists", HttpStatus.CONFLICT),
-
-	USER_NOT_FOUND("", "user not found.", HttpStatus.NOT_FOUND);
+	DUPLICATED_USER("DUPLICATED_USER", "user already exists", HttpStatus.CONFLICT),
+	USER_NOT_FOUND("USER_NOT_FOUND", "user not found.", HttpStatus.NOT_FOUND);
 
 	private final String code;
 	private final String message;

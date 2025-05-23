@@ -10,17 +10,23 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Setter;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "user_daily_goal_log")
-public class UserDailyGoalLogEntity {
+public class UserDailyGoalEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", nullable = false)
+	@Setter
+	private UserEntity user;
 
 	@Column(name = "daily_goal", nullable = false)
 	private int dailyGoal;
@@ -31,34 +37,29 @@ public class UserDailyGoalLogEntity {
 	@Column(name = "end_date")
 	private LocalDate endDate;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
-	private UserEntity user;
-
-	private UserDailyGoalLogEntity(int dailyGoal, LocalDate startDate, LocalDate endDate, UserEntity user) {
+	private UserDailyGoalEntity(UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
 		this.id = null;
+		this.user = user;
 		this.dailyGoal = dailyGoal;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.user = user;
 	}
 
-	public static UserDailyGoalLogEntity create(int dailyGoal, LocalDate startDate, LocalDate endDate, UserEntity user) {
-		return new UserDailyGoalLogEntity(
+	public static UserDailyGoalEntity create(UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
+		return new UserDailyGoalEntity(
+			user,
 			dailyGoal,
 			startDate,
-			endDate,
-			user
+			endDate
 		);
 	}
 
-	public static UserDailyGoalLogEntity create(int dailyGoal, LocalDate startDate, UserEntity user) {
-		return new UserDailyGoalLogEntity(
+	public static UserDailyGoalEntity create(UserEntity user, int dailyGoal, LocalDate startDate) {
+		return new UserDailyGoalEntity(
+			user,
 			dailyGoal,
 			startDate,
-			null,
-			user
+			null
 		);
 	}
 }

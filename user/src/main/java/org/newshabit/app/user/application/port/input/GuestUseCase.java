@@ -1,12 +1,11 @@
 package org.newshabit.app.user.application.port.input;
 
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginRequest;
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginResponse;
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
+import org.newshabit.app.user.domain.model.Register;
 import org.newshabit.app.user.common.exception.DuplicatedException;
+import org.newshabit.common.auth.domain.model.Token;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 
 public interface GuestUseCase {
-	LoginResponse login(LoginRequest loginRequest) throws NotFoundException;
-	void register(RegisterRequest registerRequest) throws DuplicatedException;
+	Token login(String socialId, String deviceId) throws NotFoundException;
+	void register(Register register) throws DuplicatedException;
 }
