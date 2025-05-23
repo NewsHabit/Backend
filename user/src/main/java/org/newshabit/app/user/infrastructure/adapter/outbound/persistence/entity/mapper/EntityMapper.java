@@ -2,7 +2,7 @@ package org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entit
 
 import org.newshabit.app.user.domain.model.User;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
-import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalLogEntity;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalEntity;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -29,21 +29,21 @@ public class EntityMapper {
 		);
 	}
 
-	public UserDailyGoal toDomain(UserDailyGoalLogEntity entity) {
+	public UserDailyGoal toDomain(UserDailyGoalEntity entity) {
 		return new UserDailyGoal(
 			entity.getDailyGoal(),
 			entity.getStartDate(),
 			entity.getEndDate(),
-			entity.getUserId()
+			entity.getUser().getId()
 		);
 	}
 
-	public UserDailyGoalLogEntity toEntity(UserDailyGoal userDailyGoal) {
-		return UserDailyGoalLogEntity.create(
+	public UserDailyGoalEntity toEntity(UserDailyGoal userDailyGoal) {
+		return UserDailyGoalEntity.create(
+			null,
 			userDailyGoal.getDailyGoal(),
 			userDailyGoal.getStartDate(),
-			userDailyGoal.getEndDate(),
-			userDailyGoal.getUserId()
+			userDailyGoal.getEndDate()
 		);
 	}
 }

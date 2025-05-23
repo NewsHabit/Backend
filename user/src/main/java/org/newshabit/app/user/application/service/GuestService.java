@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
-import org.newshabit.app.user.application.port.output.UserDailyGoalLogOutputPort;
+import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.domain.model.Register;
 import org.newshabit.app.user.domain.model.User;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GuestService implements GuestUseCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
-	private final UserDailyGoalLogOutputPort userDailyGoalLogOutputPort;
+	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final TokenProviderUseCase tokenProviderUseCase;
 
 	@Override
@@ -71,6 +71,6 @@ public class GuestService implements GuestUseCase {
 			user.getId()
 		);
 
-		userDailyGoalLogOutputPort.save(userDailyGoal);
+		userDailyGoalOutputPort.save(userDailyGoal);
 	}
 }

@@ -10,7 +10,6 @@ import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginRespon
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterResponse;
 import org.newshabit.app.user.application.port.input.GuestUseCase;
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.SettingsResponse;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.mapper.DtoMapper;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.common.auth.domain.model.CustomUserDetail;

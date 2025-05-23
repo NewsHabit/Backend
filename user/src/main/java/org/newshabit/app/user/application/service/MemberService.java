@@ -2,7 +2,7 @@ package org.newshabit.app.user.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.user.application.port.input.MemberUserCase;
-import org.newshabit.app.user.application.port.output.UserDailyGoalLogOutputPort;
+import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
 import org.newshabit.app.user.domain.model.MemberSettings;
 import org.newshabit.app.user.domain.model.User;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService implements MemberUserCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
-	private final UserDailyGoalLogOutputPort userDailyGoalLogOutputPort;
+	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 
 	@Override
 	public MemberSettings getMemberSettings(int userId) throws NotFoundException {
 		User user = userRepositoryOutputPort.findByUserId(userId).orElseThrow(NotFoundException::new);
 
-		UserDailyGoal userDailyGoal = userDailyGoalLogOutputPort.findLatestByUserId(userId);
+		UserDailyGoal userDailyGoal = userDailyGoalOutputPort.findLatestByUserId(userId);
 
 		return new MemberSettings(
 			user.getUsername(),

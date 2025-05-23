@@ -1,0 +1,45 @@
+package org.newshabit.app.user.infrastructure.adapter.outbound.persistence;
+
+import jakarta.persistence.EntityManager;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
+import org.newshabit.app.user.common.exception.ErrorCode;
+import org.newshabit.app.user.common.exception.NotFoundException;
+import org.newshabit.app.user.domain.model.UserDailyGoal;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalEntity;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserEntity;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.mapper.EntityMapper;
+import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.repository.UserDailyGoalRepository;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
+	private final UserDailyGoalRepository userDailyGoalRepository;
+	private final EntityMapper entityMapper;
+	private final EntityManager em;
+
+	public UserDailyGoal save(UserDailyGoal userDailyGoal) {
+		UserDailyGoalEntity userDailyGoalEntity = entityMapper.toEntity(userDailyGoal);
+
+		UserEntity userRef = em.getReference(UserEntity.class, userDailyGoal.getUserId());
+
+		userDailyGoalEntity.setUser(userRef);
+
+		UserDailyGoalEntity saved = userDailyGoalRepository.save(userDailyGoalEntity);
+
+		return entityMapper.toDomain(saved);
+	}
+
+	@Override
+	public UserDailyGoal findLatestByUserId(int userId) {
+		Optional<UserDailyGoalEntity> optionalEntity = userDailyGoalRepository.findLatestByUserId(userId);
+
+		if (optionalEntity.isEmpty()) {
+			throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+		}
+
+		return entityMapper.toDomain(optionalEntity.get());
+	}
+}
