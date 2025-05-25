@@ -1,15 +1,18 @@
 package org.newshabit.app.user.infrastructure.adapter.inbound.web;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.user.application.port.input.MemberUserCase;
 import org.newshabit.app.user.domain.model.MemberSettings;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.CategoryUpdateRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginResponse;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterResponse;
 import org.newshabit.app.user.application.port.input.GuestUseCase;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.UsernameUpdateRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.mapper.DtoMapper;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.common.auth.domain.model.CustomUserDetail;
@@ -18,6 +21,7 @@ import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +45,7 @@ public class UserController {
 	}
 
 	@PostMapping("/v2/guest/register")
-	public ResponseEntity<CommonResponse<RegisterResponse>> register(@RequestBody RegisterRequest registerRequest) throws DuplicatedException {
+	public ResponseEntity<CommonResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest registerRequest) throws DuplicatedException {
 
 		guestUseCase.register(dtoMapper.toDomain(registerRequest));
 
@@ -49,10 +53,28 @@ public class UserController {
 	}
 
 	@GetMapping("/v2/member/settings")
-	public ResponseEntity<CommonResponse<Object>> getProfile(@AuthenticationPrincipal CustomUserDetail userDetail) throws NotFoundException {
+	public ResponseEntity<CommonResponse<Object>> getUserSettings(@AuthenticationPrincipal CustomUserDetail userDetail) throws NotFoundException {
 
 		MemberSettings memberSettings = memberUserCase.getMemberSettings(userDetail.getUserId());
 
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toDto(memberSettings)));
+	}
+
+	@PatchMapping("/v2/member/username")
+	public ResponseEntity<CommonResponse<Object>> updateUsername(@AuthenticationPrincipal CustomUserDetail userDetail,
+		@Valid @RequestBody UsernameUpdateRequest usernameUpdateRequest) throws NotFoundException {
+
+		memberUserCase.updateUsername(userDetail.getUserId(), usernameUpdateRequest.username());
+
+		return ResponseEntity.ok(CommonResponse.success());
+	}
+
+	@PatchMapping("/v2/member/categories")
+	public ResponseEntity<CommonResponse<Object>> updateCategories(@AuthenticationPrincipal CustomUserDetail userDetail,
+		@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) throws NotFoundException {
+
+		memberUserCase.updateInterestCategories(userDetail.getUserId(), categoryUpdateRequest.categories());
+
+		return ResponseEntity.ok(CommonResponse.success());
 	}
 }

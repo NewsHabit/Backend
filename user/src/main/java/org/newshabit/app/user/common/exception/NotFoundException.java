@@ -10,4 +10,7 @@ public class NotFoundException extends BaseException {
 		super(errorCode);
 	}
 
+	public NotFoundException() {
+		super(ErrorCode.USER_NOT_FOUND);
+	}
 }

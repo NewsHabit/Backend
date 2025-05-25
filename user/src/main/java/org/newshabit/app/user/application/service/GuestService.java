@@ -32,7 +32,7 @@ public class GuestService implements GuestUseCase {
 		Optional<User> userOptional = userRepositoryOutputPort.findBySocialId(socialId);
 
 		if (userOptional.isEmpty()) {
-			throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+			throw new NotFoundException();
 		}
 
 		User user = userOptional.get();
@@ -50,7 +50,7 @@ public class GuestService implements GuestUseCase {
 	@Transactional
 	public void register(Register register) throws DuplicatedException {
 		userRepositoryOutputPort.findBySocialId(register.getSocialId()).ifPresent( exist -> {
-			throw new DuplicatedException(ErrorCode.DUPLICATED_USER);
+			throw new DuplicatedException();
 		});
 
 		User user = new User(
