@@ -9,4 +9,5 @@ public interface MemberUserCase {
 	MemberSettings getMemberSettings(int userId) throws NotFoundException;
 	void updateUsername(int userId, String username) throws NotFoundException;
 	void updateInterestCategories(int userId, List<NewsCategory> interestCategories) throws NotFoundException;
+	void updateDailyGoal(int userId, int dailyGoal) throws NotFoundException;
 }

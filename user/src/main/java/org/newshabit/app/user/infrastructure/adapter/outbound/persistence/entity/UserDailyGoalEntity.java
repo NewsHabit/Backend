@@ -37,16 +37,17 @@ public class UserDailyGoalEntity {
 	@Column(name = "end_date")
 	private LocalDate endDate;
 
-	private UserDailyGoalEntity(UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
-		this.id = null;
+	private UserDailyGoalEntity(Integer id,UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
+		this.id = id;
 		this.user = user;
 		this.dailyGoal = dailyGoal;
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 
-	public static UserDailyGoalEntity create(UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
+	public static UserDailyGoalEntity create(Integer id, UserEntity user, int dailyGoal, LocalDate startDate, LocalDate endDate) {
 		return new UserDailyGoalEntity(
+			id,
 			user,
 			dailyGoal,
 			startDate,
@@ -54,8 +55,9 @@ public class UserDailyGoalEntity {
 		);
 	}
 
-	public static UserDailyGoalEntity create(UserEntity user, int dailyGoal, LocalDate startDate) {
+	public static UserDailyGoalEntity create(Integer id, UserEntity user, int dailyGoal, LocalDate startDate) {
 		return new UserDailyGoalEntity(
+			id,
 			user,
 			dailyGoal,
 			startDate,

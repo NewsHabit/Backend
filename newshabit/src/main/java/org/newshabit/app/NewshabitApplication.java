@@ -20,12 +20,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     "org.newshabit.app.user.infrastructure.adapter.outbound.persistence.repository"
 })
 @ComponentScan(basePackages = {
-//    "org.newshabit.app.aiprocess",
+    "org.newshabit.app.aiprocess",
     "org.newshabit.app.common",
     "org.newshabit.common.auth",
-//    "org.newshabit.app.news",
+    "org.newshabit.app.news",
     "org.newshabit.app.auth",
-//    "org.newshabit.app.crawl",
+    "org.newshabit.app.crawl",
     "org.newshabit.app.user"
 })
 public class NewshabitApplication {

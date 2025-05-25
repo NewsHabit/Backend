@@ -9,8 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDailyGoal {
+	private Integer id;
 	private int dailyGoal;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int userId;
+
+	public void updateEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
 }
