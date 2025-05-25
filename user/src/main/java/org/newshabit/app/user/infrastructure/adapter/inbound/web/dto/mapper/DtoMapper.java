@@ -20,7 +20,7 @@ public class DtoMapper {
 		return new Register(
 			registerRequest.socialId(),
 			registerRequest.username(),
-			registerRequest.categoryList(),
+			registerRequest.categories(),
 			registerRequest.dailyGoal()
 		);
 	}

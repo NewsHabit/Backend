@@ -1,7 +1,9 @@
 package org.newshabit.app.user.infrastructure.adapter.outbound.persistence;
 
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.domain.model.User;
@@ -19,6 +21,7 @@ public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 
 	public User save(User user) {
 		UserEntity userEntity = entityMapper.toEntity(user);
+
 		return entityMapper.toDomain(userRepository.save(userEntity));
 	}
 
@@ -35,9 +38,27 @@ public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 		Optional<UserEntity> optional = userRepository.findById(id);
 
 		if (optional.isEmpty())	{
-			throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+			throw new NotFoundException();
 		}
 
 		return optional.map(entityMapper::toDomain);
+	}
+
+	@Override
+	public void updateUsername(User user, String username) {
+		UserEntity userEntity = userRepository.findById(user.getId()).orElseThrow(NotFoundException::new);
+
+		userEntity.updateUsername(username);
+
+		userRepository.save(userEntity);
+	}
+
+	@Override
+	public void updateInterestCategories(User user, List<NewsCategory> interestCategories) throws NotFoundException {
+		UserEntity userEntity = userRepository.findById(user.getId()).orElseThrow(NotFoundException::new);
+
+		userEntity.updateInterestCategories(interestCategories);
+
+		userRepository.save(userEntity);
 	}
 }

@@ -1,6 +1,8 @@
 package org.newshabit.app.user.application.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.user.application.port.input.MemberUserCase;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
@@ -27,5 +29,19 @@ public class MemberService implements MemberUserCase {
 			user.getInterestCategories(),
 			userDailyGoal.getDailyGoal()
 		);
+	}
+
+	@Override
+	public void updateUsername(int userId, String username) throws NotFoundException {
+		User user = userRepositoryOutputPort.findByUserId(userId).orElseThrow(NotFoundException::new);
+
+		userRepositoryOutputPort.updateUsername(user, username);
+	}
+
+	@Override
+	public void updateInterestCategories(int userId, List<NewsCategory> interestCategories) throws NotFoundException {
+		User user = userRepositoryOutputPort.findByUserId(userId).orElseThrow(NotFoundException::new);
+
+		userRepositoryOutputPort.updateInterestCategories(user, interestCategories);
 	}
 }

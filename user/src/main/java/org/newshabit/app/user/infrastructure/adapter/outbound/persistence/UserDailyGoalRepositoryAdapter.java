@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 	private final UserDailyGoalRepository userDailyGoalRepository;
 	private final EntityMapper entityMapper;
-	private final EntityManager em;
+	private final EntityManager entityManager;
 
 	public UserDailyGoal save(UserDailyGoal userDailyGoal) {
 		UserDailyGoalEntity userDailyGoalEntity = entityMapper.toEntity(userDailyGoal);
 
-		UserEntity userRef = em.getReference(UserEntity.class, userDailyGoal.getUserId());
+		UserEntity userRef = entityManager.getReference(UserEntity.class, userDailyGoal.getUserId());
 
 		userDailyGoalEntity.setUser(userRef);
 
@@ -37,7 +37,7 @@ public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 		Optional<UserDailyGoalEntity> optionalEntity = userDailyGoalRepository.findLatestByUserId(userId);
 
 		if (optionalEntity.isEmpty()) {
-			throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+			throw new NotFoundException();
 		}
 
 		return entityMapper.toDomain(optionalEntity.get());

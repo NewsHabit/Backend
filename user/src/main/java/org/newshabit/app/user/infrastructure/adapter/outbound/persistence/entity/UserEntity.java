@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.converter.NewsCategoryListConverter;
 import org.newshabit.app.common.domain.enums.NewsCategory;
@@ -50,5 +51,14 @@ public class UserEntity {
 		this.interestCategories = interestCategories;
 		this.socialId = socialId;
 		this.role = role;
+	}
+
+	public void updateUsername(String username) {
+		this.username = username;
+		this.usernameModifiedAt = LocalDateTime.now();
+	}
+
+	public void updateInterestCategories(List<NewsCategory> interestCategories) {
+		this.interestCategories = interestCategories;
 	}
 }
