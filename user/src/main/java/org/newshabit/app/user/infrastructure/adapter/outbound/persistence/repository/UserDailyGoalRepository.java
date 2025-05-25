@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserDailyGoalRepository extends JpaRepository<UserDailyGoalEntity, Long> {
+public interface UserDailyGoalRepository extends JpaRepository<UserDailyGoalEntity, Integer> {
 
 	@Query("""
 		SELECT dailyGoal FROM UserDailyGoalEntity dailyGoal
