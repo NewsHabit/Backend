@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_BAD_REQUEST.getCode(),
 			CommonErrorCode.COMMON_BAD_REQUEST.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_UNAUTHORIZED.getCode(),
 			CommonErrorCode.COMMON_UNAUTHORIZED.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_VALIDATION_ERROR.getCode(),
 			errorMessage,
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_BAD_REQUEST.getCode(),
 			CommonErrorCode.COMMON_BAD_REQUEST.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_NOT_FOUND.getCode(),
 			CommonErrorCode.COMMON_NOT_FOUND.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
@@ -97,7 +97,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_SERVER_ERROR.getCode(),
 			CommonErrorCode.COMMON_SERVER_ERROR.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 		return ResponseEntity
 			.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -111,7 +111,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			e.getErrorCode(),
 			e.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
@@ -126,7 +126,7 @@ public class GlobalExceptionHandler {
 		CommonResponse<Object> errorResponse = new CommonResponse<>(
 			CommonErrorCode.COMMON_SERVER_ERROR.getCode(),
 			CommonErrorCode.COMMON_SERVER_ERROR.getMessage(),
-			LocalDateTime.now()
+			null
 		);
 
 		return ResponseEntity
