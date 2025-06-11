@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 	private final RSAPrivateKey privateKey;
 
-	private static final String ROLES_FILED_NAME = "roles";
-	private static final String DEVICE_ID_FILED_NAME = "deviceId";
-	private static final String USER_ID_FILED_NAME = "userId";
+    private static final String ROLES_FIELD_NAME = "roles";
+    private static final String DEVICE_ID_FIELD_NAME = "deviceId";
+    private static final String USER_ID_FIELD_NAME = "userId";
 
 	@Value("${auth.jwt.access-token.valid-time:900000}")
 	private long accessTokenValidityInMilliseconds;
@@ -41,9 +41,9 @@ public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
 
 	private String createToken(String socialId, int userId, String deviceId, List<UserRole> userRoles, long validityInMilliseconds) {
 		Claims claims = Jwts.claims().setSubject(socialId);
-		claims.put(ROLES_FILED_NAME, userRoles.stream().map(Enum::name).toList());
-		claims.put(DEVICE_ID_FILED_NAME, deviceId);
-		claims.put(USER_ID_FILED_NAME, userId);
+            claims.put(ROLES_FIELD_NAME, userRoles.stream().map(Enum::name).toList());
+            claims.put(DEVICE_ID_FIELD_NAME, deviceId);
+            claims.put(USER_ID_FIELD_NAME, userId);
 		Date now = new Date();
 		Date expireDate = new Date(now.getTime() + validityInMilliseconds);
 
