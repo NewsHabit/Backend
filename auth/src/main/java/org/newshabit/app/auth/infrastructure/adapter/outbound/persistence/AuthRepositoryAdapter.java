@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 public class AuthRepositoryAdapter implements AuthRepositoryOutputPort {
 	private final AuthRepository authRepository;
 
-	public Optional<AuthEntity> findBySocialIdAndDeviceId(int userId, String deviceId) {
-		return authRepository.findAuthEntityByUserIdAndDeviceId(userId, deviceId);
-	}
+    public Optional<AuthEntity> findByUserIdAndDeviceId(int userId, String deviceId) {
+            return authRepository.findAuthEntityByUserIdAndDeviceId(userId, deviceId);
+        }
 
 	public void save(AuthEntity entity) {
 		authRepository.save(entity);
