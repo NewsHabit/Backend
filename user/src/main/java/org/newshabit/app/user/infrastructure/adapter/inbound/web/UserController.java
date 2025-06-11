@@ -7,6 +7,7 @@ import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.user.application.port.input.MemberUserCase;
 import org.newshabit.app.user.domain.model.MemberSettings;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.CategoryUpdateRequest;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.DailyGoalRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginRequest;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.LoginResponse;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterRequest;
@@ -74,6 +75,15 @@ public class UserController {
 		@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) throws NotFoundException {
 
 		memberUserCase.updateInterestCategories(userDetail.getUserId(), categoryUpdateRequest.categories());
+
+		return ResponseEntity.ok(CommonResponse.success());
+	}
+
+	@PatchMapping("/v2/member/daily-goal")
+	public ResponseEntity<CommonResponse<Object>> updateDailyGoal(@AuthenticationPrincipal CustomUserDetail userDetail,
+		@Valid @RequestBody DailyGoalRequest dailyGoalRequest) throws NotFoundException {
+
+		memberUserCase.updateDailyGoal(userDetail.getUserId(), dailyGoalRequest.dailyGoal());
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}

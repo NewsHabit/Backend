@@ -31,6 +31,7 @@ public class EntityMapper {
 
 	public UserDailyGoal toDomain(UserDailyGoalEntity entity) {
 		return new UserDailyGoal(
+			entity.getId(),
 			entity.getDailyGoal(),
 			entity.getStartDate(),
 			entity.getEndDate(),
@@ -40,6 +41,7 @@ public class EntityMapper {
 
 	public UserDailyGoalEntity toEntity(UserDailyGoal userDailyGoal) {
 		return UserDailyGoalEntity.create(
+			userDailyGoal.getId(),
 			null,
 			userDailyGoal.getDailyGoal(),
 			userDailyGoal.getStartDate(),

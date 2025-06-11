@@ -13,7 +13,6 @@ import org.newshabit.app.user.domain.model.User;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
 import org.newshabit.common.auth.domain.model.Token;
 import org.newshabit.app.common.domain.enums.UserRole;
-import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.application.port.input.GuestUseCase;
@@ -65,6 +64,7 @@ public class GuestService implements GuestUseCase {
 		user = userRepositoryOutputPort.save(user);
 
 		UserDailyGoal userDailyGoal = new UserDailyGoal(
+			null,
 			register.getDailyGoal(),
 			LocalDate.now(),
 			null,

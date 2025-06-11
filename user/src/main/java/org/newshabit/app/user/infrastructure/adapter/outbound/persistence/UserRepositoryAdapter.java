@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.enums.NewsCategory;
-import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.domain.model.User;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserEntity;
@@ -30,7 +29,6 @@ public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 		Optional<UserEntity> userEntity = userRepository.findUserEntityBySocialId(socialId);
 
 		return userEntity.map(entityMapper::toDomain);
-
 	}
 
 	@Override

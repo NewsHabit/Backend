@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
-import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalEntity;
@@ -33,7 +32,7 @@ public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 	}
 
 	@Override
-	public UserDailyGoal findLatestByUserId(int userId) {
+	public UserDailyGoal findLatestByUserId(int userId) throws NotFoundException {
 		Optional<UserDailyGoalEntity> optionalEntity = userDailyGoalRepository.findLatestByUserId(userId);
 
 		if (optionalEntity.isEmpty()) {
