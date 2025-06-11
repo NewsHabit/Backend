@@ -29,7 +29,7 @@ public class TokenProviderService implements TokenProviderUseCase {
 		String accessToken = tokenProviderOutputPort.createAccessToken(socialId, userId, deviceId, roles);
 		String refreshToken = tokenProviderOutputPort.createRefreshToken(socialId, userId, deviceId, roles);
 
-		Optional<AuthEntity> authEntityOptional = authRepositoryOutputPort.findBySocialIdAndDeviceId(userId, deviceId);
+                Optional<AuthEntity> authEntityOptional = authRepositoryOutputPort.findByUserIdAndDeviceId(userId, deviceId);
 
 		AuthEntity authEntity;
 

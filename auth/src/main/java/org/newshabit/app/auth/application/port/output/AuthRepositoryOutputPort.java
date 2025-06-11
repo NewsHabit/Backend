@@ -5,5 +5,5 @@ import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.entity
 
 public interface AuthRepositoryOutputPort {
 	void save(AuthEntity entity);
-	Optional<AuthEntity> findBySocialIdAndDeviceId(int userId, String deviceId);
+    Optional<AuthEntity> findByUserIdAndDeviceId(int userId, String deviceId);
 }
