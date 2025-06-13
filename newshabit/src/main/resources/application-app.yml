@@ -13,3 +13,8 @@ app:
     sleep-max: 2000
     start-idx: 1
     end-idx: 10
+  news:
+    delete:
+      cron: ${NEWS_DELETE_CRON:0 0 2 * * *}
+      click_cnt: ${NEWS_DELETE_CLICK_CNT:5}
+      date: ${NEWS_DELETE_DATE:14}
