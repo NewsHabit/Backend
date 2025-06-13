@@ -14,6 +14,14 @@ public interface RefinedNewsRepository extends JpaRepository<RefinedNewsEntity, 
 
         boolean existsByOriginalUrl(String url);
 
-        @Query("select n from RefinedNewsEntity n where (n.clickCnt < :cnt or n.publishedAt < :border) and not exists (select 1 from BookmarkEntity b where b.newsId = n.id)")
-        List<RefinedNewsEntity> findDeletableNews(@Param("cnt") int clickCnt, @Param("border") LocalDateTime border);
+        @Query("""
+                SELECT n FROM RefinedNewsEntity n
+                LEFT JOIN BookmarkEntity b ON n.id = b.newsId
+                WHERE (n.clickCnt < :cnt OR n.publishedAt < :border)
+                AND b.id IS NULL
+                """)
+        List<RefinedNewsEntity> findDeletableNews(
+                @Param("cnt") int clickCnt,
+                @Param("border") LocalDateTime border
+        );
 }
