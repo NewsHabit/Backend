@@ -21,10 +21,12 @@ public interface UserDailyGoalRepository extends JpaRepository<UserDailyGoalEnti
 	List<UserDailyGoalEntity> findByUserId(@Param("userId") Integer userId, Pageable pageable);
 
 
-	default Optional<UserDailyGoalEntity> findLatestByUserId(@Param("userId") Integer userId) {
-		List<UserDailyGoalEntity> list =
-			findByUserId(userId, PageRequest.of(0, 1));
-		return list.stream().findFirst();
-	}
+        default Optional<UserDailyGoalEntity> findLatestByUserId(@Param("userId") Integer userId) {
+                List<UserDailyGoalEntity> list =
+                        findByUserId(userId, PageRequest.of(0, 1));
+                return list.stream().findFirst();
+        }
+
+        void deleteAllByUserId(Integer userId);
 
 }

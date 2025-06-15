@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,6 +85,13 @@ public class UserController {
 		@Valid @RequestBody DailyGoalRequest dailyGoalRequest) throws NotFoundException {
 
 		memberUserCase.updateDailyGoal(userDetail.getUserId(), dailyGoalRequest.dailyGoal());
+
+		return ResponseEntity.ok(CommonResponse.success());
+	}
+
+	@DeleteMapping("/v2/member")
+	public ResponseEntity<CommonResponse<Object>> deleteMember(@AuthenticationPrincipal CustomUserDetail userDetail) {
+		memberUserCase.deleteMember(userDetail.getUserId());
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}

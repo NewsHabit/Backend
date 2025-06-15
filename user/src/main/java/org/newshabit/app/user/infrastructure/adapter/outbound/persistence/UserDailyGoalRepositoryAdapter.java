@@ -32,13 +32,18 @@ public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 	}
 
 	@Override
-	public UserDailyGoal findLatestByUserId(int userId) throws NotFoundException {
-		Optional<UserDailyGoalEntity> optionalEntity = userDailyGoalRepository.findLatestByUserId(userId);
+        public UserDailyGoal findLatestByUserId(int userId) throws NotFoundException {
+                Optional<UserDailyGoalEntity> optionalEntity = userDailyGoalRepository.findLatestByUserId(userId);
 
 		if (optionalEntity.isEmpty()) {
 			throw new NotFoundException();
 		}
 
-		return entityMapper.toDomain(optionalEntity.get());
-	}
+                return entityMapper.toDomain(optionalEntity.get());
+        }
+
+        @Override
+        public void deleteByUserId(int userId) {
+                userDailyGoalRepository.deleteAllByUserId(userId);
+        }
 }

@@ -8,5 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AuthRepository extends JpaRepository<AuthEntity, Integer> {
 
-	Optional<AuthEntity> findAuthEntityByUserIdAndDeviceId(int userId, String deviceId);
+        Optional<AuthEntity> findAuthEntityByUserIdAndDeviceId(int userId, String deviceId);
+
+        void deleteByUserId(int userId);
 }

@@ -10,4 +10,10 @@ public interface MemberUserCase {
 	void updateUsername(int userId, String username) throws NotFoundException;
 	void updateInterestCategories(int userId, List<NewsCategory> interestCategories) throws NotFoundException;
 	void updateDailyGoal(int userId, int dailyGoal) throws NotFoundException;
+
+	/**
+	 * 사용자 계정을 삭제합니다.
+	 * @param userId 삭제할 사용자의 아이디
+	 */
+	void deleteMember(int userId);
 }

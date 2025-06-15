@@ -3,6 +3,12 @@ package org.newshabit.app.user.application.port.output;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
 
 public interface UserDailyGoalOutputPort {
-	UserDailyGoal save(UserDailyGoal userDailyGoal);
-	UserDailyGoal findLatestByUserId(int userId);
+        UserDailyGoal save(UserDailyGoal userDailyGoal);
+        UserDailyGoal findLatestByUserId(int userId);
+
+        /**
+         * 사용자와 연결된 일일 목표 기록을 삭제합니다.
+         * @param userId 사용자 ID
+         */
+        void deleteByUserId(int userId);
 }
