@@ -59,4 +59,8 @@ public class UserRepositoryAdapter implements UserRepositoryOutputPort {
 
 		userRepository.save(userEntity);
 	}
+	@Override
+	public void deleteById(int userId) {
+		userRepository.deleteById(userId);
+	}
 }

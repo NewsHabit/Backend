@@ -10,13 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthRepositoryAdapter implements AuthRepositoryOutputPort {
-	private final AuthRepository authRepository;
+        private final AuthRepository authRepository;
 
     public Optional<AuthEntity> findByUserIdAndDeviceId(int userId, String deviceId) {
             return authRepository.findAuthEntityByUserIdAndDeviceId(userId, deviceId);
         }
 
-	public void save(AuthEntity entity) {
-		authRepository.save(entity);
-	}
+        public void save(AuthEntity entity) {
+                authRepository.save(entity);
+        }
+
+        @Override
+        public void deleteByUserId(int userId) {
+                authRepository.deleteByUserId(userId);
+        }
 }
