@@ -1,18 +1,25 @@
 package org.newshabit.app.news.infrastructure.adapter.outbound.persistence;
 
 
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.news.application.port.output.RefinedNewsRepositoryOutputPort;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.RefinedNewsEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.repository.RefinedNewsRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
 public class RefinedNewsRepositoryAdapter implements RefinedNewsRepositoryOutputPort {
 	private final RefinedNewsRepository refinedNewsRepository;
+	@Value("${app.news.delete.click_cnt}")
+	private int deleteClickCount;
+	@Value("${app.news.delete.days}")
+	private int deleteDays;
 
-	@Override
+
 	public boolean existsByOriginalUrl(String url) {
 		return refinedNewsRepository.existsByOriginalUrl(url);
 	}
@@ -20,4 +27,9 @@ public class RefinedNewsRepositoryAdapter implements RefinedNewsRepositoryOutput
 	public RefinedNewsEntity save(RefinedNewsEntity refinedNewsEntity) {
 		return refinedNewsRepository.save(refinedNewsEntity);
 	}
+
+	public List<RefinedNewsEntity> findDeletableNews(int clickCnt, LocalDateTime daysBeforeToday) {
+		return refinedNewsRepository.findDeletableNews(deleteClickCount, daysBeforeToday);
+	}
+
 }
