@@ -6,6 +6,7 @@ dependencies {
     implementation project(':common')
     implementation project(":common-event")
     implementation project(":common-auth")
+    implementation project(":user")
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

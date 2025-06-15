@@ -29,11 +29,7 @@ public class NewsDeleteScheduler {
         log.info("NewsDeleteScheduler started: {}", LocalDateTime.now());
         try {
             LocalDateTime border = LocalDateTime.now().minusDays(deleteBeforeDays);
-            List<RefinedNewsEntity> targets = newsRepositoryOutputPort.findDeletableNews(clickCntThreshold, border);
-            targets.forEach(n -> {
-                log.info("Deleting news id: {}", n.getId());
-                newsRepository.delete(n);
-            });
+            newsRepositoryOutputPort.findDeletableNews(clickCntThreshold, border);
         } catch (Exception e) {
             log.error("NewsDeleteScheduler error: {}", e.getMessage());
         }
