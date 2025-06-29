@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.domain.model;
+package org.newshabit.app.auth.domain.model;
 
 import java.util.Collection;
 import java.util.List;

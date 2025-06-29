@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.jwt;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -10,10 +10,10 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.common.auth.application.port.output.TokenCheckerOutputPort;
-import org.newshabit.common.auth.common.exception.ErrorCode;
-import org.newshabit.common.auth.domain.model.CustomUserDetail;
-import org.newshabit.common.auth.common.exception.AccessTokenException;
+import org.newshabit.app.auth.application.port.output.TokenCheckerOutputPort;
+import org.newshabit.app.auth.common.exception.ErrorCode;
+import org.newshabit.app.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.auth.common.exception.AccessTokenException;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor

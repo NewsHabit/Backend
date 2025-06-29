@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.domain.model;
+package org.newshabit.app.auth.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

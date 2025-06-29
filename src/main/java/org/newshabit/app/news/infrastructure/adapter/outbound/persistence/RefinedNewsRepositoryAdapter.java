@@ -16,7 +16,7 @@ public class RefinedNewsRepositoryAdapter implements RefinedNewsRepositoryOutput
 	private final RefinedNewsRepository refinedNewsRepository;
 	@Value("${app.news.delete.click_cnt}")
 	private int deleteClickCount;
-	@Value("${app.news.delete.days}")
+	@Value("${app.news.delete.date}")
 	private int deleteDays;
 
 

@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

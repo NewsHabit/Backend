@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import java.security.interfaces.RSAPublicKey;
 import lombok.RequiredArgsConstructor;

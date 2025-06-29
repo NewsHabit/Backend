@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.common.auth.common.exception.AccessTokenException;
+import org.newshabit.app.auth.common.exception.AccessTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

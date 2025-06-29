@@ -1,11 +1,11 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.common.auth.infrastructure.adapter.outbound.security.utils.PemUtils;
+import org.newshabit.app.auth.infrastructure.adapter.outbound.security.utils.PemUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

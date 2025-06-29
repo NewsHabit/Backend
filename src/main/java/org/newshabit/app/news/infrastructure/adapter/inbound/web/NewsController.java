@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.domain.model.RefinedNews;
-import org.newshabit.common.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

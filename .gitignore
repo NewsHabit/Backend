@@ -1,5 +1,5 @@
 *.pem
-infra/.env
+.env
 HELP.md
 .gradle
 build/

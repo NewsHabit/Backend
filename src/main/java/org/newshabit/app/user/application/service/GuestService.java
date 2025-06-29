@@ -11,7 +11,7 @@ import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.domain.model.Register;
 import org.newshabit.app.user.domain.model.User;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
-import org.newshabit.common.auth.domain.model.Token;
+import org.newshabit.app.auth.domain.model.Token;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.app.user.common.exception.NotFoundException;

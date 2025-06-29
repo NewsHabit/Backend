@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.common.exception;
+package org.newshabit.app.auth.common.exception;
 
 import org.newshabit.app.common.exception.BaseErrorCode;
 import org.springframework.http.HttpStatus;

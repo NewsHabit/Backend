@@ -9,12 +9,12 @@ import org.newshabit.app.auth.application.port.output.AuthRepositoryOutputPort;
 import org.newshabit.app.auth.application.port.output.TokenProviderOutputPort;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
-import org.newshabit.common.auth.domain.model.Token;
+import org.newshabit.app.auth.domain.model.Token;
 import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.entity.AuthEntity;
-import org.newshabit.common.auth.application.port.output.TokenCheckerOutputPort;
-import org.newshabit.common.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.auth.application.port.output.TokenCheckerOutputPort;
+import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.common.domain.enums.UserRole;
-import org.newshabit.common.auth.common.exception.AccessTokenException;
+import org.newshabit.app.auth.common.exception.AccessTokenException;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package org.newshabit.common.auth.infrastructure.adapter.outbound.security.utils;
+package org.newshabit.app.auth.infrastructure.adapter.outbound.security.utils;
 
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
