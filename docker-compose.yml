@@ -1,8 +1,8 @@
 services:
   newshabit:
     build:
-      context: ..
-      dockerfile: newshabit/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     image: ${NEWSHABIT_IMAGE_NAME}:${NEWSHABIT_IMAGE_TAG}
     container_name: newshabit
     cpus: 0.8
