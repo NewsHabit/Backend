@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MemberService implements MemberUserCase {
-        private final UserRepositoryOutputPort userRepositoryOutputPort;
-        private final UserDailyGoalOutputPort userDailyGoalOutputPort;
-        private final AuthRepositoryOutputPort authRepositoryOutputPort;
+	private final UserRepositoryOutputPort userRepositoryOutputPort;
+	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
+	private final AuthRepositoryOutputPort authRepositoryOutputPort;
 
 	private final int DAILY_GOAL_UPDATE_ALLOWED_DAYS = 7;
 
