@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RefineNewsConsumeConsumeService implements RefineNewsConsumeUseCase {
+public class RefineNewsConsumeService implements RefineNewsConsumeUseCase {
 	private final RefinedNewsRepositoryOutputPort refinedNewsRepositoryOutputPort;
 
 	@Override

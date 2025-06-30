@@ -14,7 +14,7 @@ import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterReq
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.RegisterResponse;
 import org.newshabit.app.user.application.port.input.GuestUseCase;
 import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.UsernameUpdateRequest;
-import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.mapper.DtoMapper;
+import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.mapper.UserDtoMapper;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.auth.domain.model.Token;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 	private final GuestUseCase guestUseCase;
 	private final MemberUserCase memberUserCase;
-	private final DtoMapper dtoMapper;
+	private final UserDtoMapper dtoMapper;
 
 	@PostMapping("/v2/guest/login")
 	public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) throws NotFoundException {

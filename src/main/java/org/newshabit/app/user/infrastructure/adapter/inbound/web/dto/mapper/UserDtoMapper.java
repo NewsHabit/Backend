@@ -7,7 +7,7 @@ import org.newshabit.app.user.infrastructure.adapter.inbound.web.dto.SettingsRes
 import org.springframework.stereotype.Component;
 
 @Component
-public class DtoMapper {
+public class UserDtoMapper {
 	public SettingsResponse toDto(MemberSettings memberSettings) {
 		return new SettingsResponse(
 			memberSettings.name(),
