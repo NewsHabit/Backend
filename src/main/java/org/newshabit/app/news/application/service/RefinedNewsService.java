@@ -3,8 +3,10 @@ package org.newshabit.app.news.application.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
-import org.newshabit.app.news.application.port.output.RefinedNewsRepositoryOutputPort;
+import org.newshabit.app.news.application.port.output.RefinedNewsPort;
+import org.newshabit.app.news.application.port.output.TodayNewsPort;
 import org.newshabit.app.news.domain.model.RefinedNews;
+import org.newshabit.app.news.domain.model.TodayNews;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RefinedNewsService implements RefinedNewsUseCase {
-	private final RefinedNewsRepositoryOutputPort refinedNewsRepositoryOutputPort;
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
+	private final TodayNewsPort todayNewsPort;
+	private final RefinedNewsPort refinedNewsPort;
 
 	@Override
 	public List<RefinedNews> getTodayNews(int userId) {
@@ -23,7 +26,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 		 * 해당 개수만큼 오늘의 뉴스 발행
 		 */
 
-		List<RefinedNews> todayNews = refinedNewsRepositoryOutputPort.findTodayNewsByUserId(userId);
+		List<TodayNews> todayNews = todayNewsPort.getTodayNewsByUserId(userId);
 
 		if (todayNews.isEmpty()) {
 			UserDailyGoal userDailyGoal = userDailyGoalOutputPort.findLatestByUserId(userId);
@@ -35,7 +38,10 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 			 */
 		}
 
-
-		return todayNews;
+		return refinedNewsPort.findAllByUserId(
+			todayNews.stream()
+				.map(TodayNews::getNewsId)
+				.toList()
+		);
 	}
 }

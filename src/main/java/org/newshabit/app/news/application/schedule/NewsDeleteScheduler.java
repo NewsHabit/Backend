@@ -3,7 +3,7 @@ package org.newshabit.app.news.application.schedule;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.news.application.port.output.RefinedNewsRepositoryOutputPort;
+import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class NewsDeleteScheduler {
-    private final RefinedNewsRepositoryOutputPort newsRepositoryOutputPort;
+    private final RefinedNewsPort newsRepositoryOutputPort;
 
     @Value("${app.news.delete.click_cnt}")
     private int clickCntThreshold;

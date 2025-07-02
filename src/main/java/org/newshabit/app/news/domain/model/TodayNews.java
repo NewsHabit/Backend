@@ -4,16 +4,12 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.newshabit.app.common.domain.enums.NewsCategory;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewsReadLog {
+public class TodayNews {
 	private Integer id;
-	private Integer userId;
 	private Integer newsId;
-	private NewsCategory category;
-	private boolean isTodayNews;
 	private LocalDate publishedAt;
 }

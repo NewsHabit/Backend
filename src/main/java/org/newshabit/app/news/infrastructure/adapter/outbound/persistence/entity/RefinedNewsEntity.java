@@ -13,8 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.newshabit.app.avro.NewsCategory;
-import org.newshabit.app.avro.RefinedNews;
+import org.newshabit.app.common.domain.enums.NewsCategory;
 
 @Entity
 @Getter
@@ -66,23 +65,4 @@ public class RefinedNewsEntity {
 
 	@Column(name = "original_url", nullable = false)
 	private String originalUrl;
-
-	public static RefinedNewsEntity fromAvro(RefinedNews refinedNews) {
-		return new RefinedNewsEntity(
-			null,
-			refinedNews.getTitle(),
-			refinedNews.getWhoSummary(),
-			refinedNews.getWhenSummary(),
-			refinedNews.getWhereSummary(),
-			refinedNews.getWhatSummary(),
-			refinedNews.getWhySummary(),
-			refinedNews.getHowSummary(),
-			refinedNews.getKeyword(),
-			refinedNews.getSummary(),
-			LocalDateTime.now(),
-			refinedNews.getNewsCategory(),
-			refinedNews.getClickCnt(),
-			refinedNews.getOriginalUrl()
-		);
-	}
 }

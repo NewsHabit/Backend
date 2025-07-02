@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RefinedNewsRepository extends JpaRepository<RefinedNewsEntity, Long> {
+public interface RefinedNewsRepo extends JpaRepository<RefinedNewsEntity, Integer> {
 
         boolean existsByOriginalUrl(String url);
 

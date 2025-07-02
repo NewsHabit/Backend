@@ -8,7 +8,6 @@ import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper.NewsDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class NewsController {
 	private final RefinedNewsUseCase refinedNewsUseCase;
 	private final NewsReadLogUseCase newsReadLogUseCase;
-	private final NewsDtoMapper dtoMapper;
 
 	@GetMapping("/v2/member/today-news")
 	public ResponseEntity<CommonResponse<List<RefinedNews>>> getTodayNews(
@@ -38,14 +36,14 @@ public class NewsController {
 		return ResponseEntity.ok(commonResponse);
 	}
 
-	@PostMapping("/v2/member/read-articles")
+	@PostMapping("/v2/guest/read-articles")
 	public ResponseEntity<CommonResponse<List<RefinedNews>>> updateNewsReadHistory(
 		@AuthenticationPrincipal CustomUserDetail userDetail,
 		@RequestBody NewsReadLogRequestDto requestDto
 	) {
-		int userId = userDetail.getUserId();
+		Integer userId = userDetail.getUserId();
 
-		newsReadLogUseCase.updateNewsReadLog(dtoMapper.toDomain(userId, requestDto));
+		newsReadLogUseCase.updateNewsReadLog(userId, requestDto.newsId());
 
 		CommonResponse<List<RefinedNews>> commonResponse = CommonResponse.success();
 

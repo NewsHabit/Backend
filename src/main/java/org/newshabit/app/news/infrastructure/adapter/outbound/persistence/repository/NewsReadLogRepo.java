@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-
-public interface NewsReadLogRepository extends JpaRepository<NewsReadLogEntity, Integer> {
+public interface NewsReadLogRepo extends JpaRepository<NewsReadLogEntity, Integer> {
 	Optional<NewsReadLogEntity> findByNewsIdAndUserId(Integer newsId, Integer userId);
 }

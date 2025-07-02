@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 public class AiAdapter implements AiOutputPort {
 	@Value("${app.ai.url}")
 	private String API_URL;
+	@Value("${app.ai.key}")
+	private String API_KEY;
 	@Value("${app.ai.prompt}")
 	private String PROMPT;
 	private final ObjectMapper objectMapper = new ObjectMapper();
@@ -40,6 +42,7 @@ public class AiAdapter implements AiOutputPort {
 		HttpRequest httpRequest = HttpRequest.newBuilder()
 			.uri(URI.create(API_URL))
 			.header("Content-Type", "application/json")
+			.header("X-goog-api-key", API_KEY)
 			.POST(HttpRequest.BodyPublishers.ofString(jsonBody))
 			.build();
 
@@ -49,7 +52,6 @@ public class AiAdapter implements AiOutputPort {
 		);
 
 		if (response.candidates() == null) {
-			log.warn("No candidates found for request: {}", response);
 			return Optional.empty();
 		}
 

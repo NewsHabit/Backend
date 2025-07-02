@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Integer> {
+public interface BookmarkRepo extends JpaRepository<BookmarkEntity, Integer> {
     boolean existsByNewsId(Integer newsId);
 }
