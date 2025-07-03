@@ -1,6 +1,6 @@
 package org.newshabit.app.news.infrastructure.adapter.outbound.persistence;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
@@ -31,9 +31,13 @@ public class RefinedNewsAdapter implements RefinedNewsPort {
 		return refinedNewsRepo.save(newsEntityMapper.toEntity(refinedNews));
 	}
 
-	public void findDeletableNews(int clickCnt, LocalDateTime daysBeforeToday) {
-		List<RefinedNewsEntity> deleteList = refinedNewsRepo.findDeletableNews(deleteClickCount, daysBeforeToday);
-		refinedNewsRepo.deleteAll(deleteList);
+	public void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay) {
+		refinedNewsRepo.deleteAllBelowThreshold(clickCntThreshold, thresholdDay);
+	}
+
+	@Override
+	public void updateClickCntAfterDeletion() {
+		refinedNewsRepo.updateAllClickCntAfterDeletion();
 	}
 
 	@Override

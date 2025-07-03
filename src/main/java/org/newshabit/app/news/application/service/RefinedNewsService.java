@@ -1,6 +1,9 @@
 package org.newshabit.app.news.application.service;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
@@ -43,5 +46,12 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 				.map(TodayNews::getNewsId)
 				.toList()
 		);
+	}
+
+	@Override
+	@Transactional
+	public void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay) {
+		refinedNewsPort.deleteThresholdNews(clickCntThreshold, thresholdDay);
+		refinedNewsPort.updateClickCntAfterDeletion();
 	}
 }

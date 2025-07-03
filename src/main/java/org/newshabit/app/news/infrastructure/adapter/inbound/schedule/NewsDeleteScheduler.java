@@ -1,9 +1,10 @@
-package org.newshabit.app.news.application.schedule;
+package org.newshabit.app.news.infrastructure.adapter.inbound.schedule;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.news.application.port.output.RefinedNewsPort;
+import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class NewsDeleteScheduler {
-    private final RefinedNewsPort newsRepositoryOutputPort;
+    private final RefinedNewsUseCase refinedNewsUseCase;
 
     @Value("${app.news.delete.click_cnt}")
     private int clickCntThreshold;
@@ -21,13 +22,15 @@ public class NewsDeleteScheduler {
     private int deleteBeforeDays;
 
     @Scheduled(cron = "${app.news.delete.cron}")
-    public void deleteOldNews() {
+    public void deleteBelowThresholdNews() {
         log.info("NewsDeleteScheduler started: {}", LocalDateTime.now());
         try {
-            LocalDateTime border = LocalDateTime.now().minusDays(deleteBeforeDays);
-            newsRepositoryOutputPort.findDeletableNews(clickCntThreshold, border);
+            LocalDate border = LocalDate.now().minusDays(deleteBeforeDays);
+
+            refinedNewsUseCase.deleteThresholdNews(clickCntThreshold, border);
         } catch (Exception e) {
             log.error("NewsDeleteScheduler error: {}", e.getMessage());
+            throw new RuntimeException("NewsDeleteScheduler error: " + e.getMessage());
         }
         log.info("NewsDeleteScheduler finished: {}", LocalDateTime.now());
     }
