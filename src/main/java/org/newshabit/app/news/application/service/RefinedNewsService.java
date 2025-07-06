@@ -1,17 +1,23 @@
 package org.newshabit.app.news.application.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import jakarta.transaction.Transactional;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
-import org.newshabit.app.user.domain.model.UserDailyGoal;
+import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
+import org.newshabit.app.user.domain.model.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,32 +26,69 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final TodayNewsPort todayNewsPort;
 	private final RefinedNewsPort refinedNewsPort;
+	private final UserRepositoryOutputPort userRepositoryOutputPort;
 
 	@Override
+	@Transactional
 	public List<RefinedNews> getTodayNews(int userId) {
-		/**
-		 * 오늘의 뉴스 이미 발행 되었는지 확인.
-		 * 발행 안되었으면 해당 유저 오늘의 뉴스 구독 수 확인
-		 * 해당 개수만큼 오늘의 뉴스 발행
-		 */
+		List<TodayNews> todayNewsList = todayNewsPort.getTodayNewsList(userId);
 
-		List<TodayNews> todayNews = todayNewsPort.getTodayNewsByUserId(userId);
+		if (todayNewsList.isEmpty()) {
+			int dailyGoal = userDailyGoalOutputPort.findLatestByUserId(userId).getDailyGoal();
 
-		if (todayNews.isEmpty()) {
-			UserDailyGoal userDailyGoal = userDailyGoalOutputPort.findLatestByUserId(userId);
-			int dailyGoal = userDailyGoal.getDailyGoal();
+			User user = userRepositoryOutputPort.findByUserId(userId).orElseThrow(
+				() -> new IllegalArgumentException("User not found with userId: " + userId)
+			);
 
+			todayNewsList = selectTodayNews(userId, dailyGoal, user.getInterestCategories());
 
-			/**
-			 * 뉴스 발행
-			 */
+			todayNewsPort.saveTodayNewsList(todayNewsList);
 		}
 
-		return refinedNewsPort.findAllByUserId(
-			todayNews.stream()
-				.map(TodayNews::getNewsId)
-				.toList()
-		);
+		List<Integer> newsIds = todayNewsList.stream()
+			.map(TodayNews::getNewsId)
+			.toList();
+
+		return refinedNewsPort.findAllByNewsIds(newsIds);
+	}
+
+	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {
+		LocalDate thresholdDate = LocalDate.now().minusDays(1);
+		List<RefinedNews> todayNewsCandidates = refinedNewsPort.findTodayNewsCandidates(userId, interestCategories, thresholdDate);
+
+		Collections.shuffle(todayNewsCandidates);
+
+		Map<NewsCategory, List<RefinedNews>> groupedCandidates = todayNewsCandidates.stream()
+			.collect(Collectors.groupingBy(RefinedNews::getNewsCategory, Collectors.toList()));
+
+		int categoryCount = interestCategories.size();
+		int baseQuota     = dailyGoal / categoryCount;
+		int remainder     = dailyGoal % categoryCount;
+
+		List<RefinedNews> picked = new ArrayList<>();
+
+		for (NewsCategory category : interestCategories) {
+			List<RefinedNews> bucket = groupedCandidates.getOrDefault(category, Collections.emptyList());
+
+			int quota = baseQuota + (remainder > 0 ? 1 : 0);
+
+			if (bucket.size() >= quota) {
+				remainder--;
+			}
+
+			int pickCount = Math.min(quota, bucket.size());
+
+			picked.addAll(bucket.subList(0, pickCount));
+		}
+
+		return picked.stream().map(
+			refinedNews -> new TodayNews(
+				null,
+				refinedNews.getId(),
+				userId,
+				LocalDate.now()
+			)
+		).toList();
 	}
 
 	@Override

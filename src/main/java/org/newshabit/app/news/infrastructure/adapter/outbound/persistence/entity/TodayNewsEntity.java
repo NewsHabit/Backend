@@ -26,6 +26,9 @@ public class TodayNewsEntity {
 	@Column(name = "news_id", nullable = false)
 	private Integer newsId;
 
+	@Column(name = "user_id", nullable = false)
+	private Integer userId;
+
 	@Column(name = "published_at", nullable = false)
 	private LocalDate publishedAt;
 }

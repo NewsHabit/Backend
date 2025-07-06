@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class TodayNews {
 	private Integer id;
 	private Integer newsId;
+	private Integer userId;
 	private LocalDate publishedAt;
 }

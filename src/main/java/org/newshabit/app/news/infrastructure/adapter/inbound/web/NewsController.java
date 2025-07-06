@@ -37,7 +37,7 @@ public class NewsController {
 	}
 
 	@PostMapping("/v2/guest/read-articles")
-	public ResponseEntity<CommonResponse<List<RefinedNews>>> updateNewsReadHistory(
+	public ResponseEntity<CommonResponse<Void>> updateNewsReadHistory(
 		@AuthenticationPrincipal CustomUserDetail userDetail,
 		@RequestBody NewsReadLogRequestDto requestDto
 	) {
@@ -45,8 +45,6 @@ public class NewsController {
 
 		newsReadLogUseCase.updateNewsReadLog(userId, requestDto.newsId());
 
-		CommonResponse<List<RefinedNews>> commonResponse = CommonResponse.success();
-
-		return ResponseEntity.ok(commonResponse);
+		return ResponseEntity.ok(CommonResponse.success());
 	}
 }

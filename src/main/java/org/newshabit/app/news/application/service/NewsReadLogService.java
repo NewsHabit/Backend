@@ -30,7 +30,7 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 		if (userId != null) {
 			NewsCategory category = refinedNews.getNewsCategory();
 
-			boolean isTodayNews = todayNewsPort.isTodayNews(newsId);
+			boolean isTodayNews = todayNewsPort.isTodayNews(userId, newsId);
 
 			NewsReadLog newsReadLog = new NewsReadLog(
 				null,

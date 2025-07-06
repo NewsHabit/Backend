@@ -4,6 +4,7 @@ import java.util.List;
 import org.newshabit.app.news.domain.model.TodayNews;
 
 public interface TodayNewsPort {
-	boolean isTodayNews(Integer newsId);
-	List<TodayNews> getTodayNewsByUserId(Integer userId);
+	boolean isTodayNews(Integer userId, Integer newsId);
+	List<TodayNews> getTodayNewsList(Integer userId);
+	void saveTodayNewsList(List<TodayNews> todayNewsList);
 }
