@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BookmarkPort {
     List<Bookmark> findAllByUserId(int userId);
+    Bookmark save(Bookmark bookmark);
 }

@@ -3,6 +3,7 @@ package org.newshabit.app.news.infrastructure.adapter.outbound.persistence;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.news.application.port.output.BookmarkPort;
 import org.newshabit.app.news.domain.model.Bookmark;
+import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.BookmarkEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.mapper.NewsEntityMapper;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.repository.BookmarkRepo;
 import org.springframework.stereotype.Component;
@@ -20,5 +21,12 @@ public class BookmarkAdapter implements BookmarkPort {
         return bookmarkRepo.findAllByUserId(userId).stream()
                 .map(newsEntityMapper::toDomain)
                 .toList();
+    }
+
+    @Override
+    public Bookmark save(Bookmark bookmark) {
+        BookmarkEntity bookmarkEntity = bookmarkRepo.save(newsEntityMapper.toEntity(bookmark));
+
+        return newsEntityMapper.toDomain(bookmarkEntity);
     }
 }

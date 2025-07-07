@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 public class RefinedNewsService implements RefinedNewsUseCase {
 	private final TodayNewsPort todayNewsPort;
 	private final RefinedNewsPort refinedNewsPort;
-	private final BookmarkPort bookmarkPort;
 
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
@@ -100,16 +99,5 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	public void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay) {
 		refinedNewsPort.deleteThresholdNews(clickCntThreshold, thresholdDay);
 		refinedNewsPort.updateClickCntAfterDeletion();
-	}
-
-	@Override
-	public List<RefinedNews> getBookmarkedNews(int userId) {
-		List<Bookmark> bookMarks = bookmarkPort.findAllByUserId(userId);
-
-		List<Integer> newsIds = bookMarks.stream()
-			.map(Bookmark::getNewsId)
-			.toList();
-
-		return refinedNewsPort.findAllByNewsIds(newsIds);
 	}
 }

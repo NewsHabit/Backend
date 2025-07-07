@@ -32,6 +32,15 @@ public class NewsEntityMapper {
 		);
 	}
 
+	public BookmarkEntity toEntity(Bookmark bookmark) {
+		return new BookmarkEntity(
+			bookmark.getId(),
+			bookmark.getNewsId(),
+			bookmark.getUserId(),
+			bookmark.getPublishedAt()
+		);
+	}
+
 	public TodayNewsEntity toEntity(TodayNews todayNews) {
 		return new TodayNewsEntity(
 			todayNews.getId(),

@@ -3,10 +3,12 @@ package org.newshabit.app.news.infrastructure.adapter.inbound.web;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.response.CommonResponse;
+import org.newshabit.app.news.application.port.input.BookmarkUseCase;
 import org.newshabit.app.news.application.port.input.NewsReadLogUseCase;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class NewsController {
 	private final RefinedNewsUseCase refinedNewsUseCase;
 	private final NewsReadLogUseCase newsReadLogUseCase;
+	private final BookmarkUseCase bookmarkUseCase;
 
 	@GetMapping("/v2/member/today-news")
 	public ResponseEntity<CommonResponse<List<RefinedNews>>> getTodayNews(
@@ -54,8 +57,20 @@ public class NewsController {
 	) {
 		Integer userId = userDetail.getUserId();
 
-		List<RefinedNews> bookmarkedNews = refinedNewsUseCase.getBookmarkedNews(userId);
+		List<RefinedNews> bookmarkedNews = bookmarkUseCase.getBookmarkedNews(userId);
 
 		return ResponseEntity.ok(CommonResponse.success(bookmarkedNews));
+	}
+
+	@PostMapping("/v2/member/bookmarks")
+	public ResponseEntity<CommonResponse<Void>> addBookmarks(
+			@AuthenticationPrincipal CustomUserDetail userDetail,
+			@RequestBody BookmarkRequestDto requestDto
+	) {
+		Integer userId = userDetail.getUserId();
+
+		bookmarkUseCase.addBookmark(userId, requestDto.newsId());
+
+		return ResponseEntity.ok(CommonResponse.success());
 	}
 }
