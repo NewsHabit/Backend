@@ -14,5 +14,6 @@ public interface RefinedNewsPort {
 	RefinedNews findById(int id);
 	List<RefinedNews> findAllByNewsIds(List<Integer> newsIds);
 	List<RefinedNews> findTodayNewsCandidates(int userId, List<NewsCategory> interestCategories, LocalDate thresholdDate);
+	List<RefinedNews> getTrendingNews(int page);
 
 }

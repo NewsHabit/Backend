@@ -12,11 +12,7 @@ import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkReq
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,5 +68,14 @@ public class NewsController {
 		bookmarkUseCase.addBookmark(userId, requestDto.newsId());
 
 		return ResponseEntity.ok(CommonResponse.success());
+	}
+
+	@GetMapping("/v2/guest/trending")
+	public ResponseEntity<CommonResponse<List<RefinedNews>>> getTrendingNews(
+			@RequestParam(name = "page", required = false, defaultValue = "0") int page
+	) {
+		List<RefinedNews> trendingNews = refinedNewsUseCase.getTrendingNews(page);
+
+		return ResponseEntity.ok(CommonResponse.success(trendingNews));
 	}
 }

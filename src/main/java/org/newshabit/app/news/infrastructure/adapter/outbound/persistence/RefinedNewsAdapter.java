@@ -9,6 +9,9 @@ import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.RefinedNewsEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.mapper.NewsEntityMapper;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.repository.RefinedNewsRepo;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -53,6 +56,24 @@ public class RefinedNewsAdapter implements RefinedNewsPort {
 		return refinedNewsRepo.findTodayNewsCandidates(userId, interestCategories, thresholdDate).stream()
 			.map(newsEntityMapper::toDomain)
 			.toList();
+	}
+
+	@Override
+	public List<RefinedNews> getTrendingNews(int page) {
+		int pageSize = 10;
+
+		Pageable pageable = PageRequest.of(
+				page,
+				pageSize,
+				Sort.by(
+						Sort.Order.desc("publishedAt"),
+						Sort.Order.desc("clickCnt")
+				)
+		);
+
+		refinedNewsRepo.findAll(pageable);
+
+		return List.of();
 	}
 
 }

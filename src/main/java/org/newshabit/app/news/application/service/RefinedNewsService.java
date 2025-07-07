@@ -100,4 +100,9 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 		refinedNewsPort.deleteThresholdNews(clickCntThreshold, thresholdDay);
 		refinedNewsPort.updateClickCntAfterDeletion();
 	}
+
+	@Override
+	public List<RefinedNews> getTrendingNews(int page) {
+		return refinedNewsPort.getTrendingNews(page);
+	}
 }
