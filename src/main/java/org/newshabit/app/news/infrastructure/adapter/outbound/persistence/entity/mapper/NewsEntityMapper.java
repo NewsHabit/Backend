@@ -2,8 +2,10 @@ package org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entit
 
 import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
+import org.newshabit.app.news.domain.model.TodayNews;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.NewsReadLogEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.RefinedNewsEntity;
+import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.TodayNewsEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,6 +18,24 @@ public class NewsEntityMapper {
 			newsReadLog.getCategory(),
 			newsReadLog.isTodayNews(),
 			newsReadLog.getPublishedAt()
+		);
+	}
+
+	public TodayNewsEntity toEntity(TodayNews todayNews) {
+		return new TodayNewsEntity(
+			todayNews.getId(),
+			todayNews.getNewsId(),
+			todayNews.getUserId(),
+			todayNews.getPublishedAt()
+		);
+	}
+
+	public TodayNews toDomain(TodayNewsEntity todayNewsEntity) {
+		return new TodayNews(
+			todayNewsEntity.getId(),
+			todayNewsEntity.getNewsId(),
+			todayNewsEntity.getUserId(),
+			todayNewsEntity.getPublishedAt()
 		);
 	}
 
