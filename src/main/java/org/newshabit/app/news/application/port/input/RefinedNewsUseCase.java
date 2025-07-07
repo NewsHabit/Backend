@@ -7,4 +7,5 @@ import org.newshabit.app.news.domain.model.RefinedNews;
 public interface RefinedNewsUseCase {
 	List<RefinedNews> getTodayNews(int userId);
 	void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay);
+	List<RefinedNews> getBookmarkedNews(int userId);
 }

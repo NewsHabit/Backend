@@ -47,4 +47,15 @@ public class NewsController {
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}
+
+	@GetMapping("/v2/member/bookmarks")
+	public ResponseEntity<CommonResponse<List<RefinedNews>>> getBookmarks(
+			@AuthenticationPrincipal CustomUserDetail userDetail
+	) {
+		Integer userId = userDetail.getUserId();
+
+		List<RefinedNews> bookmarkedNews = refinedNewsUseCase.getBookmarkedNews(userId);
+
+		return ResponseEntity.ok(CommonResponse.success(bookmarkedNews));
+	}
 }

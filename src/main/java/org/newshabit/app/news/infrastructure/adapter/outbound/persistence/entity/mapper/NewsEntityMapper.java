@@ -1,8 +1,10 @@
 package org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.mapper;
 
+import org.newshabit.app.news.domain.model.Bookmark;
 import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
+import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.BookmarkEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.NewsReadLogEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.RefinedNewsEntity;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.TodayNewsEntity;
@@ -18,6 +20,15 @@ public class NewsEntityMapper {
 			newsReadLog.getCategory(),
 			newsReadLog.isTodayNews(),
 			newsReadLog.getPublishedAt()
+		);
+	}
+
+	public Bookmark toDomain(BookmarkEntity bookmarkEntity) {
+		return new Bookmark(
+			bookmarkEntity.getId(),
+			bookmarkEntity.getNewsId(),
+			bookmarkEntity.getUserId(),
+			bookmarkEntity.getPublishedAt()
 		);
 	}
 

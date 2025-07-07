@@ -11,8 +11,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
+import org.newshabit.app.news.application.port.output.BookmarkPort;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
+import org.newshabit.app.news.domain.model.Bookmark;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
@@ -23,9 +25,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RefinedNewsService implements RefinedNewsUseCase {
-	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final TodayNewsPort todayNewsPort;
 	private final RefinedNewsPort refinedNewsPort;
+	private final BookmarkPort bookmarkPort;
+
+	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
 
 	@Override
@@ -96,5 +100,16 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	public void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay) {
 		refinedNewsPort.deleteThresholdNews(clickCntThreshold, thresholdDay);
 		refinedNewsPort.updateClickCntAfterDeletion();
+	}
+
+	@Override
+	public List<RefinedNews> getBookmarkedNews(int userId) {
+		List<Bookmark> bookMarks = bookmarkPort.findAllByUserId(userId);
+
+		List<Integer> newsIds = bookMarks.stream()
+			.map(Bookmark::getNewsId)
+			.toList();
+
+		return refinedNewsPort.findAllByNewsIds(newsIds);
 	}
 }
