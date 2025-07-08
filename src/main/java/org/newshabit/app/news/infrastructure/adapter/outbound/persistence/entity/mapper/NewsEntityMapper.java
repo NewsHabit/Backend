@@ -23,6 +23,17 @@ public class NewsEntityMapper {
 		);
 	}
 
+	public NewsReadLog toDomain(NewsReadLogEntity newsReadLogEntity) {
+		return new NewsReadLog(
+			newsReadLogEntity.getId(),
+			newsReadLogEntity.getUserId(),
+			newsReadLogEntity.getNewsId(),
+			newsReadLogEntity.getCategory(),
+			newsReadLogEntity.isTodayNews(),
+			newsReadLogEntity.getPublishedAt()
+		);
+	}
+
 	public Bookmark toDomain(BookmarkEntity bookmarkEntity) {
 		return new Bookmark(
 			bookmarkEntity.getId(),

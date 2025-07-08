@@ -1,6 +1,9 @@
 package org.newshabit.app.user.infrastructure.adapter.outbound.persistence;
 
 import jakarta.persistence.EntityManager;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
@@ -46,4 +49,11 @@ public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 	public void deleteByUserId(int userId) {
                 userDailyGoalRepository.deleteAllByUserId(userId);
         }
+
+	@Override
+	public List<UserDailyGoal> findByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate) {
+		return userDailyGoalRepository.findOverlappingDailyGoal(userId, startDate, endDate).stream()
+				.map(entityMapper::toDomain)
+				.toList();
+	}
 }

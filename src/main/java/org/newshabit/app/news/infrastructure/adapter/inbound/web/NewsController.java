@@ -6,10 +6,13 @@ import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.news.application.port.input.BookmarkUseCase;
 import org.newshabit.app.news.application.port.input.NewsReadLogUseCase;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
+import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -77,5 +80,20 @@ public class NewsController {
 		List<RefinedNews> trendingNews = refinedNewsUseCase.getTrendingNews(page);
 
 		return ResponseEntity.ok(CommonResponse.success(trendingNews));
+	}
+
+	@GetMapping("/v2/member/records")
+	public ResponseEntity<CommonResponse<TodayNewsReadLogResponseDto>> getNewsReadRecords(
+		@AuthenticationPrincipal CustomUserDetail userDetail,
+		@RequestParam(name = "year") int year,
+		@RequestParam(name = "month") int month
+	) {
+		Integer userId = userDetail.getUserId();
+
+		List<TodayNewsReadLog> readLogs = newsReadLogUseCase.getNewsReadRecords(userId, year, month);
+
+		TodayNewsReadLogResponseDto responseDto = new TodayNewsReadLogResponseDto(readLogs);
+
+		return ResponseEntity.ok(CommonResponse.success(responseDto));
 	}
 }

@@ -1,7 +1,9 @@
 package org.newshabit.app.user.infrastructure.adapter.outbound.persistence.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserDailyGoalEntity;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +30,18 @@ public interface UserDailyGoalRepository extends JpaRepository<UserDailyGoalEnti
         }
 
         void deleteAllByUserId(Integer userId);
+
+	@Query("""
+        SELECT u
+        FROM UserDailyGoalEntity u
+        WHERE u.user.id = :userId
+          AND u.startDate <= :endDate
+          AND (u.endDate IS NULL OR u.endDate >= :startDate)
+        """)
+	List<UserDailyGoalEntity> findOverlappingDailyGoal(
+			@Param("userId")    int userId,
+			@Param("startDate") LocalDate startDate,
+			@Param("endDate")   LocalDate endDate
+	);
 
 }
