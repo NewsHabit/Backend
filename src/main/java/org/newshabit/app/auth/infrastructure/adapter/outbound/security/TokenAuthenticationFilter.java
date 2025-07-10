@@ -28,7 +28,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 				response.resetBuffer();
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 				response.setContentType("application/json;charset=UTF-8");
-				String json = "{\"status\": 401, \"message\": \"" + exception.getMessage() + "\", \"data\": null}";
+				String json = "{\"status\": \"UNAUTHORIZED\", \"message\": \"" + exception.getMessage() + "\", \"data\": null}";
 				PrintWriter writer = response.getWriter();
 				writer.write(json);
 				writer.flush();

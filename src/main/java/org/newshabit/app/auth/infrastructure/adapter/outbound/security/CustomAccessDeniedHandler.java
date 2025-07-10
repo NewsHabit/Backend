@@ -20,7 +20,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		response.setStatus(HttpStatus.FORBIDDEN.value());
 		response.setContentType("application/json;charset=UTF-8");
 
-		String json = "{\"status\": 403, \"message\": \"forbidden\", \"data\": null}";
+		String json = "{\"status\": \"FORBIDDEN\", \"message\": \"FORBIDDEN\", \"data\": null}";
 
 		PrintWriter writer = response.getWriter();
 		writer.write(json);
