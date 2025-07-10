@@ -19,6 +19,7 @@ services:
       SPRING_PROFILES_ACTIVE: "ai,app,auth,jdbc,spring-cloud-stream"
 
       GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_API_URL: ${GEMINI_API_URL}
       GEMINI_PROMPT: ${GEMINI_PROMPT}
       HEADLINE_URI: ${HEADLINE_URI}
       USER_AGENT: ${USER_AGENT}
