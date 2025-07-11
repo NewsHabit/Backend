@@ -71,9 +71,9 @@ public class RefinedNewsAdapter implements RefinedNewsPort {
 				)
 		);
 
-		refinedNewsRepo.findAll(pageable);
-
-		return List.of();
+		return refinedNewsRepo.findAll(pageable).stream()
+			.map(newsEntityMapper::toDomain)
+			.toList();
 	}
 
 }

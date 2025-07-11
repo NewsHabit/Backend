@@ -2,8 +2,13 @@ package org.newshabit.app.news.application.service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.application.port.input.NewsReadLogUseCase;
@@ -62,8 +67,35 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 		List<UserDailyGoal> userDailyGoals = userDailyGoalOutputPort.findByUserIdAndDateRange(userId, startDate, endDate);
 		List<NewsReadLog> newsReadLogs = newsReadLogPort.findByUserIdAndDateRange(userId, startDate, endDate);
 
+		Map<LocalDate, Long> readCountByDate = newsReadLogs.stream()
+			.collect(Collectors.groupingBy(
+				NewsReadLog::getPublishedAt,
+				Collectors.counting()
+			));
 
+		List<LocalDate> allDates = Stream.iterate(startDate, date -> date.plusDays(1))
+			.limit(ChronoUnit.DAYS.between(startDate, endDate) + 1)
+			.toList();
 
-		return List.of();
+		List<TodayNewsReadLog> result = new ArrayList<>();
+
+		for (LocalDate date : allDates) {
+			int goalCount = userDailyGoals.stream()
+				.filter(goal ->
+					!goal.getStartDate().isAfter(date) &&
+					(goal.getEndDate() == null || !goal.getEndDate().isBefore(date))
+				)
+				.mapToInt(UserDailyGoal::getDailyGoal)
+				.findFirst()
+				.orElse(0);
+
+			long readCount = readCountByDate.getOrDefault(date, 0L);
+
+			boolean isSatisfied = readCount >= goalCount;
+
+			result.add(new TodayNewsReadLog(date, isSatisfied));
+		}
+
+		return result;
 	}
 }
