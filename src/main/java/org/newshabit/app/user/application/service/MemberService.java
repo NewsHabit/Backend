@@ -7,7 +7,6 @@ import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.user.application.port.input.MemberUserCase;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
-import org.newshabit.app.auth.application.port.output.AuthRepositoryOutputPort;
 import org.newshabit.app.user.common.exception.DuplicatedException;
 import org.newshabit.app.user.common.exception.ErrorCode;
 import org.newshabit.app.user.domain.model.MemberSettings;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class MemberService implements MemberUserCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
-	private final AuthRepositoryOutputPort authRepositoryOutputPort;
 
 	private final int DAILY_GOAL_UPDATE_ALLOWED_DAYS = 7;
 
@@ -77,11 +75,9 @@ public class MemberService implements MemberUserCase {
 		userDailyGoalOutputPort.save(latestDailyGoal);
 		userDailyGoalOutputPort.save(newDailyGoal);
 	}
-	@Override
-        public void deleteMember(int userId) {
-                authRepositoryOutputPort.deleteByUserId(userId);
-                userDailyGoalOutputPort.deleteByUserId(userId);
 
-                userRepositoryOutputPort.deleteById(userId);
-        }
+	@Override
+	public void deleteMember(int userId) {
+		userRepositoryOutputPort.deleteById(userId);
+	}
 }

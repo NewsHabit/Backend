@@ -23,8 +23,8 @@ public interface RefinedNewsRepo extends JpaRepository<RefinedNewsEntity, Intege
         int deleteAllBelowThreshold(@Param("clickCntThreshold") int clickCntThreshold, @Param("thresholdDay") LocalDate thresholdDay);
 
         @Modifying(clearAutomatically = true, flushAutomatically = true)
-        @Query(value = "UPDATE refined_news " +
-                "SET click_cnt = FLOOR(click_cnt * 0.9)", nativeQuery = true)
+        @Query(value = "UPDATE RefinedNewsEntity rne " +
+                "SET rne.clickCnt = FUNCTION('FLOOR', rne.clickCnt * 0.9)")
         int updateAllClickCntAfterDeletion();
 
         @Query("SELECT rne " +
