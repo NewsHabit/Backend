@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.auth.application.port.output.TokenCheckerOutputPort;
+import org.newshabit.app.auth.application.port.output.AuthRepoPort;
+import org.newshabit.app.auth.application.port.output.TokenCheckerPort;
 import org.newshabit.app.auth.common.exception.ErrorCode;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.auth.common.exception.AccessTokenException;
@@ -19,9 +20,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
+public class TokenCheckerAdapter implements TokenCheckerPort {
+	private final AuthRepoPort authRepoPort;
 	private final RSAPublicKey publicKey;
-
 	private JwtParser jwtParser;
 
 	private static final String ROLES_FILED_NAME = "roles";
@@ -47,6 +48,7 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 		Claims claims = getClaims(token);
 
 		checkExpiration(claims);
+		checkTokenExists(token);
 
 		String socialId = claims.getSubject();
 		Integer userId = claims.get(USER_ID_FILED_NAME, Integer.class);
@@ -54,6 +56,28 @@ public class CommonTokenCheckerAdapter implements TokenCheckerOutputPort {
 		List<String> roles = getRoles(claims);
 
 		return CustomUserDetail.createUser(socialId, userId, deviceId, token, roles);
+	}
+
+	private void checkTokenExists(String token) throws AccessTokenException {
+		authRepoPort.findByRefreshToken(token).orElseThrow(
+			() -> new AccessTokenException(ErrorCode.NOT_FOUND_TOKEN)
+		);
+	}
+
+	@Override
+	public boolean isExpired(String token) {
+		if (token == null || token.isEmpty()) {
+			return true;
+		}
+
+		try {
+			Claims claims = getClaims(token);
+			checkExpiration(claims);
+		} catch (AccessTokenException e) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private Claims getClaims(String token) throws AccessTokenException {

@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.newshabit.app.auth.application.port.output.AuthRepositoryOutputPort;
-import org.newshabit.app.auth.application.port.output.TokenProviderOutputPort;
+import org.newshabit.app.auth.application.port.output.AuthRepoPort;
+import org.newshabit.app.auth.application.port.output.TokenProviderPort;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
 import org.newshabit.app.auth.domain.model.Token;
 import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.entity.AuthEntity;
-import org.newshabit.app.auth.application.port.output.TokenCheckerOutputPort;
+import org.newshabit.app.auth.application.port.output.TokenCheckerPort;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.newshabit.app.auth.common.exception.AccessTokenException;
@@ -20,16 +20,16 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TokenProviderService implements TokenProviderUseCase {
-	private final TokenProviderOutputPort tokenProviderOutputPort;
-	private final TokenCheckerOutputPort tokenCheckerOutputPort;
-	private final AuthRepositoryOutputPort authRepositoryOutputPort;
+	private final TokenProviderPort tokenProviderPort;
+	private final TokenCheckerPort tokenCheckerPort;
+	private final AuthRepoPort authRepoPort;
 
 	@Override
 	public Token createLoginToken(String socialId, String deviceId, int userId, List<UserRole> roles) {
-		String accessToken = tokenProviderOutputPort.createAccessToken(socialId, userId, deviceId, roles);
-		String refreshToken = tokenProviderOutputPort.createRefreshToken(socialId, userId, deviceId, roles);
+		String accessToken = tokenProviderPort.createAccessToken(socialId, userId, deviceId, roles);
+		String refreshToken = tokenProviderPort.createRefreshToken(socialId, userId, deviceId, roles);
 
-                Optional<AuthEntity> authEntityOptional = authRepositoryOutputPort.findByUserIdAndDeviceId(userId, deviceId);
+		Optional<AuthEntity> authEntityOptional = authRepoPort.findByUserIdAndDeviceId(userId, deviceId);
 
 		AuthEntity authEntity;
 
@@ -47,7 +47,7 @@ public class TokenProviderService implements TokenProviderUseCase {
 			);
 		}
 
-		authRepositoryOutputPort.save(authEntity);
+		authRepoPort.save(authEntity);
 
 		return new Token(
 			accessToken,
@@ -57,7 +57,7 @@ public class TokenProviderService implements TokenProviderUseCase {
 
 	@Override
 	public ReissueAccessTokenResponse reissueAccessToken(String refreshToken) throws AccessTokenException {
-		CustomUserDetail userDetail = tokenCheckerOutputPort.getUserDetail(refreshToken);
+		CustomUserDetail userDetail = tokenCheckerPort.getUserDetail(refreshToken);
 		String socialId = userDetail.getUsername();
 		String deviceId = userDetail.getDeviceId();
 		int userId = userDetail.getUserId();

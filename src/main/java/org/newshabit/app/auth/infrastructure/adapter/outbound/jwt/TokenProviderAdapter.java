@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.auth.application.port.output.TokenProviderOutputPort;
+import org.newshabit.app.auth.application.port.output.TokenProviderPort;
 import org.newshabit.app.common.domain.enums.UserRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class JwtTokenProviderAdapter implements TokenProviderOutputPort {
+public class TokenProviderAdapter implements TokenProviderPort {
 	private final RSAPrivateKey privateKey;
 
     private static final String ROLES_FIELD_NAME = "roles";

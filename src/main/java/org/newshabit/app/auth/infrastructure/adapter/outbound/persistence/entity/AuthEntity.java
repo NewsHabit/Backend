@@ -24,7 +24,7 @@ public class AuthEntity {
 	private Integer id;
 
 	@Column(name = "user_id", nullable = false)
-	private int userId;
+	private Integer userId;
 
 	@Column(name = "device_id", nullable = false, length = 100)
 	private String deviceId;
