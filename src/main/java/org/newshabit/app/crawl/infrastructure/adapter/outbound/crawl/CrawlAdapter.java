@@ -49,7 +49,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 	private Document fetchHtmlDocument(String uri) throws IOException {
 		return Jsoup.connect(uri)
 			.userAgent(userAgent)
-			.timeout(5000)
+			.timeout(10000)
 			.get();
 	}
 
