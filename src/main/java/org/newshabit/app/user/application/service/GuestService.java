@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
+import org.newshabit.app.auth.application.port.output.AuthRepoPort;
+import org.newshabit.app.auth.domain.model.Auth;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.domain.model.Register;
 import org.newshabit.app.user.domain.model.User;
@@ -25,6 +27,7 @@ public class GuestService implements GuestUseCase {
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final TokenProviderUseCase tokenProviderUseCase;
+	private final AuthRepoPort authRepoPort;
 
 	@Override
 	public Token login(String socialId, String deviceId) throws NotFoundException {
@@ -41,6 +44,16 @@ public class GuestService implements GuestUseCase {
 		Token token = tokenProviderUseCase.createLoginToken(
 			socialId, deviceId, user.getId(), roles
 		);
+
+		Auth auth = new Auth(
+			null,
+			user.getId(),
+			deviceId,
+			token.getRefreshToken(),
+			LocalDateTime.now()
+		);
+
+		authRepoPort.save(auth);
 
 		return new Token(token.getAccessToken(), token.getRefreshToken());
 	}

@@ -17,12 +17,14 @@ public class AuthRepoAdapter implements AuthRepoPort {
     private final AuthEntityMapper authEntityMapper;
 
     @Override
-    public void save(AuthEntity entity) {
-        authRepo.save(entity);
+    public void save(Auth auth) {
+        authRepo.save(authEntityMapper.toEntity(auth));
     }
 
-    public Optional<AuthEntity> findByUserIdAndDeviceId(int userId, String deviceId) {
-            return authRepo.findAuthEntityByUserIdAndDeviceId(userId, deviceId);
+    public Optional<Auth> findByUserIdAndDeviceId(int userId, String deviceId) {
+            return authRepo.findAuthEntityByUserIdAndDeviceId(userId, deviceId).map(
+                authEntityMapper::toDomain
+            );
         }
 
     @Override

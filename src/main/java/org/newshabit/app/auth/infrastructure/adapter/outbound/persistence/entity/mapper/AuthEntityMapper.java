@@ -15,4 +15,14 @@ public class AuthEntityMapper {
 			authEntity.getPublishedAt()
 		);
 	}
+
+	public AuthEntity toEntity(Auth auth) {
+		return new AuthEntity(
+			auth.getId(),
+			auth.getUserId(),
+			auth.getDeviceId(),
+			auth.getRefreshToken(),
+			auth.getPublishedAt()
+		);
+	}
 }

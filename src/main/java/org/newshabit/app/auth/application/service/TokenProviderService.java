@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.newshabit.app.auth.application.port.output.AuthRepoPort;
 import org.newshabit.app.auth.application.port.output.TokenProviderPort;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
+import org.newshabit.app.auth.domain.model.Auth;
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
 import org.newshabit.app.auth.domain.model.Token;
-import org.newshabit.app.auth.infrastructure.adapter.outbound.persistence.entity.AuthEntity;
 import org.newshabit.app.auth.application.port.output.TokenCheckerPort;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.common.domain.enums.UserRole;
@@ -29,25 +29,17 @@ public class TokenProviderService implements TokenProviderUseCase {
 		String accessToken = tokenProviderPort.createAccessToken(socialId, userId, deviceId, roles);
 		String refreshToken = tokenProviderPort.createRefreshToken(socialId, userId, deviceId, roles);
 
-		Optional<AuthEntity> authEntityOptional = authRepoPort.findByUserIdAndDeviceId(userId, deviceId);
+		Optional<Auth> authOptional = authRepoPort.findByUserIdAndDeviceId(userId, deviceId);
 
-		AuthEntity authEntity;
+		Auth auth = new Auth(
+			authOptional.map(Auth::getId).orElse(null),
+			userId,
+			deviceId,
+			refreshToken,
+			LocalDateTime.now()
+		);
 
-		if (authEntityOptional.isPresent()) {
-			authEntity = authEntityOptional.get();
-			authEntity.setRefreshToken(refreshToken);
-			authEntity.modifyPublishedAt();
-		} else {
-			authEntity = new AuthEntity(
-				null,
-				userId,
-				deviceId,
-				refreshToken,
-				LocalDateTime.now()
-			);
-		}
-
-		authRepoPort.save(authEntity);
+		authRepoPort.save(auth);
 
 		return new Token(
 			accessToken,
