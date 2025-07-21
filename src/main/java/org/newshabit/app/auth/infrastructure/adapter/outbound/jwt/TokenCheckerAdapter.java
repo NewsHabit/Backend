@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class TokenCheckerAdapter implements TokenCheckerPort {
-	private final AuthRepoPort authRepoPort;
 	private final RSAPublicKey publicKey;
 	private JwtParser jwtParser;
 
@@ -48,7 +47,6 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 		Claims claims = getClaims(token);
 
 		checkExpiration(claims);
-		checkTokenExists(token);
 
 		String socialId = claims.getSubject();
 		Integer userId = claims.get(USER_ID_FILED_NAME, Integer.class);
@@ -56,12 +54,6 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 		List<String> roles = getRoles(claims);
 
 		return CustomUserDetail.createUser(socialId, userId, deviceId, token, roles);
-	}
-
-	private void checkTokenExists(String token) throws AccessTokenException {
-		authRepoPort.findByRefreshToken(token).orElseThrow(
-			() -> new AccessTokenException(ErrorCode.NOT_FOUND_TOKEN)
-		);
 	}
 
 	@Override
