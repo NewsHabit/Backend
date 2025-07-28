@@ -13,7 +13,7 @@ public interface RefinedNewsPort {
 	void updateClickCntAfterDeletion();
 	RefinedNews findById(int id);
 	List<RefinedNews> findAllByNewsIds(List<Integer> newsIds);
-	List<RefinedNews> findTodayNewsCandidates(int userId, List<NewsCategory> interestCategories);
+	List<RefinedNews> findTodayNewsCandidates(int userId, NewsCategory interestCategory, int size);
 	List<RefinedNews> getTrendingNews(int page);
 
 }

@@ -54,40 +54,33 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	}
 
 	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {
-		List<RefinedNews> todayNewsCandidates = refinedNewsPort.findTodayNewsCandidates(userId, interestCategories);
-
-		Collections.shuffle(todayNewsCandidates);
-
-		Map<NewsCategory, List<RefinedNews>> groupedCandidates = todayNewsCandidates.stream()
-			.collect(Collectors.groupingBy(RefinedNews::getNewsCategory, Collectors.toList()));
-
 		int categoryCount = interestCategories.size();
-		int baseQuota     = dailyGoal / categoryCount;
-		int remainder     = dailyGoal % categoryCount;
+		int baseCount = dailyGoal / categoryCount;
+		int remainder = dailyGoal % categoryCount;
 
-		List<RefinedNews> picked = new ArrayList<>();
+		Map<NewsCategory, Integer> categoryCountMap = interestCategories.stream()
+			.collect(Collectors.toMap(
+				category -> category,
+				category -> baseCount
+			));
 
-		for (NewsCategory category : interestCategories) {
-			List<RefinedNews> bucket = groupedCandidates.getOrDefault(category, Collections.emptyList());
-
-			int quota = baseQuota + (remainder > 0 ? 1 : 0);
-
-			if (bucket.size() >= quota) {
-				remainder--;
-			}
-
-			int pickCount = Math.min(quota, bucket.size());
-
-			picked.addAll(bucket.subList(0, pickCount));
+		for (int i = 0; i < remainder; i++) {
+			NewsCategory category = interestCategories.get(i);
+			categoryCountMap.put(category, categoryCountMap.get(category) + 1);
 		}
 
-		return picked.stream().map(
-			refinedNews -> new TodayNews(
-				null,
-				refinedNews.getId(),
-				userId,
-				LocalDate.now()
-			)
+		return interestCategories.stream().flatMap(
+			category -> {
+				int size = categoryCountMap.get(category);
+
+				return  refinedNewsPort.findTodayNewsCandidates(userId, category, size).stream().map(
+				refinedNews -> new TodayNews(
+					null,
+					refinedNews.getId(),
+					userId,
+					LocalDate.now()
+				));
+			}
 		).toList();
 	}
 

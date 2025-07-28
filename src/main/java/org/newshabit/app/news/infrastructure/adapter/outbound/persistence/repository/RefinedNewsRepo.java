@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.infrastructure.adapter.outbound.persistence.entity.RefinedNewsEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,30 +15,31 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RefinedNewsRepo extends JpaRepository<RefinedNewsEntity, Integer> {
 
-        boolean existsByOriginalUrl(String url);
+	boolean existsByOriginalUrl(String url);
 
-        @Modifying(clearAutomatically = true, flushAutomatically = true)
-        @Query("DELETE FROM RefinedNewsEntity n " +
-               "WHERE n.clickCnt < :clickCntThreshold " +
-               "  OR FUNCTION('DATE', n.publishedAt) < :thresholdDay")
-        int deleteAllBelowThreshold(@Param("clickCntThreshold") int clickCntThreshold, @Param("thresholdDay") LocalDate thresholdDay);
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query("DELETE FROM RefinedNewsEntity n " +
+		   "WHERE n.clickCnt < :clickCntThreshold " +
+		   "  OR FUNCTION('DATE', n.publishedAt) < :thresholdDay")
+	int deleteAllBelowThreshold(@Param("clickCntThreshold") int clickCntThreshold, @Param("thresholdDay") LocalDate thresholdDay);
 
-        @Modifying(clearAutomatically = true, flushAutomatically = true)
-        @Query(value = "UPDATE RefinedNewsEntity rne " +
-                "SET rne.clickCnt = FUNCTION('FLOOR', rne.clickCnt * 0.9)")
-        int updateAllClickCntAfterDeletion();
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query(value = "UPDATE RefinedNewsEntity rne " +
+			"SET rne.clickCnt = FUNCTION('FLOOR', rne.clickCnt * 0.9)")
+	int updateAllClickCntAfterDeletion();
 
-        @Query("SELECT rne " +
-			   "FROM RefinedNewsEntity rne " +
-			   "WHERE rne.newsCategory IN :categories " +
-			   "  AND rne.id NOT IN ( " +
-			   "    SELECT tne.newsId " +
-			   "    FROM TodayNewsEntity tne " +
-			   "    WHERE tne.userId = :userId" +
-               "  )"
-        )
-        List<RefinedNewsEntity> findTodayNewsCandidates(
-            @Param("userId")     Integer userId,
-            @Param("categories") List<NewsCategory> categories
-        );
+	@Query("SELECT rne " +
+		"FROM RefinedNewsEntity rne " +
+		"WHERE rne.newsCategory = :category " +
+		"  AND rne.id NOT IN ( " +
+		"    SELECT tne.newsId " +
+		"    FROM TodayNewsEntity tne " +
+		"    WHERE tne.userId = :userId" +
+		"  ) " +
+		"ORDER BY rne.publishedAt DESC, rne.clickCnt DESC")
+	List<RefinedNewsEntity> findTodayNewsCandidatesByCategory(
+		@Param("userId") Integer userId,
+		@Param("category") NewsCategory category,
+		Pageable pageable
+	);
 }

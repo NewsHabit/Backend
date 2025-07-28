@@ -65,9 +65,4 @@ public class RefinedNewsEntity {
 
 	@Column(name = "original_url", nullable = false)
 	private String originalUrl;
-
-	public RefinedNewsEntity updateClickCntAfterDeletion() {
-		this.clickCnt = (int) (this.clickCnt * 0.9);
-		return this;
-	}
 }
