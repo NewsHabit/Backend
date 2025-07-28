@@ -30,16 +30,14 @@ public interface RefinedNewsRepo extends JpaRepository<RefinedNewsEntity, Intege
         @Query("SELECT rne " +
 			   "FROM RefinedNewsEntity rne " +
 			   "WHERE rne.newsCategory IN :categories " +
-			   "  AND rne.publishedAt >= :startOfDay " +
 			   "  AND rne.id NOT IN ( " +
 			   "    SELECT tne.newsId " +
 			   "    FROM TodayNewsEntity tne " +
-			   "    WHERE tne.userId = :userId AND tne.publishedAt >= :startOfDay" +
+			   "    WHERE tne.userId = :userId" +
                "  )"
         )
         List<RefinedNewsEntity> findTodayNewsCandidates(
             @Param("userId")     Integer userId,
-            @Param("categories") List<NewsCategory> categories,
-            @Param("startOfDay") LocalDate startOfDay
+            @Param("categories") List<NewsCategory> categories
         );
 }

@@ -17,7 +17,7 @@ public class TokenCheckerService {
 	@Scheduled(cron = "0 0 0 * * *")
 	void deleteExpiredTokens() {
 		List<Integer> expiredTokenIds = authRepoPort.findAll().stream()
-			.filter( auth -> tokenCheckerPort.isExpired(auth.getRefreshToken()))
+			.filter( auth -> tokenCheckerPort.isValid(auth.getRefreshToken()))
 			.map(Auth::getId)
 			.toList();
 		authRepoPort.deleteExpiredTokens(expiredTokenIds);

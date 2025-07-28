@@ -5,5 +5,5 @@ import org.newshabit.app.auth.common.exception.AccessTokenException;
 
 public interface TokenCheckerPort {
 	CustomUserDetail getUserDetail(String accessToken) throws AccessTokenException;
-	boolean isExpired(String token);
+	boolean isValid(String token);
 }

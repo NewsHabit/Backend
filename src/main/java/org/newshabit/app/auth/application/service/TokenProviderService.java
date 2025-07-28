@@ -62,4 +62,9 @@ public class TokenProviderService implements TokenProviderUseCase {
 			token.getRefreshToken()
 		);
 	}
+
+	@Override
+	public boolean checkAccessToken(String accessToken) {
+		return tokenCheckerPort.isValid(accessToken);
+	}
 }

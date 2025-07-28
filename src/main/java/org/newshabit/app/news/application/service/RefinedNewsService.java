@@ -54,8 +54,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	}
 
 	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {
-		LocalDate thresholdDate = LocalDate.now().minusDays(1);
-		List<RefinedNews> todayNewsCandidates = refinedNewsPort.findTodayNewsCandidates(userId, interestCategories, thresholdDate);
+		List<RefinedNews> todayNewsCandidates = refinedNewsPort.findTodayNewsCandidates(userId, interestCategories);
 
 		Collections.shuffle(todayNewsCandidates);
 

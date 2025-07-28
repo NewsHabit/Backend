@@ -8,4 +8,5 @@ import org.newshabit.app.common.domain.enums.UserRole;
 public interface TokenProviderUseCase {
 	Token createLoginToken(String socialId, String deviceId, int userId, List<UserRole> roles);
 	ReissueAccessTokenResponse reissueAccessToken(String refreshToken);
+	boolean checkAccessToken(String accessToken);
 }

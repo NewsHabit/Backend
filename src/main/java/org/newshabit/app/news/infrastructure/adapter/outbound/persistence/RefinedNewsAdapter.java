@@ -52,8 +52,8 @@ public class RefinedNewsAdapter implements RefinedNewsPort {
 	}
 
 	@Override
-	public List<RefinedNews> findTodayNewsCandidates(int userId, List<NewsCategory> interestCategories, LocalDate thresholdDate) {
-		return refinedNewsRepo.findTodayNewsCandidates(userId, interestCategories, thresholdDate).stream()
+	public List<RefinedNews> findTodayNewsCandidates(int userId, List<NewsCategory> interestCategories) {
+		return refinedNewsRepo.findTodayNewsCandidates(userId, interestCategories).stream()
 			.map(newsEntityMapper::toDomain)
 			.toList();
 	}

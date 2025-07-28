@@ -57,7 +57,7 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 	}
 
 	@Override
-	public boolean isExpired(String token) {
+	public boolean isValid(String token) {
 		if (token == null || token.isEmpty()) {
 			return true;
 		}
