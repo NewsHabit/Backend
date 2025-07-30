@@ -1,8 +1,6 @@
 package org.newshabit.app.news.application.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import jakarta.transaction.Transactional;

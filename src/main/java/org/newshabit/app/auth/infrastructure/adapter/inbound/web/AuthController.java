@@ -8,7 +8,6 @@ import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.TokenCheckR
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.TokenCheckResponse;
 import org.newshabit.app.common.response.CommonResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +29,7 @@ public class AuthController {
 		return ResponseEntity.ok(CommonResponse.success(response));
 	}
 
-	@GetMapping("/v2/guest/token/check")
+	@PostMapping("/v2/guest/token/check")
 	public ResponseEntity<CommonResponse<TokenCheckResponse>> checkToken(@RequestBody TokenCheckRequest request) {
 		boolean isValid = tokenProviderUseCase.checkAccessToken(request.accessToken());
 

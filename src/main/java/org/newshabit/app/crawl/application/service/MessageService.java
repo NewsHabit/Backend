@@ -20,7 +20,6 @@ public class MessageService implements MessageUseCase {
 
 	@Override
 	public void publishCrawledNews(List<CrawledNews> newsList) {
-		log.info("Publishing crawled news: {}", newsList);
 		messageOutputPort.publishMessages(newsList, binding);
 	}
 }
