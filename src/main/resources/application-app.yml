@@ -8,7 +8,7 @@ app:
   crawl:
     headline-uri: ${HEADLINE_URI}
     user-agent: ${USER_AGENT}
-    cron: ${CRAWL_CRON:0 0 */4 * * *}
+    cron: ${CRAWL_CRON:0 0 * * * *}
     sleep-min: 2000
     sleep-max: 2000
     start-idx: 1
