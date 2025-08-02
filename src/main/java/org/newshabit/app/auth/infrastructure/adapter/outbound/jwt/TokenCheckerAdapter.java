@@ -59,17 +59,17 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 	@Override
 	public boolean isValid(String token) {
 		if (token == null || token.isEmpty()) {
-			return true;
+			return false;
 		}
 
 		try {
 			Claims claims = getClaims(token);
 			checkExpiration(claims);
 		} catch (AccessTokenException e) {
-			return true;
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	private Claims getClaims(String token) throws AccessTokenException {
