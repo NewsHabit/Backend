@@ -8,9 +8,9 @@ import jakarta.annotation.PostConstruct;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.newshabit.app.auth.application.port.output.AuthRepoPort;
 import org.newshabit.app.auth.application.port.output.TokenCheckerPort;
 import org.newshabit.app.auth.common.exception.ErrorCode;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
@@ -28,20 +28,17 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 	private static final String DEVICE_ID_FILED_NAME = "deviceId";
 	private static final String USER_ID_FILED_NAME = "userId";
 
-	private CustomUserDetail guestUserDetail;
-
 	@PostConstruct
 	public void init() {
 		this.jwtParser = Jwts.parserBuilder()
 			.setSigningKey(publicKey)
 			.build();
-		this.guestUserDetail = CustomUserDetail.createGuestUser();
 	}
 
 	@Override
-	public CustomUserDetail getUserDetail(String token) throws AccessTokenException {
+	public Optional<CustomUserDetail> getUserDetail(String token) throws AccessTokenException {
 		if (token == null || token.isEmpty()) {
-			return guestUserDetail;
+			return Optional.empty();
 		}
 
 		Claims claims = getClaims(token);
@@ -53,7 +50,7 @@ public class TokenCheckerAdapter implements TokenCheckerPort {
 		String deviceId = claims.get(DEVICE_ID_FILED_NAME, String.class);
 		List<String> roles = getRoles(claims);
 
-		return CustomUserDetail.createUser(socialId, userId, deviceId, token, roles);
+		return Optional.of(CustomUserDetail.createUser(socialId, userId, deviceId, token, roles));
 	}
 
 	@Override

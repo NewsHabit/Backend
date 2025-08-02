@@ -1,5 +1,6 @@
 package org.newshabit.app.auth.infrastructure.adapter.outbound.security;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
@@ -17,11 +18,18 @@ import org.springframework.stereotype.Component;
 @ConditionalOnClass(name = "org.springframework.security.core.Authentication")
 public class TokenAuthenticationProvider implements AuthenticationProvider {
 	private final TokenCheckerAdapter tokenCheckerAdapter;
+	private CustomUserDetail guestUserDetail;
+
+	@PostConstruct
+	public void init() {
+		guestUserDetail = CustomUserDetail.createGuestUser();
+	}
+
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AccessTokenException {
 		String accessToken = (String) authentication.getCredentials();
-		CustomUserDetail userDetail = tokenCheckerAdapter.getUserDetail(accessToken);
+		CustomUserDetail userDetail = tokenCheckerAdapter.getUserDetail(accessToken).orElse(guestUserDetail);
 
 		return new UsernamePasswordAuthenticationToken(userDetail, accessToken, userDetail.getAuthorities());
 	}

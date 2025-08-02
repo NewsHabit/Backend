@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.newshabit.app.auth.application.port.output.AuthRepoPort;
 import org.newshabit.app.auth.application.port.output.TokenProviderPort;
 import org.newshabit.app.auth.application.port.input.TokenProviderUseCase;
+import org.newshabit.app.auth.common.exception.ErrorCode;
 import org.newshabit.app.auth.domain.model.Auth;
 import org.newshabit.app.auth.infrastructure.adapter.inbound.web.dto.ReissueAccessTokenResponse;
 import org.newshabit.app.auth.domain.model.Token;
@@ -49,7 +50,10 @@ public class TokenProviderService implements TokenProviderUseCase {
 
 	@Override
 	public ReissueAccessTokenResponse reissueAccessToken(String refreshToken) throws AccessTokenException {
-		CustomUserDetail userDetail = tokenCheckerPort.getUserDetail(refreshToken);
+		CustomUserDetail userDetail = tokenCheckerPort.getUserDetail(refreshToken).orElseThrow(
+			() -> new AccessTokenException(ErrorCode.INVALID_TOKEN)
+		);
+
 		String socialId = userDetail.getUsername();
 		String deviceId = userDetail.getDeviceId();
 		int userId = userDetail.getUserId();
