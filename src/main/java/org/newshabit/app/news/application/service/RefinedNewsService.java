@@ -13,6 +13,7 @@ import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
+import org.newshabit.app.news.domain.model.TodayNewsDetail;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
 import org.newshabit.app.user.domain.model.User;
@@ -29,7 +30,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 	@Override
 	@Transactional
-	public List<RefinedNews> getTodayNews(int userId) {
+	public List<TodayNewsDetail> getTodayNews(int userId) {
 		List<TodayNews> todayNewsList = todayNewsPort.getTodayNewsList(userId);
 
 		if (todayNewsList.isEmpty()) {
@@ -48,7 +49,18 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 			.map(TodayNews::getNewsId)
 			.toList();
 
-		return refinedNewsPort.findAllByNewsIds(newsIds);
+		List<RefinedNews> refinedNewsList = refinedNewsPort.findAllByNewsIds(newsIds);
+
+		List<TodayNewsDetail> todayNewsDetailList = refinedNewsList.stream()
+			.map(refinedNews -> new TodayNewsDetail(
+				refinedNews.getId(),
+				refinedNews.getTitle(),
+				refinedNews.getNewsCategory(),
+				refinedNews.getSummary()
+			))
+			.toList();
+
+		return todayNewsDetailList;
 	}
 
 	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {

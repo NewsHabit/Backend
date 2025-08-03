@@ -9,10 +9,14 @@ import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
+import org.newshabit.app.news.domain.model.TodayNewsDetail;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper.NewsDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,18 +28,17 @@ public class NewsController {
 	private final RefinedNewsUseCase refinedNewsUseCase;
 	private final NewsReadLogUseCase newsReadLogUseCase;
 	private final BookmarkUseCase bookmarkUseCase;
+	private final NewsDtoMapper dtoMapper;
 
 	@GetMapping("/v2/member/today-news")
-	public ResponseEntity<CommonResponse<List<RefinedNews>>> getTodayNews(
+	public ResponseEntity<CommonResponse<TodayNewsListResponseDto>> getTodayNews(
 		@AuthenticationPrincipal CustomUserDetail userDetail
 	) {
 		int userId = userDetail.getUserId();
 
-		List<RefinedNews> todayNews = refinedNewsUseCase.getTodayNews(userId);
+		List<TodayNewsDetail> todayNews = refinedNewsUseCase.getTodayNews(userId);
 
-		CommonResponse<List<RefinedNews>> commonResponse = CommonResponse.success(todayNews);
-
-		return ResponseEntity.ok(commonResponse);
+		return ResponseEntity.ok(CommonResponse.success(dtoMapper.fromDomain(todayNews)));
 	}
 
 	@PostMapping("/v2/guest/read-articles")
@@ -43,7 +46,7 @@ public class NewsController {
 		@AuthenticationPrincipal CustomUserDetail userDetail,
 		@RequestBody NewsReadLogRequestDto requestDto
 	) {
-		Integer userId = userDetail.getUserId();
+		Integer userId = userDetail != null ? userDetail.getUserId() : null;
 
 		newsReadLogUseCase.updateNewsReadLog(userId, requestDto.newsId());
 

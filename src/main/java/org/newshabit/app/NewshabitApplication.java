@@ -22,7 +22,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(basePackages = {
     "org.newshabit.app.aiprocess",
     "org.newshabit.app.common",
-    "org.newshabit.common.auth",
     "org.newshabit.app.news",
     "org.newshabit.app.auth",
     "org.newshabit.app.crawl",
