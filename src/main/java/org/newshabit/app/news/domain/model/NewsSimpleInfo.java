@@ -8,7 +8,7 @@ import org.newshabit.app.common.domain.enums.NewsCategory;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodayNewsDetail {
+public class NewsSimpleInfo {
 	private int newsId;
 	private String title;
 	private NewsCategory category;

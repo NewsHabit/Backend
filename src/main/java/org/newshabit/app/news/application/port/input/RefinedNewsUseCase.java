@@ -3,10 +3,10 @@ package org.newshabit.app.news.application.port.input;
 import java.time.LocalDate;
 import java.util.List;
 import org.newshabit.app.news.domain.model.RefinedNews;
-import org.newshabit.app.news.domain.model.TodayNewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimpleInfo;
 
 public interface RefinedNewsUseCase {
-	List<TodayNewsDetail> getTodayNews(int userId);
+	List<NewsSimpleInfo> getTodayNews(int userId);
 	void deleteThresholdNews(int clickCntThreshold, LocalDate thresholdDay);
-	List<RefinedNews> getTrendingNews(int page);
+	List<NewsSimpleInfo> getTrendingNews(int page);
 }

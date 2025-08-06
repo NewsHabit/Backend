@@ -1,15 +1,17 @@
 package org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper;
 
 import java.util.List;
-import org.newshabit.app.news.domain.model.TodayNewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimpleInfo;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class NewsDtoMapper {
-	public TodayNewsListResponseDto fromDomain(
-		List<TodayNewsDetail> todayNewsList
+	public TodayNewsListResponseDto toTodayNewsListResponseDto(
+		List<NewsSimpleInfo> todayNewsList
 	) {
 		return new TodayNewsListResponseDto(
 			todayNewsList.stream()
@@ -23,5 +25,19 @@ public class NewsDtoMapper {
 		);
 	}
 
+	public TrendingNewsListResponseDto toTrendingNewsListResponseDto(
+		List<NewsSimpleInfo> trendingNewsList
+	) {
+		return new TrendingNewsListResponseDto(
+			trendingNewsList.stream()
+				.map(newsSimpleInfo -> new TrendingNewsResponseDto(
+					newsSimpleInfo.getNewsId(),
+					newsSimpleInfo.getTitle(),
+					newsSimpleInfo.getCategory(),
+					newsSimpleInfo.getDescription()
+				))
+				.toList()
+		);
+	}
 
 }

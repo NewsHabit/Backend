@@ -6,16 +6,16 @@ import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.news.application.port.input.BookmarkUseCase;
 import org.newshabit.app.news.application.port.input.NewsReadLogUseCase;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
-import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
-import org.newshabit.app.news.domain.model.TodayNewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimpleInfo;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper.NewsDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,9 +36,9 @@ public class NewsController {
 	) {
 		int userId = userDetail.getUserId();
 
-		List<TodayNewsDetail> todayNews = refinedNewsUseCase.getTodayNews(userId);
+		List<NewsSimpleInfo> todayNews = refinedNewsUseCase.getTodayNews(userId);
 
-		return ResponseEntity.ok(CommonResponse.success(dtoMapper.fromDomain(todayNews)));
+		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTodayNewsListResponseDto(todayNews)));
 	}
 
 	@PostMapping("/v2/guest/read-articles")
@@ -77,12 +77,12 @@ public class NewsController {
 	}
 
 	@GetMapping("/v2/guest/trending")
-	public ResponseEntity<CommonResponse<List<RefinedNews>>> getTrendingNews(
+	public ResponseEntity<CommonResponse<TrendingNewsListResponseDto>> getTrendingNews(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page
 	) {
-		List<RefinedNews> trendingNews = refinedNewsUseCase.getTrendingNews(page);
+		List<NewsSimpleInfo> trendingNews = refinedNewsUseCase.getTrendingNews(page);
 
-		return ResponseEntity.ok(CommonResponse.success(trendingNews));
+		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTrendingNewsListResponseDto(trendingNews)));
 	}
 
 	@GetMapping("/v2/member/records")

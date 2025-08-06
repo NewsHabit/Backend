@@ -13,7 +13,7 @@ import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
-import org.newshabit.app.news.domain.model.TodayNewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimpleInfo;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
 import org.newshabit.app.user.domain.model.User;
@@ -30,7 +30,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 	@Override
 	@Transactional
-	public List<TodayNewsDetail> getTodayNews(int userId) {
+	public List<NewsSimpleInfo> getTodayNews(int userId) {
 		List<TodayNews> todayNewsList = todayNewsPort.getTodayNewsList(userId);
 
 		if (todayNewsList.isEmpty()) {
@@ -51,16 +51,14 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 		List<RefinedNews> refinedNewsList = refinedNewsPort.findAllByNewsIds(newsIds);
 
-		List<TodayNewsDetail> todayNewsDetailList = refinedNewsList.stream()
-			.map(refinedNews -> new TodayNewsDetail(
+		return refinedNewsList.stream()
+			.map(refinedNews -> new NewsSimpleInfo(
 				refinedNews.getId(),
 				refinedNews.getTitle(),
 				refinedNews.getNewsCategory(),
 				refinedNews.getSummary()
 			))
 			.toList();
-
-		return todayNewsDetailList;
 	}
 
 	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {
@@ -102,7 +100,14 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	}
 
 	@Override
-	public List<RefinedNews> getTrendingNews(int page) {
-		return refinedNewsPort.getTrendingNews(page);
+	public List<NewsSimpleInfo> getTrendingNews(int page) {
+		return refinedNewsPort.getTrendingNews(page).stream().map(
+			refinedNews -> new NewsSimpleInfo(
+				refinedNews.getId(),
+				refinedNews.getTitle(),
+				refinedNews.getNewsCategory(),
+				refinedNews.getSummary()
+			)
+		).toList();
 	}
 }
