@@ -76,6 +76,18 @@ public class NewsController {
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
+	@DeleteMapping("/v2/member/bookmarks")
+	public ResponseEntity<CommonResponse<Void>> deleteBookmarks(
+		@AuthenticationPrincipal CustomUserDetail userDetail,
+		@RequestBody BookmarkRequestDto requestDto
+	) {
+		Integer userId = userDetail.getUserId();
+
+		bookmarkUseCase.deleteBookmark(userId, requestDto.newsId());
+
+		return ResponseEntity.ok(CommonResponse.success());
+	}
+
 	@GetMapping("/v2/guest/trending")
 	public ResponseEntity<CommonResponse<TrendingNewsListResponseDto>> getTrendingNews(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page

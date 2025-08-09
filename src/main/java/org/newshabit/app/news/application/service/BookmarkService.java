@@ -6,6 +6,8 @@ import org.newshabit.app.news.application.port.output.BookmarkPort;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.domain.model.Bookmark;
 import org.newshabit.app.news.domain.model.RefinedNews;
+import org.newshabit.app.user.common.exception.ErrorCode;
+import org.newshabit.app.user.common.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,5 +42,13 @@ public class BookmarkService implements BookmarkUseCase {
         );
 
         bookmarkPort.save(bookmark);
+    }
+
+    @Override
+    public void deleteBookmark(int userId, int newsId) {
+        Bookmark bookmark = bookmarkPort.findByUserIdAndNewsId(userId, newsId).orElseThrow(
+            () -> new NotFoundException(ErrorCode.BOOKMARK_NOT_FOUND)
+        );
+        bookmarkPort.delete(bookmark);
     }
 }

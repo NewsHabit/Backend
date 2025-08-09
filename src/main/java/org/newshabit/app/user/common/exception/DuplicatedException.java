@@ -10,6 +10,6 @@ public class DuplicatedException extends BaseException {
 	}
 
 	public DuplicatedException() {
-		super(ErrorCode.DUPLICATED_USER);
+		super(ErrorCode.USER_DUPLICATED);
 	}
 }

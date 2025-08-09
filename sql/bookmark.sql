@@ -4,6 +4,8 @@ CREATE TABLE bookmark (
     news_id INT NOT NULL COMMENT 'news 테이블 FK',
     published_at DATETIME NOT NULL COMMENT '생성 날짜',
 
+    CONSTRAINT uk_bookmark_user_news UNIQUE (user_id, news_id),
+
     CONSTRAINT fk_daily_news_user
         FOREIGN KEY (user_id)
             REFERENCES user(id)

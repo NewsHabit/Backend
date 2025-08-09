@@ -7,4 +7,5 @@ import java.util.List;
 public interface BookmarkUseCase {
     List<RefinedNews> getBookmarkedNews(int userId);
     void addBookmark(int userId, int newsId);
+    void deleteBookmark(int userId, int newsId);
 }
