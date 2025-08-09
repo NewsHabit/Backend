@@ -37,8 +37,8 @@ public class NewsEntityMapper {
 	public Bookmark toDomain(BookmarkEntity bookmarkEntity) {
 		return new Bookmark(
 			bookmarkEntity.getId(),
-			bookmarkEntity.getNewsId(),
 			bookmarkEntity.getUserId(),
+			bookmarkEntity.getNewsId(),
 			bookmarkEntity.getPublishedAt()
 		);
 	}
@@ -46,8 +46,8 @@ public class NewsEntityMapper {
 	public BookmarkEntity toEntity(Bookmark bookmark) {
 		return new BookmarkEntity(
 			bookmark.getId(),
-			bookmark.getNewsId(),
 			bookmark.getUserId(),
+			bookmark.getNewsId(),
 			bookmark.getPublishedAt()
 		);
 	}
