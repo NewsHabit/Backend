@@ -24,4 +24,6 @@ public interface NewsReadLogRepo extends JpaRepository<NewsReadLogEntity, Intege
 			@Param("startDate") LocalDate startDate,
 			@Param("endDate")   LocalDate endDate
 	);
+
+	boolean existsByUserIdAndNewsId(Integer userId, Integer newsId);
 }

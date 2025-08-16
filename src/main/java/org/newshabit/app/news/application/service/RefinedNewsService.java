@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
+import org.newshabit.app.news.application.port.output.NewsReadLogPort;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
 import org.newshabit.app.news.domain.model.NewsDetail;
@@ -28,6 +29,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 	private final UserRepositoryOutputPort userRepositoryOutputPort;
+	private final NewsReadLogPort newsReadLogPort;
 
 	@Override
 	@Transactional
@@ -54,12 +56,13 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 		return refinedNewsList.stream()
 			.map(refinedNews -> new NewsSimple(
-				refinedNews.getId(),
-				refinedNews.getTitle(),
-				refinedNews.getNewsCategory(),
-				refinedNews.getSummary()
-			))
-			.toList();
+			refinedNews.getId(),
+			refinedNews.getTitle(),
+			refinedNews.getNewsCategory(),
+			refinedNews.getSummary(),
+			newsReadLogPort.isRead(userId, refinedNews.getId())
+		))
+		.toList();
 	}
 
 	private List<TodayNews> selectTodayNews(int userId, int dailyGoal, List<NewsCategory> interestCategories) {
@@ -107,7 +110,8 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 				refinedNews.getId(),
 				refinedNews.getTitle(),
 				refinedNews.getNewsCategory(),
-				refinedNews.getSummary()
+				refinedNews.getSummary(),
+				false
 			)
 		).toList();
 	}

@@ -13,4 +13,5 @@ public class NewsSimple {
 	private String title;
 	private NewsCategory category;
 	private String description;
+	private boolean isRead;
 }

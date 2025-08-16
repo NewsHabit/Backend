@@ -8,4 +8,5 @@ import java.util.List;
 public interface NewsReadLogPort {
 	void updateNewsReadLog(NewsReadLog newsReadLog);
 	List<NewsReadLog> findByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate);
+	boolean isRead(int userId, int newsId);
 }

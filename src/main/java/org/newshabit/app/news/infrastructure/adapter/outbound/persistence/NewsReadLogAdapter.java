@@ -33,4 +33,9 @@ public class NewsReadLogAdapter implements NewsReadLogPort {
 				.map(entityMapper::toDomain)
 				.toList();
 	}
+
+	@Override
+	public boolean isRead(int userId, int newsId) {
+		return newsReadLogRepo.existsByUserIdAndNewsId(userId, newsId);
+	}
 }
