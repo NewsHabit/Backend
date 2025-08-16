@@ -11,9 +11,10 @@ import org.newshabit.app.common.domain.enums.NewsCategory;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
 import org.newshabit.app.news.application.port.output.RefinedNewsPort;
 import org.newshabit.app.news.application.port.output.TodayNewsPort;
+import org.newshabit.app.news.domain.model.NewsDetail;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNews;
-import org.newshabit.app.news.domain.model.NewsSimpleInfo;
+import org.newshabit.app.news.domain.model.NewsSimple;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
 import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
 import org.newshabit.app.user.domain.model.User;
@@ -30,7 +31,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 
 	@Override
 	@Transactional
-	public List<NewsSimpleInfo> getTodayNews(int userId) {
+	public List<NewsSimple> getTodayNews(int userId) {
 		List<TodayNews> todayNewsList = todayNewsPort.getTodayNewsList(userId);
 
 		if (todayNewsList.isEmpty()) {
@@ -52,7 +53,7 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 		List<RefinedNews> refinedNewsList = refinedNewsPort.findAllByNewsIds(newsIds);
 
 		return refinedNewsList.stream()
-			.map(refinedNews -> new NewsSimpleInfo(
+			.map(refinedNews -> new NewsSimple(
 				refinedNews.getId(),
 				refinedNews.getTitle(),
 				refinedNews.getNewsCategory(),
@@ -100,14 +101,33 @@ public class RefinedNewsService implements RefinedNewsUseCase {
 	}
 
 	@Override
-	public List<NewsSimpleInfo> getTrendingNews(int page) {
+	public List<NewsSimple> getTrendingNews(int page) {
 		return refinedNewsPort.getTrendingNews(page).stream().map(
-			refinedNews -> new NewsSimpleInfo(
+			refinedNews -> new NewsSimple(
 				refinedNews.getId(),
 				refinedNews.getTitle(),
 				refinedNews.getNewsCategory(),
 				refinedNews.getSummary()
 			)
 		).toList();
+	}
+
+	@Override
+	public NewsDetail getNewsDetail(int newsId) {
+		RefinedNews refinedNews = refinedNewsPort.findById(newsId);
+
+		return new NewsDetail(
+			refinedNews.getId(),
+			refinedNews.getTitle(),
+			refinedNews.getWhoSummary(),
+			refinedNews.getWhenSummary(),
+			refinedNews.getWhereSummary(),
+			refinedNews.getWhatSummary(),
+			refinedNews.getWhySummary(),
+			refinedNews.getHowSummary(),
+			refinedNews.getKeyword(),
+			refinedNews.getPublishedAt(),
+			refinedNews.getNewsCategory()
+		);
 	}
 }

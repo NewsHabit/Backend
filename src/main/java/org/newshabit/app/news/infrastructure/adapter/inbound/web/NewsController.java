@@ -6,18 +6,17 @@ import org.newshabit.app.common.response.CommonResponse;
 import org.newshabit.app.news.application.port.input.BookmarkUseCase;
 import org.newshabit.app.news.application.port.input.NewsReadLogUseCase;
 import org.newshabit.app.news.application.port.input.RefinedNewsUseCase;
-import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
-import org.newshabit.app.news.domain.model.NewsSimpleInfo;
+import org.newshabit.app.news.domain.model.NewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimple;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsDetailResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper.NewsDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,7 +37,7 @@ public class NewsController {
 	) {
 		int userId = userDetail.getUserId();
 
-		List<NewsSimpleInfo> todayNews = refinedNewsUseCase.getTodayNews(userId);
+		List<NewsSimple> todayNews = refinedNewsUseCase.getTodayNews(userId);
 
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTodayNewsListResponseDto(todayNews)));
 	}
@@ -61,7 +60,7 @@ public class NewsController {
 	) {
 		Integer userId = userDetail.getUserId();
 
-		List<NewsSimpleInfo> bookmarkedNewsList = bookmarkUseCase.getBookmarkedNews(userId);
+		List<NewsSimple> bookmarkedNewsList = bookmarkUseCase.getBookmarkedNews(userId);
 
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toBookmarkListResponseDto(bookmarkedNewsList)));
 	}
@@ -94,7 +93,7 @@ public class NewsController {
 	public ResponseEntity<CommonResponse<TrendingNewsListResponseDto>> getTrendingNews(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page
 	) {
-		List<NewsSimpleInfo> trendingNews = refinedNewsUseCase.getTrendingNews(page);
+		List<NewsSimple> trendingNews = refinedNewsUseCase.getTrendingNews(page);
 
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTrendingNewsListResponseDto(trendingNews)));
 	}
@@ -112,5 +111,14 @@ public class NewsController {
 		TodayNewsReadLogResponseDto responseDto = new TodayNewsReadLogResponseDto(readLogs);
 
 		return ResponseEntity.ok(CommonResponse.success(responseDto));
+	}
+
+	@GetMapping("/v2/guest")
+	public ResponseEntity<CommonResponse<NewsDetailResponseDto>> getNewsDetail(
+		@RequestParam(name = "newsId") int newsId
+	) {
+		NewsDetail newsDetail = refinedNewsUseCase.getNewsDetail(newsId);
+
+		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toNewsDetailResponseDto(newsDetail)));
 	}
 }

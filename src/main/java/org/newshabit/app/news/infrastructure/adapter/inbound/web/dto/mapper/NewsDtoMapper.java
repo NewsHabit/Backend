@@ -1,9 +1,11 @@
 package org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper;
 
 import java.util.List;
-import org.newshabit.app.news.domain.model.NewsSimpleInfo;
+import org.newshabit.app.news.domain.model.NewsDetail;
+import org.newshabit.app.news.domain.model.NewsSimple;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsDetailResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewsDtoMapper {
 	public TodayNewsListResponseDto toTodayNewsListResponseDto(
-		List<NewsSimpleInfo> todayNewsList
+		List<NewsSimple> todayNewsList
 	) {
 		return new TodayNewsListResponseDto(
 			todayNewsList.stream()
@@ -28,7 +30,7 @@ public class NewsDtoMapper {
 	}
 
 	public TrendingNewsListResponseDto toTrendingNewsListResponseDto(
-		List<NewsSimpleInfo> trendingNewsList
+		List<NewsSimple> trendingNewsList
 	) {
 		return new TrendingNewsListResponseDto(
 			trendingNewsList.stream()
@@ -42,7 +44,7 @@ public class NewsDtoMapper {
 		);
 	}
 
-	public BookmarkListResponseDto toBookmarkListResponseDto(List<NewsSimpleInfo> bookmarkedNewsList) {
+	public BookmarkListResponseDto toBookmarkListResponseDto(List<NewsSimple> bookmarkedNewsList) {
 		return new BookmarkListResponseDto(
 			bookmarkedNewsList.stream()
 				.map(newsSimpleInfo -> new BookmarkResponseDto(
@@ -52,6 +54,22 @@ public class NewsDtoMapper {
 					newsSimpleInfo.getDescription()
 				))
 				.toList()
+		);
+	}
+
+	public NewsDetailResponseDto toNewsDetailResponseDto(NewsDetail newsDetail) {
+		return new NewsDetailResponseDto(
+			newsDetail.getId(),
+			newsDetail.getTitle(),
+			newsDetail.getWhoSummary(),
+			newsDetail.getWhenSummary(),
+			newsDetail.getWhereSummary(),
+			newsDetail.getWhatSummary(),
+			newsDetail.getWhySummary(),
+			newsDetail.getHowSummary(),
+			newsDetail.getKeyword(),
+			newsDetail.getPublishedAt(),
+			newsDetail.getNewsCategory()
 		);
 	}
 }
