@@ -10,7 +10,9 @@ import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.auth.domain.model.CustomUserDetail;
 import org.newshabit.app.news.domain.model.NewsSimpleInfo;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
@@ -54,14 +56,14 @@ public class NewsController {
 	}
 
 	@GetMapping("/v2/member/bookmarks")
-	public ResponseEntity<CommonResponse<List<RefinedNews>>> getBookmarks(
+	public ResponseEntity<CommonResponse<BookmarkListResponseDto>> getBookmarks(
 			@AuthenticationPrincipal CustomUserDetail userDetail
 	) {
 		Integer userId = userDetail.getUserId();
 
-		List<RefinedNews> bookmarkedNews = bookmarkUseCase.getBookmarkedNews(userId);
+		List<NewsSimpleInfo> bookmarkedNewsList = bookmarkUseCase.getBookmarkedNews(userId);
 
-		return ResponseEntity.ok(CommonResponse.success(bookmarkedNews));
+		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toBookmarkListResponseDto(bookmarkedNewsList)));
 	}
 
 	@PostMapping("/v2/member/bookmarks")

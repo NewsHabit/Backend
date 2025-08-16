@@ -2,6 +2,8 @@ package org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.mapper;
 
 import java.util.List;
 import org.newshabit.app.news.domain.model.NewsSimpleInfo;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
@@ -40,4 +42,16 @@ public class NewsDtoMapper {
 		);
 	}
 
+	public BookmarkListResponseDto toBookmarkListResponseDto(List<NewsSimpleInfo> bookmarkedNewsList) {
+		return new BookmarkListResponseDto(
+			bookmarkedNewsList.stream()
+				.map(newsSimpleInfo -> new BookmarkResponseDto(
+					newsSimpleInfo.getNewsId(),
+					newsSimpleInfo.getTitle(),
+					newsSimpleInfo.getCategory(),
+					newsSimpleInfo.getDescription()
+				))
+				.toList()
+		);
+	}
 }
