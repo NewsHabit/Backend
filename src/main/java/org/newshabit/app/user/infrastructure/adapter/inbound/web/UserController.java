@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/v2/user")
 public class UserController {
 	private final GuestUseCase guestUseCase;
 	private final MemberUserCase memberUserCase;
 	private final UserDtoMapper dtoMapper;
 
-	@PostMapping("/v2/guest/login")
+	@PostMapping("/login")
 	public ResponseEntity<CommonResponse<LoginResponse>> login(@RequestBody LoginRequest loginRequest) throws NotFoundException {
 
 		Token token = guestUseCase.login(loginRequest.socialId(), loginRequest.deviceId());
@@ -46,7 +46,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success(new LoginResponse(token.accessToken, token.refreshToken)));
 	}
 
-	@PostMapping("/v2/guest/register")
+	@PostMapping("/register")
 	public ResponseEntity<CommonResponse<RegisterResponse>> register(@Valid @RequestBody RegisterRequest registerRequest) throws DuplicatedException {
 
 		guestUseCase.register(dtoMapper.toDomain(registerRequest));
@@ -54,7 +54,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@GetMapping("/v2/member/settings")
+	@GetMapping("/member/settings")
 	public ResponseEntity<CommonResponse<Object>> getUserSettings(@AuthenticationPrincipal CustomUserDetail userDetail) throws NotFoundException {
 
 		MemberSettings memberSettings = memberUserCase.getMemberSettings(userDetail.getUserId());
@@ -62,7 +62,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toDto(memberSettings)));
 	}
 
-	@PatchMapping("/v2/member/username")
+	@PatchMapping("/member/username")
 	public ResponseEntity<CommonResponse<Object>> updateUsername(@AuthenticationPrincipal CustomUserDetail userDetail,
 		@Valid @RequestBody UsernameUpdateRequest usernameUpdateRequest) throws NotFoundException {
 
@@ -71,7 +71,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@PatchMapping("/v2/member/categories")
+	@PatchMapping("/member/categories")
 	public ResponseEntity<CommonResponse<Object>> updateCategories(@AuthenticationPrincipal CustomUserDetail userDetail,
 		@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) throws NotFoundException {
 
@@ -80,7 +80,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@PatchMapping("/v2/member/daily-goal")
+	@PatchMapping("/member/daily-goal")
 	public ResponseEntity<CommonResponse<Object>> updateDailyGoal(@AuthenticationPrincipal CustomUserDetail userDetail,
 		@Valid @RequestBody DailyGoalRequest dailyGoalRequest) throws NotFoundException {
 
@@ -89,7 +89,7 @@ public class UserController {
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@DeleteMapping("/v2/member")
+	@DeleteMapping("/member")
 	public ResponseEntity<CommonResponse<Object>> deleteMember(@AuthenticationPrincipal CustomUserDetail userDetail) {
 		memberUserCase.deleteMember(userDetail.getUserId());
 

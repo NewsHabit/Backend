@@ -32,7 +32,8 @@ public class BookmarkService implements BookmarkUseCase {
                 refinedNews.getId(),
                 refinedNews.getTitle(),
                 refinedNews.getNewsCategory(),
-                refinedNews.getSummary()
+                refinedNews.getSummary(),
+                false
             )
         ).toList();
     }

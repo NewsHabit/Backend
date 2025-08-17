@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/v2/auth")
 @RequiredArgsConstructor
 public class AuthController {
 	private final TokenProviderUseCase tokenProviderUseCase;
 
-	@PostMapping("/v2/guest/refresh")
+	@PostMapping("/refresh")
 	public ResponseEntity<CommonResponse<ReissueAccessTokenResponse>> reissueAccessToken(@RequestBody ReissueAccessTokenRequest request) {
 
 		ReissueAccessTokenResponse response = tokenProviderUseCase.reissueAccessToken(
@@ -29,7 +29,7 @@ public class AuthController {
 		return ResponseEntity.ok(CommonResponse.success(response));
 	}
 
-	@PostMapping("/v2/guest/token/check")
+	@PostMapping("/token/check")
 	public ResponseEntity<CommonResponse<TokenCheckResponse>> checkToken(@RequestBody TokenCheckRequest request) {
 		boolean isValid = tokenProviderUseCase.checkAccessToken(request.accessToken());
 

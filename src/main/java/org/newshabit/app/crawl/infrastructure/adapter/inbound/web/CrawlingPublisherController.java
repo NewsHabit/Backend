@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/crawl")
+@RequestMapping("/v2/crawl")
 public class CrawlingPublisherController {
 	private final CrawlUseCase crawlUseCase;
 	private final MessageUseCase messageUseCase;
 
-	@GetMapping("/v2/admin/produce")
+	@GetMapping("/admin/produce")
 	public ResponseEntity<CommonResponse<String>> crawlNewsAndProduce() {
 
 		List<CrawledNews> crawledNewsList = crawlUseCase.crawlNews();

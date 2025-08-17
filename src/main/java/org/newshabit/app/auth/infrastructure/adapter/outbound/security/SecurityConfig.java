@@ -46,8 +46,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authz -> authz
 				.requestMatchers(new RegexRequestMatcher(".*/admin/.*", null)).hasRole("ADMIN")
 				.requestMatchers(new RegexRequestMatcher(".*/member/.*", null)).hasAnyRole("MEMBER", "ADMIN")
-				.requestMatchers(new RegexRequestMatcher(".*/guest/.*", null)).permitAll()
-				.anyRequest().authenticated()
+				.anyRequest().permitAll()
 			)
 			.exceptionHandling(config -> config
 				.accessDeniedHandler(accessDeniedHandler)

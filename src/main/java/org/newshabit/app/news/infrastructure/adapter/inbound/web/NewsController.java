@@ -11,9 +11,7 @@ import org.newshabit.app.news.domain.model.NewsDetail;
 import org.newshabit.app.news.domain.model.NewsSimple;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsDetailResponseDto;
-import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsReadLogRequestDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
@@ -24,14 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/news")
+@RequestMapping("/v2/news")
 public class NewsController {
 	private final RefinedNewsUseCase refinedNewsUseCase;
 	private final NewsReadLogUseCase newsReadLogUseCase;
 	private final BookmarkUseCase bookmarkUseCase;
 	private final NewsDtoMapper dtoMapper;
 
-	@GetMapping("/v2/member/today-news")
+	@GetMapping("/member/today-news")
 	public ResponseEntity<CommonResponse<TodayNewsListResponseDto>> getTodayNews(
 		@AuthenticationPrincipal CustomUserDetail userDetail
 	) {
@@ -42,21 +40,21 @@ public class NewsController {
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTodayNewsListResponseDto(todayNews)));
 	}
 
-	@PostMapping("/v2/guest/read-articles")
+	@PostMapping("/read-articles")
 	public ResponseEntity<CommonResponse<Void>> updateNewsReadHistory(
 		@AuthenticationPrincipal CustomUserDetail userDetail,
-		@RequestBody NewsReadLogRequestDto requestDto
+		@RequestParam(name = "newsId") int newsId
 	) {
 		Integer userId = userDetail != null ? userDetail.getUserId() : null;
 
-		newsReadLogUseCase.updateNewsReadLog(userId, requestDto.newsId());
+		newsReadLogUseCase.updateNewsReadLog(userId, newsId);
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@GetMapping("/v2/member/bookmarks")
+	@GetMapping("/member/bookmarks")
 	public ResponseEntity<CommonResponse<BookmarkListResponseDto>> getBookmarks(
-			@AuthenticationPrincipal CustomUserDetail userDetail
+		@AuthenticationPrincipal CustomUserDetail userDetail
 	) {
 		Integer userId = userDetail.getUserId();
 
@@ -65,31 +63,31 @@ public class NewsController {
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toBookmarkListResponseDto(bookmarkedNewsList)));
 	}
 
-	@PostMapping("/v2/member/bookmarks")
+	@PostMapping("/member/bookmarks")
 	public ResponseEntity<CommonResponse<Void>> addBookmarks(
-			@AuthenticationPrincipal CustomUserDetail userDetail,
-			@RequestBody BookmarkRequestDto requestDto
+		@AuthenticationPrincipal CustomUserDetail userDetail,
+		@RequestParam(name = "newsId") int newsId
 	) {
 		Integer userId = userDetail.getUserId();
 
-		bookmarkUseCase.addBookmark(userId, requestDto.newsId());
+		bookmarkUseCase.addBookmark(userId, newsId);
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@DeleteMapping("/v2/member/bookmarks")
+	@DeleteMapping("/member/bookmarks")
 	public ResponseEntity<CommonResponse<Void>> deleteBookmarks(
 		@AuthenticationPrincipal CustomUserDetail userDetail,
-		@RequestBody BookmarkRequestDto requestDto
+		@RequestParam(name = "newsId") int newsId
 	) {
 		Integer userId = userDetail.getUserId();
 
-		bookmarkUseCase.deleteBookmark(userId, requestDto.newsId());
+		bookmarkUseCase.deleteBookmark(userId, newsId);
 
 		return ResponseEntity.ok(CommonResponse.success());
 	}
 
-	@GetMapping("/v2/guest/trending")
+	@GetMapping("/trending")
 	public ResponseEntity<CommonResponse<TrendingNewsListResponseDto>> getTrendingNews(
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page
 	) {
@@ -98,7 +96,7 @@ public class NewsController {
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toTrendingNewsListResponseDto(trendingNews)));
 	}
 
-	@GetMapping("/v2/member/records")
+	@GetMapping("/member/records")
 	public ResponseEntity<CommonResponse<TodayNewsReadLogResponseDto>> getNewsReadRecords(
 		@AuthenticationPrincipal CustomUserDetail userDetail,
 		@RequestParam(name = "year") int year,
@@ -113,7 +111,7 @@ public class NewsController {
 		return ResponseEntity.ok(CommonResponse.success(responseDto));
 	}
 
-	@GetMapping("/v2/guest")
+	@GetMapping("/detail")
 	public ResponseEntity<CommonResponse<NewsDetailResponseDto>> getNewsDetail(
 		@RequestParam(name = "newsId") int newsId
 	) {
