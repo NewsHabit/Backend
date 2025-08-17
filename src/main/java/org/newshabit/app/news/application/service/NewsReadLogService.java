@@ -19,6 +19,9 @@ import org.newshabit.app.news.domain.model.NewsReadLog;
 import org.newshabit.app.news.domain.model.RefinedNews;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.user.application.port.output.UserDailyGoalOutputPort;
+import org.newshabit.app.user.application.port.output.UserRepositoryOutputPort;
+import org.newshabit.app.user.common.exception.ErrorCode;
+import org.newshabit.app.user.common.exception.NotFoundException;
 import org.newshabit.app.user.domain.model.UserDailyGoal;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,7 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 	private final RefinedNewsPort refinedNewsPort;
 	private final TodayNewsPort todayNewsPort;
 
+	private final UserRepositoryOutputPort userRepositoryOutputPort;
 	private final UserDailyGoalOutputPort userDailyGoalOutputPort;
 
 	@Override
@@ -40,6 +44,10 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 		refinedNewsPort.save(refinedNews);
 
 		if (userId != null) {
+			userRepositoryOutputPort.findByUserId(userId).orElseThrow(
+				() -> new NotFoundException(ErrorCode.USER_NOT_FOUND)
+			);
+
 			NewsCategory category = refinedNews.getNewsCategory();
 
 			boolean isTodayNews = todayNewsPort.isTodayNews(userId, newsId);
@@ -59,6 +67,10 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 
 	@Override
 	public List<TodayNewsReadLog> getNewsReadRecords(int userId, int year, int month) {
+		userRepositoryOutputPort.findByUserId(userId).orElseThrow(
+			() -> new NotFoundException(ErrorCode.USER_NOT_FOUND)
+		);
+
 		YearMonth ym = YearMonth.of(year, month);
 
 		LocalDate startDate = ym.atDay(1);
