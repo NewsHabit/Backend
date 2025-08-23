@@ -35,6 +35,13 @@ public class NewsReadLogAdapter implements NewsReadLogPort {
 	}
 
 	@Override
+	public List<NewsReadLog> findByUserId(int userId) {
+		return newsReadLogRepo.findByUserIdOrderByPublishedAtAsc(userId).stream()
+			.map(entityMapper::toDomain)
+			.toList();
+	}
+
+	@Override
 	public boolean isRead(int userId, int newsId) {
 		return newsReadLogRepo.existsByUserIdAndNewsId(userId, newsId);
 	}

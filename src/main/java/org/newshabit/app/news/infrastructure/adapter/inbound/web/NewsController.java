@@ -12,6 +12,7 @@ import org.newshabit.app.news.domain.model.NewsSimple;
 import org.newshabit.app.news.domain.model.TodayNewsReadLog;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.BookmarkListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.NewsDetailResponseDto;
+import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsClearCntResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsListResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TodayNewsReadLogResponseDto;
 import org.newshabit.app.news.infrastructure.adapter.inbound.web.dto.TrendingNewsListResponseDto;
@@ -118,5 +119,16 @@ public class NewsController {
 		NewsDetail newsDetail = refinedNewsUseCase.getNewsDetail(newsId);
 
 		return ResponseEntity.ok(CommonResponse.success(dtoMapper.toNewsDetailResponseDto(newsDetail)));
+	}
+
+	@GetMapping("/today-news/clear")
+	public ResponseEntity<CommonResponse<TodayNewsClearCntResponseDto>> getTodayNewsTotalClearCnt(
+		@AuthenticationPrincipal CustomUserDetail userDetail
+	) {
+		int userId = userDetail.getUserId();
+
+		long totalClearCnt = newsReadLogUseCase.getTodayNewsTotalClearCnt(userId);
+
+		return ResponseEntity.ok(CommonResponse.success(new TodayNewsClearCntResponseDto(totalClearCnt)));
 	}
 }

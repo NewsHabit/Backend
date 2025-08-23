@@ -7,4 +7,5 @@ import java.util.List;
 public interface NewsReadLogUseCase {
 	void updateNewsReadLog(Integer userId, Integer newsId);
 	List<TodayNewsReadLog>  getNewsReadRecords(int userId, int year, int month);
+	long getTodayNewsTotalClearCnt(int userId);
 }

@@ -13,6 +13,9 @@ import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.UserEntity;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.entity.mapper.EntityMapper;
 import org.newshabit.app.user.infrastructure.adapter.outbound.persistence.repository.UserDailyGoalRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -46,14 +49,19 @@ public class UserDailyGoalRepositoryAdapter implements UserDailyGoalOutputPort {
 	}
 
 	@Override
-	public void deleteByUserId(int userId) {
-                userDailyGoalRepository.deleteAllByUserId(userId);
-        }
-
-	@Override
 	public List<UserDailyGoal> findByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate) {
 		return userDailyGoalRepository.findOverlappingDailyGoal(userId, startDate, endDate).stream()
 				.map(entityMapper::toDomain)
 				.toList();
+	}
+
+	@Override
+	public List<UserDailyGoal> findByUserId(int userId) {
+		return userDailyGoalRepository.findByUserId(
+			userId,
+			Pageable.unpaged(Sort.by(Direction.ASC, "startDate"))
+		).stream()
+			.map(entityMapper::toDomain)
+			.toList();
 	}
 }

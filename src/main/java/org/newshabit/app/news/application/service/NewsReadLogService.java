@@ -3,10 +3,14 @@ package org.newshabit.app.news.application.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -109,5 +113,49 @@ public class NewsReadLogService implements NewsReadLogUseCase {
 		}
 
 		return result;
+	}
+
+	@Override
+	public long getTodayNewsTotalClearCnt(int userId) {
+		userRepositoryOutputPort.findByUserId(userId).orElseThrow(
+			() -> new NotFoundException(ErrorCode.USER_NOT_FOUND)
+		);
+
+		Deque<UserDailyGoal> userDailyGoals = new ArrayDeque<>(userDailyGoalOutputPort.findByUserId(userId));
+		List<NewsReadLog> newsReadLogs = newsReadLogPort.findByUserId(userId);
+
+		Map<LocalDate, Long> todayNewsClearCntMap = newsReadLogs.stream()
+			.filter(NewsReadLog::isTodayNews)
+			.map(NewsReadLog::getPublishedAt)
+			.collect(Collectors.groupingBy(
+				date -> date,
+				Collectors.counting())
+			);
+
+		long totalClearCnt = 0;
+
+		for (Entry<LocalDate, Long> entry : todayNewsClearCntMap.entrySet()) {
+			LocalDate date = entry.getKey();
+			Long readCount = entry.getValue();
+
+			UserDailyGoal userDailyGoal = userDailyGoals.peek();
+
+			int targetReadCount = Objects.requireNonNull(
+				userDailyGoal, ErrorCode.DAILY_GOAL_ERROR.getMessage()
+			).getDailyGoal();
+
+			if (userDailyGoal.getEndDate() != null && date.isAfter(userDailyGoal.getEndDate())) {
+				userDailyGoals.pop();
+				targetReadCount = Objects.requireNonNull(
+					userDailyGoals.peek(), ErrorCode.DAILY_GOAL_ERROR.getMessage()
+				).getDailyGoal();
+			}
+
+			if (readCount >= targetReadCount) {
+				totalClearCnt++;
+			}
+		}
+
+		return totalClearCnt;
 	}
 }

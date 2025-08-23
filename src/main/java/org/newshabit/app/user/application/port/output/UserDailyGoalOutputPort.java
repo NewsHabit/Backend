@@ -13,7 +13,6 @@ public interface UserDailyGoalOutputPort {
          * 사용자와 연결된 일일 목표 기록을 삭제합니다.
          * @param userId 사용자 ID
          */
-        void deleteByUserId(int userId);
         List<UserDailyGoal> findByUserIdAndDateRange(int userId, LocalDate startDate, LocalDate endDate);
-
+        List<UserDailyGoal> findByUserId(int userId);
 }

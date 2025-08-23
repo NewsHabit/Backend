@@ -26,4 +26,6 @@ public interface NewsReadLogRepo extends JpaRepository<NewsReadLogEntity, Intege
 	);
 
 	boolean existsByUserIdAndNewsId(Integer userId, Integer newsId);
+
+	List<NewsReadLogEntity> findByUserIdOrderByPublishedAtAsc(Integer userId);
 }
