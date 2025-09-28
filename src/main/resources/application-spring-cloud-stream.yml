@@ -10,6 +10,7 @@ spring:
           group: refine-group
           consumer:
             partitioned: true
+            concurrency: 6
             maxAttempts: 3
             back-off-initial-interval: 1000
             use-native-decoding: true
@@ -50,6 +51,7 @@ spring:
                 schema.registry.url: ${SCHEMA_REGISTRY_URL}
                 linger.ms: 1000
                 specific.avro.reader: true
+                max.poll.records: 6
 
           refineNews-out-0:
             producer:
