@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.NewsCategory;
 import org.newshabit.app.crawl.application.port.input.CrawlUseCase;
-import org.newshabit.app.crawl.application.port.output.CrawlOutputPort;
+import org.newshabit.app.crawl.application.port.output.CrawlPort;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CrawlService implements CrawlUseCase {
-	private final CrawlOutputPort crawlOutputPort;
+
+	private final CrawlPort crawlPort;
 	@Value("${app.crawl.headline-uri}")
 	private String headlineUris;
 
@@ -29,10 +30,20 @@ public class CrawlService implements CrawlUseCase {
 			.collect(Collectors.toList());
 	}
 
+	@Override
+	public boolean getCrawlStatus() {
+		return crawlPort.isCrawlEnabled();
+	}
+
+	@Override
+	public void setCrawlStatus(boolean enabled) {
+		crawlPort.setCrawlEnabled(enabled);
+	}
+
 	private List<CrawledNews> crawlCategoryNews(NewsCategory category) {
 		log.info("Start Crawl Headlines: {}", category);
 
-		List<String> headlines = crawlOutputPort.crawlHeadlineUris(headlineUris, category);
+		List<String> headlines = crawlPort.crawlHeadlineUris(headlineUris, category);
 
 		List<CrawledNews> newsList = headlines.stream()
 			.map(headline -> safeCrawlNews(headline, category))
@@ -46,7 +57,7 @@ public class CrawlService implements CrawlUseCase {
 
 	private Optional<CrawledNews> safeCrawlNews(String headlineUri, NewsCategory category) {
 		try {
-			return Optional.of(crawlOutputPort.crawlNews(headlineUri, category));
+			return Optional.of(crawlPort.crawlNews(headlineUri, category));
 		} catch (Exception e) {
 			log.error("safeCrawlNews: {}: {}", e.getMessage(), headlineUri);
 			return Optional.empty();

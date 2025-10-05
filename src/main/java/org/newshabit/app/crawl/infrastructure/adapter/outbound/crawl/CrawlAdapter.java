@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,14 +17,15 @@ import org.jsoup.select.Elements;
 import org.newshabit.app.avro.CrawledNews;
 import org.newshabit.app.avro.NewsCategory;
 import org.newshabit.app.common.util.SleepUtil;
-import org.newshabit.app.crawl.application.port.output.CrawlOutputPort;
+import org.newshabit.app.crawl.application.port.output.CrawlPort;
 import org.newshabit.app.crawl.infrastructure.adapter.outbound.crawl.mapper.NewsCategoryMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class CrawlAdapter implements CrawlOutputPort {
+public class CrawlAdapter implements CrawlPort {
+
 	@Value("${app.crawl.user-agent}")
 	private String userAgent;
 	@Value("${app.crawl.sleep-min:1000}")
@@ -35,10 +38,17 @@ public class CrawlAdapter implements CrawlOutputPort {
 	@Value("${app.crawl.end-idx:10}")
 	private int endIdx;
 
+	@Getter
+	@Setter
+	@Value("${app.crawl.enabled}")
+	private boolean crawlEnabled;
+
 	@Override
-	public List<String> crawlHeadlineUris(String uri, NewsCategory category) throws RuntimeException  {
+	public List<String> crawlHeadlineUris(String uri, NewsCategory category)
+		throws RuntimeException {
 		try {
-			Document document = fetchHtmlDocument(uri + NewsCategoryMapper.toDomain(category).getCode());
+			Document document = fetchHtmlDocument(
+				uri + NewsCategoryMapper.toDomain(category).getCode());
 
 			return extractHeadlineUris(document);
 		} catch (IOException e) {
@@ -54,7 +64,8 @@ public class CrawlAdapter implements CrawlOutputPort {
 	}
 
 	private List<String> extractHeadlineUris(Document document) {
-		Elements items = document.select("li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
+		Elements items = document.select(
+			"li.sa_item._SECTION_HEADLINE, li.sa_item._SECTION_HEADLINE.is_blind");
 
 		return items.stream()
 			.flatMap(item -> item.select("div.sa_text a[data-imp-index]").stream())
@@ -79,7 +90,7 @@ public class CrawlAdapter implements CrawlOutputPort {
 
 	@Override
 	public CrawledNews crawlNews(String uri, NewsCategory category) throws RuntimeException {
-		SleepUtil.randomSleep(Integer.parseInt(sleepMin) , Integer.parseInt(sleepMax));
+		SleepUtil.randomSleep(Integer.parseInt(sleepMin), Integer.parseInt(sleepMax));
 		try {
 			Document document = fetchHtmlDocument(uri);
 

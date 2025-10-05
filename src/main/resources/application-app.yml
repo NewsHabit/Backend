@@ -6,6 +6,7 @@ server:
 
 app:
   crawl:
+    enabled: ${CRAWL_ENABLED:true}
     headline-uri: ${HEADLINE_URI}
     user-agent: ${USER_AGENT}
     cron: ${CRAWL_CRON:0 0 * * * *}
